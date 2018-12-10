@@ -172,7 +172,8 @@ if (SERVER) then
 			for _, slot in pairs(charInventory.slots) do
 				for _, item in pairs(slot) do
 					if (item.dropOnDeath) then
-						item:Transfer(inventory:GetID(), item.gridX, item.gridY)
+					-- if (!item.noDropOnDeath) then -- Un-comment this line and delete the above if you want all items to drop by default, 
+						item:Transfer(inventory:GetID(), item.gridX, item.gridY) -- but exclude items that have ITEM.noDropOnDeath = true
 					end
 				end
 			end
