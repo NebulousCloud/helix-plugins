@@ -1,4 +1,6 @@
+
 local PLUGIN = PLUGIN
+
 PLUGIN.name = "Localized damage"
 PLUGIN.author = "Subleader"
 PLUGIN.description = "Damage are different depending on which limb is being hurt."
@@ -32,38 +34,37 @@ ix.config.Add("StomachScaleDamage", 0.8, "How much should stomach damage be scal
 	category = "Localized damage"
 })
 
-local function LegBreak( client, duration )
-	if (!RUNSPEED and !WALKSPEED) then
-		local RUNSPEED = client:GetRunSpeed()
-		local WALKSPEED = client:GetWalkSpeed()
-	end
+local function LegBreak(client, duration)
+	local runSpeed = client:GetRunSpeed()
+	local walkSpeed = client:GetWalkSpeed()
 
 	if (!client.ixLegshot) then
 		client.ixLegshot = true
-		client:SetRunSpeed(RUNSPEED / 3)
-		client:SetWalkSpeed(WALKSPEED / 3)
+		client:SetRunSpeed(runSpeed / 3)
+		client:SetWalkSpeed(walkSpeed / 3)
+
 		timer.Simple(duration, function()
-			client:SetRunSpeed(RUNSPEED)
-			client:SetWalkSpeed(WALKSPEED)
-			client.ixLegshot = false 
+			client:SetRunSpeed(runSpeed)
+			client:SetWalkSpeed(walkSpeed)
+			client.ixLegshot = false
 		end)
 	end
 end
 
-function PLUGIN:ScalePlayerDamage( client, hitgroup, dmginfo )
+function PLUGIN:ScalePlayerDamage(client, hitgroup, dmginfo)
 	if (ix.config.Get("localizedDamage")) then
 		if (hitgroup == HITGROUP_STOMACH) then
-			dmginfo:ScaleDamage(ix.config.Get("StomachScaleDamage", 0.8 ))
+			dmginfo:ScaleDamage(ix.config.Get("StomachScaleDamage", 0.8))
 		elseif ((hitgroup == HITGROUP_LEFTARM) or (hitgroup == HITGROUP_RIGHTARM)) then
 			dmginfo:ScaleDamage(ix.config.Get("ArmsScaleDamage", 0.4))
 		end
-		
+
 		if (client:GetNetVar("resistance")) then -- This is for another plugin I will upload when I have time
 			if (hitgroup == HITGROUP_HEAD) then
-				dmginfo:ScaleDamage(ix.config.Get("HeadScaleDamage", 3)/2)
+				dmginfo:ScaleDamage(ix.config.Get("HeadScaleDamage", 3) / 2)
 			elseif ((hitgroup == HITGROUP_LEFTLEG) or (hitgroup == HITGROUP_RIGHTLEG)) then
 				dmginfo:ScaleDamage(ix.config.Get("LegsScaleDamage", 0.5))
-				LegBreak(client, ix.config.Get("legBreakDuration", 10)/3)
+				LegBreak(client, ix.config.Get("legBreakDuration", 10) / 3)
 			end
 		elseif (hitgroup == HITGROUP_HEAD) then
 			dmginfo:ScaleDamage(ix.config.Get("HeadScaleDamage", 3))
