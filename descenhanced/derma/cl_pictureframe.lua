@@ -4,7 +4,7 @@ local PANEL = {}
 
 -- Called when the panel is initialized.
 function PANEL:Init()	
-	self:SetTitle( "Picture of the character" )
+	self:SetTitle( "Image du Personnage" )
 	self:SetDraggable( true )
 	self:SetSize(1000, 800)
 	-- Called when the button is clicked.
@@ -50,4 +50,4 @@ function PANEL:PerformLayout()
 	self.panelList:StretchToParent(4, 28, 4, 4)
 	DFrame.PerformLayout(self)
 end
-vgui.Register("PictureDesc", PANEL, "DFrame")
+vgui.Register("ixPictureDesc", PANEL, "DFrame")

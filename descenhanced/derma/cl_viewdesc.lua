@@ -55,4 +55,4 @@ function PANEL:setText(text, url)
 	url = url
 end
 
-vgui.Register("descriptionEnView", PANEL, "DFrame")
+vgui.Register("ixDescriptionEnView", PANEL, "DFrame")

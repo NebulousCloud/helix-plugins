@@ -31,7 +31,7 @@ function PANEL:Init()
 		local text = self.contents:GetValue()
 		local url = self.photo:GetValue()
 		local character = LocalPlayer():GetCharacter()
-		netstream.Start("descriptionSendText", text, url)
+		netstream.Start("ixDescriptionSendText", text, url)
 		print (url)
 		self:Close()
 	end
@@ -49,4 +49,4 @@ function PANEL:setText(text, url)
 	self.photo:SetValue(url or "Place your link")
 end
 
-vgui.Register("descriptionEn", PANEL, "DFrame")
+vgui.Register("ixDescriptionEn", PANEL, "DFrame")
