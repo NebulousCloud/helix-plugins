@@ -4,7 +4,7 @@ local PANEL = {}
 
 -- Called when the panel is initialized.
 function PANEL:Init()	
-	self:SetTitle( "Image du Personnage" )
+	self:SetTitle( "Picture of the character" )
 	self:SetDraggable( true )
 	self:SetSize(1000, 800)
 	-- Called when the button is clicked.
