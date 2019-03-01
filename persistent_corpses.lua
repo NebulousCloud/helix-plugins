@@ -9,6 +9,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ]]
 
+
 local PLUGIN = PLUGIN
 
 PLUGIN.name = "Persistent Corpses"
@@ -20,7 +21,7 @@ ix.config.Add("persistentCorpses", true, "Whether or not corpses remain on the m
 	category = "Persistent Corpses"
 })
 
-ix.config.Add("corpseMax", 16, "Maximum number of corpses that are allowed to be spawned.", nil, {
+ix.config.Add("corpseMax", 8, "Maximum number of corpses that are allowed to be spawned.", nil, {
 	data = {min = 0, max = PLUGIN.hardCorpseMax},
 	category = "Persistent Corpses"
 })
@@ -30,7 +31,7 @@ ix.config.Add("corpseDecayTime", 60, "How long it takes for a corpse to decay in
 	category = "Persistent Corpses"
 })
 
-ix.config.Add("corpseSearchTime", 2, "How long it takes to search a corpse.", nil, {
+ix.config.Add("corpseSearchTime", 1, "How long it takes to search a corpse.", nil, {
 	data = {min = 0, max = 60},
 	category = "Persistent Corpses"
 })
@@ -182,7 +183,7 @@ if (SERVER) then
 	end
 
 	function PLUGIN:PlayerUse(client, entity)
-		if (entity:GetClass() == "prop_ragdoll" and entity.ixInventory) then
+		if (entity:GetClass() == "prop_ragdoll" and entity.ixInventory and !ix.storage.InUse(entity.ixInventory)) then
 			ix.storage.Open(client, entity.ixInventory, {
 				entity = entity,
 				name = "Corpse",
