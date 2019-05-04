@@ -47,11 +47,13 @@ if (CLIENT) then
 		end
 	end
 
-	function Legs:Setup()
+	function Legs:Setup(model)
+		model = model or LocalPlayer():GetModel()
+
 		if (!IsValid(self.LegEnt)) then
-			self.LegEnt = ClientsideModel(LocalPlayer():GetModel(), RENDER_GROUP_OPAQUE_ENTITY)
+			self.LegEnt = ClientsideModel(model, RENDER_GROUP_OPAQUE_ENTITY)
 		else
-			self.LegEnt:SetModel(LocalPlayer():GetModel())
+			self.LegEnt:SetModel(model)
 		end
 
 		self.LegEnt:SetNoDraw(true)
@@ -197,75 +199,79 @@ if (CLIENT) then
 		cam.End3D()
 	end
 
-	function PLUGIN:PlayerWeaponChanged(client, weapon)
-		if (client == LocalPlayer() and IsValid(Legs.LegEnt)) then
-			for i = 0, Legs.LegEnt:GetBoneCount() do
-				Legs.LegEnt:ManipulateBoneScale(i, Vector(1, 1, 1))
-				Legs.LegEnt:ManipulateBonePosition(i, vector_origin)
-			end
+	function Legs:FixBones()
+		for i = 0, self.LegEnt:GetBoneCount() do
+			self.LegEnt:ManipulateBoneScale(i, Vector(1, 1, 1))
+			self.LegEnt:ManipulateBonePosition(i, vector_origin)
+		end
 
-			Legs.BonesToRemove =
+		self.BonesToRemove =
+		{
+			"ValveBiped.Bip01_Head1",
+			"ValveBiped.Bip01_L_Hand",
+			"ValveBiped.Bip01_L_Forearm",
+			"ValveBiped.Bip01_L_Upperarm",
+			"ValveBiped.Bip01_L_Clavicle",
+			"ValveBiped.Bip01_R_Hand",
+			"ValveBiped.Bip01_R_Forearm",
+			"ValveBiped.Bip01_R_Upperarm",
+			"ValveBiped.Bip01_R_Clavicle",
+			"ValveBiped.Bip01_L_Finger4",
+			"ValveBiped.Bip01_L_Finger41",
+			"ValveBiped.Bip01_L_Finger42",
+			"ValveBiped.Bip01_L_Finger3",
+			"ValveBiped.Bip01_L_Finger31",
+			"ValveBiped.Bip01_L_Finger32",
+			"ValveBiped.Bip01_L_Finger2",
+			"ValveBiped.Bip01_L_Finger21",
+			"ValveBiped.Bip01_L_Finger22",
+			"ValveBiped.Bip01_L_Finger1",
+			"ValveBiped.Bip01_L_Finger11",
+			"ValveBiped.Bip01_L_Finger12",
+			"ValveBiped.Bip01_L_Finger0",
+			"ValveBiped.Bip01_L_Finger01",
+			"ValveBiped.Bip01_L_Finger02",
+			"ValveBiped.Bip01_R_Finger4",
+			"ValveBiped.Bip01_R_Finger41",
+			"ValveBiped.Bip01_R_Finger42",
+			"ValveBiped.Bip01_R_Finger3",
+			"ValveBiped.Bip01_R_Finger31",
+			"ValveBiped.Bip01_R_Finger32",
+			"ValveBiped.Bip01_R_Finger2",
+			"ValveBiped.Bip01_R_Finger21",
+			"ValveBiped.Bip01_R_Finger22",
+			"ValveBiped.Bip01_R_Finger1",
+			"ValveBiped.Bip01_R_Finger11",
+			"ValveBiped.Bip01_R_Finger12",
+			"ValveBiped.Bip01_R_Finger0",
+			"ValveBiped.Bip01_R_Finger01",
+			"ValveBiped.Bip01_R_Finger02",
+			"ValveBiped.Bip01_Spine4",
+			"ValveBiped.Bip01_Spine2",
+		}
+
+		if (LocalPlayer():InVehicle()) then
+			self.BonesToRemove =
 			{
 				"ValveBiped.Bip01_Head1",
-				"ValveBiped.Bip01_L_Hand",
-				"ValveBiped.Bip01_L_Forearm",
-				"ValveBiped.Bip01_L_Upperarm",
-				"ValveBiped.Bip01_L_Clavicle",
-				"ValveBiped.Bip01_R_Hand",
-				"ValveBiped.Bip01_R_Forearm",
-				"ValveBiped.Bip01_R_Upperarm",
-				"ValveBiped.Bip01_R_Clavicle",
-				"ValveBiped.Bip01_L_Finger4",
-				"ValveBiped.Bip01_L_Finger41",
-				"ValveBiped.Bip01_L_Finger42",
-				"ValveBiped.Bip01_L_Finger3",
-				"ValveBiped.Bip01_L_Finger31",
-				"ValveBiped.Bip01_L_Finger32",
-				"ValveBiped.Bip01_L_Finger2",
-				"ValveBiped.Bip01_L_Finger21",
-				"ValveBiped.Bip01_L_Finger22",
-				"ValveBiped.Bip01_L_Finger1",
-				"ValveBiped.Bip01_L_Finger11",
-				"ValveBiped.Bip01_L_Finger12",
-				"ValveBiped.Bip01_L_Finger0",
-				"ValveBiped.Bip01_L_Finger01",
-				"ValveBiped.Bip01_L_Finger02",
-				"ValveBiped.Bip01_R_Finger4",
-				"ValveBiped.Bip01_R_Finger41",
-				"ValveBiped.Bip01_R_Finger42",
-				"ValveBiped.Bip01_R_Finger3",
-				"ValveBiped.Bip01_R_Finger31",
-				"ValveBiped.Bip01_R_Finger32",
-				"ValveBiped.Bip01_R_Finger2",
-				"ValveBiped.Bip01_R_Finger21",
-				"ValveBiped.Bip01_R_Finger22",
-				"ValveBiped.Bip01_R_Finger1",
-				"ValveBiped.Bip01_R_Finger11",
-				"ValveBiped.Bip01_R_Finger12",
-				"ValveBiped.Bip01_R_Finger0",
-				"ValveBiped.Bip01_R_Finger01",
-				"ValveBiped.Bip01_R_Finger02",
-				"ValveBiped.Bip01_Spine4",
-				"ValveBiped.Bip01_Spine2",
 			}
+		end
 
-			if (LocalPlayer():InVehicle()) then
-				Legs.BonesToRemove =
-				{
-					"ValveBiped.Bip01_Head1",
-				}
-			end
-
-			for _, v in pairs(Legs.BonesToRemove) do
-				local bone = Legs.LegEnt:LookupBone(v)
-				if (bone) then
-					Legs.LegEnt:ManipulateBoneScale(bone, vector_origin)
-					if (!LocalPlayer():InVehicle()) then
-						Legs.LegEnt:ManipulateBonePosition(bone, Vector(0, -100, 0))
-						Legs.LegEnt:ManipulateBoneAngles(bone, angle_zero)
-					end
+		for _, v in pairs(self.BonesToRemove) do
+			local bone = self.LegEnt:LookupBone(v)
+			if (bone) then
+				self.LegEnt:ManipulateBoneScale(bone, vector_origin)
+				if (!LocalPlayer():InVehicle()) then
+					self.LegEnt:ManipulateBonePosition(bone, Vector(0, -100, 0))
+					self.LegEnt:ManipulateBoneAngles(bone, angle_zero)
 				end
 			end
+		end
+	end
+
+	function PLUGIN:PlayerWeaponChanged(client, weapon)
+		if (client == LocalPlayer() and IsValid(Legs.LegEnt)) then
+			Legs:FixBones()
 		end
 	end
 
@@ -281,7 +287,8 @@ if (CLIENT) then
 
 	function PLUGIN:PlayerModelChanged(client, model)
 		if (client == LocalPlayer()) then
-			Legs:Setup()
+			Legs:Setup(model)
+			Legs:FixBones()
 		end
 	end
 
