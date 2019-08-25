@@ -3,11 +3,11 @@ local PLUGIN = PLUGIN
 
 PLUGIN.name = "Perma Remove"
 PLUGIN.author = "alexgrist"
-PLUGIN.desc = "Allows staff to permenantly remove map entities."
+PLUGIN.desc = "Allows staff to permanently remove map entities."
 
 do
 	local COMMAND = {
-		description = "Remove a map entity permenantly.",
+		description = "Remove a map entity permanently.",
 		superAdminOnly = true
 	}
 
