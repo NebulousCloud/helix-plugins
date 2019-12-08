@@ -56,7 +56,7 @@ ix.command.Add("RankPromote", {
         local name = target:GetName()
         local newKey, inputRank
 
-        if true then
+        if client:IsDispatch() then
             -- Overwatch : Allow Rank Manager [True:False]
             if ix.config.Get("allowRankManager") then
                 local originalName = target:GetName()
@@ -122,7 +122,7 @@ ix.command.Add("RankDemote", {
         local name = target:GetName()
         local newKey, inputRank
 
-        if true then
+        if client:IsDispatch() then
             -- Overwatch : Allow Rank Manager [True:False]
             if ix.config.Get("allowRankManager") then
                 local originalName = target:GetName()
