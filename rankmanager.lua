@@ -4,18 +4,18 @@
 
     Installation:
     
-    1. Edit the OWRankManager.rankTable table to fit your rank needs.
+    1. Edit the self.rankTable variable within PLUGIN:OnLoaded() to fit your rank needs.
     2. Place this Lua file into your schema plugin directory.
     3. Enable allowRankManager in your server config
 
 ]]
 
+local PLUGIN = PLUGIN
 
 PLUGIN.name = "Overwatch Rank Manager"
 PLUGIN.author = "Gary Tate"
 PLUGIN.description = "Allows Overwatch to manage ranks."
-
-OWRankManager = OWRankManager or {}
+PLUGIN.rankTable = PLUGIN.rankTable or {}
 
 ix.lang.AddTable("english", {
     allowRankManager = "Allow Overwatch Rank Manager",
@@ -27,25 +27,21 @@ ix.lang.AddTable("english", {
     cRankMaxRank = "%s is already the maximum rank.",
     cRankMinRank = "%s is already the minimum rank.",
     cRankInvalidRank = "%s is an invalid rank, cannot promote/demote.",
-    cRankInvalidFaction = "%s is not in a valid faction."
+    cRankInvalidFaction = "%s is not in a valid faction.",
+    cRankInvalidInput = "%s is not a valid rank."
 })
 
 ix.config.Add("allowRankManager", false, "Enable/Disable Overwatch ability to manage ranks.", nil, {
     category = "Overwatch"
 })
 
---[[ Uses faction uniqueID => ix.faction.indices[player:GetFaction()].uniqueID ]]--
-OWRankManager.rankTable = {
-    ['metropolice'] = {"00", "10", "20", "30", "40", "50", "60", "70", "80", "90", "RL"},
-    ['ota'] = {"OWS", "OWC", "EOW", "EOC"  }
-}
-
-OWRankManager.FindFaction = function(player)
-    local playerUniqueID = ix.faction.indices[player:GetFaction()].uniqueID
-    for k, v in pairs(OWRankManager.rankTable) do
-        if playerUniqueID == k then return v end
-    end
-    return false
+function PLUGIN:OnLoaded()
+    timer.Simple(0, function()
+        self.rankTable = {
+            [FACTION_MPF] = {"00", "10", "20", "30", "40", "50", "60", "70", "80", "90", "RL"},
+            [FACTION_OTA] = {"OWS", "OWC", "EOW", "EOC"  }
+        }
+    end)
 end
 
 ix.command.Add("RankPromote", {
@@ -54,23 +50,38 @@ ix.command.Add("RankPromote", {
         ix.type.character,
         bit.bor(ix.type.string, ix.type.optional)
     },
-    OnRun = function(self, client, target, rank)
-        if client:IsDispatch() then
-            --[[ Overwatch : allowRankManager ]]--
+    OnRun = function(self, client, target, optRank)
+        local faction = target:GetFaction()
+        local ranks = PLUGIN.rankTable[faction]
+        local name = target:GetName()
+        local newKey, inputRank
+
+        if true then
+            -- Overwatch : Allow Rank Manager [True:False]
             if ix.config.Get("allowRankManager") then
-                local ranks = OWRankManager.FindFaction(target)
                 local originalName = target:GetName()
-                if ranks then
-
+                
+                -- Checks if player is in a valid faction from self.rankTable
+                if (ranks) then
                     for _, v in ipairs(ranks) do
-                        local search = v
+                        if string.find(name, v) then
 
-                        if string.find(target:GetName(), search) then
-                            local newKey = table.KeyFromValue(ranks, search) + 1
+                            if optRank then
+                                inputRank = table.KeyFromValue(ranks, string.upper(optRank))
+                                if !inputRank then
+                                    return "@cRankInvalidInput", optRank
+                                end
+                            end
+
+                            if inputRank then
+                                newKey = inputRank
+                            else
+                                newKey = table.KeyFromValue(ranks, v) + 1
+                            end
 
                             if !(#ranks < newKey) then
-                                local newRank = ranks[table.KeyFromValue(ranks, search) + 1]
-                                local newName = string.gsub(target:GetName(), search, newRank)
+                                local newRank = ranks[newKey]
+                                local newName = string.gsub(target:GetName(), v, newRank)
                                 target:SetName(newName:gsub('#', '#'))
 
                                 for _1, v1 in ipairs(player.GetAll()) do
@@ -79,19 +90,16 @@ ix.command.Add("RankPromote", {
                                     end
                                 end
 
-                                --[[ Break out of the OnRun function or else it loops till error ]]--
+                                -- Break out of the OnRun function or else it loops till error
                                 return
                             else
-                                client:NotifyLocalized("cRankMaxRank", target:GetName())
-                                return
+                                return "@cRankMaxRank", target:GetName()
                             end
                         end
                     end
-                    client:NotifyLocalized("cRankInvalidRank", target:GetName())
-
+                    return "@cRankInvalidRank", target:GetName()
                 else
-                    client:NotifyLocalized("cRankInvalidFaction", target:GetName())
-                    return
+                    return "@cRankInvalidFaction", target:GetName()
                 end
             else
                 return "@cRankConfigDisabled"
@@ -108,23 +116,38 @@ ix.command.Add("RankDemote", {
         ix.type.character,
         bit.bor(ix.type.string, ix.type.optional)
     },
-    OnRun = function(self, client, target, rank)
-        if client:IsDispatch() then
-            --[[ Overwatch : allowRankManager ]]--
+    OnRun = function(self, client, target, optRank)
+        local faction = target:GetFaction()
+        local ranks = PLUGIN.rankTable[faction]
+        local name = target:GetName()
+        local newKey, inputRank
+
+        if true then
+            -- Overwatch : Allow Rank Manager [True:False]
             if ix.config.Get("allowRankManager") then
-                local ranks = OWRankManager.FindFaction(target)
                 local originalName = target:GetName()
-                if ranks then
-
+                
+                -- Checks if player is in a valid faction from self.rankTable
+                if (ranks) then
                     for _, v in ipairs(ranks) do
-                        local search = v
+                        if string.find(name, v) then
 
-                        if string.find(target:GetName(), search) then
-                            local newKey = table.KeyFromValue(ranks, search) - 1
+                            if optRank then
+                                inputRank = table.KeyFromValue(ranks, string.upper(optRank))
+                                if !inputRank then
+                                    return "@cRankInvalidInput", optRank
+                                end
+                            end
+
+                            if inputRank then
+                                newKey = inputRank
+                            else
+                                newKey = table.KeyFromValue(ranks, v) - 1
+                            end
 
                             if !(1 > newKey) then
-                                local newRank = ranks[table.KeyFromValue(ranks, search) - 1]
-                                local newName = string.gsub(target:GetName(), search, newRank)
+                                local newRank = ranks[newKey]
+                                local newName = string.gsub(target:GetName(), v, newRank)
                                 target:SetName(newName:gsub('#', '#'))
 
                                 for _1, v1 in ipairs(player.GetAll()) do
@@ -133,22 +156,20 @@ ix.command.Add("RankDemote", {
                                     end
                                 end
 
-                                --[[ Break out of the OnRun function or else it loops till error ]]--
+                                -- Break out of the OnRun function or else it loops till error
                                 return
                             else
-                                client:NotifyLocalized("cRankMinRank", target:GetName())
-                                return
+                                return "@cRankMinRank", target:GetName()
                             end
                         end
                     end
-                    client:NotifyLocalized("cRankInvalidRank", target:GetName())
 
+                    return "@cRankInvalidRank", target:GetName()
                 else
-                    client:NotifyLocalized("cRankInvalidFaction", target:GetName())
-                    return
+                    return "@cRankInvalidFaction", target:GetName()
                 end
             else
-                client:NotifyLocalized("cRankConfigDisabled")
+                return "@cRankConfigDisabled"
             end
         else
             return "@notNow"
