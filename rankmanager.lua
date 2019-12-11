@@ -3,10 +3,8 @@
     Overwatch Rank Manager for Helix
 
     Installation:
-    
-    1. Edit the self.rankTable variable within PLUGIN:OnLoaded() to fit your rank needs.
-    2. Place this Lua file into your schema plugin directory.
-    3. Enable allowRankManager in your server config
+        1. Edit the self.rankTable variable within PLUGIN:OnLoaded() to fit your rank needs.
+        2. Place this Lua file into your schema plugin directory.
 
 ]]
 
@@ -18,7 +16,6 @@ PLUGIN.description = "Allows Overwatch to manage ranks."
 PLUGIN.rankTable = PLUGIN.rankTable or {}
 
 ix.lang.AddTable("english", {
-    allowRankManager = "Allow Overwatch Rank Manager",
     cmdRankDemote = "Demote an active Overwatch functionary.",
     cmdRankPromote = "Promote an active Overwatch functionary.",
     cRankConfigDisabled = "Rank Management is currently disabled.",
@@ -29,10 +26,6 @@ ix.lang.AddTable("english", {
     cRankInvalidRank = "%s is an invalid rank, cannot promote/demote.",
     cRankInvalidFaction = "%s is not in a valid faction.",
     cRankInvalidInput = "%s is not a valid rank."
-})
-
-ix.config.Add("allowRankManager", false, "Enable/Disable Overwatch ability to manage ranks.", nil, {
-    category = "Overwatch"
 })
 
 function PLUGIN:OnLoaded()
@@ -53,58 +46,53 @@ ix.command.Add("RankPromote", {
     OnCheckAccess = function(self, client)
         return client:IsDispatch()
     end,
-    OnRun = function(self, client, target, optRank)
-        local faction = target:GetFaction()
-        local ranks = PLUGIN.rankTable[faction]
-        local name = target:GetName()
-        local newKey, inputRank
+    OnRun = function(self, client, target, rank)
+        local ranks = PLUGIN.rankTable[target:GetFaction()]
 
-        -- Overwatch : Allow Rank Manager [True:False]
-        if ix.config.Get("allowRankManager") then
-            local originalName = target:GetName()
+        -- Checks if player is in a valid faction from rankTable
+        if (istable(ranks)) then
+            local name = target:GetName()
+            local newRank
 
-            -- Checks if player is in a valid faction from self.rankTable
-            if (ranks) then
-                for _, v in ipairs(ranks) do
-                    if string.find(name, v) then
+            if (rank) then
+                newRank = table.KeyFromValue(ranks, string.upper(rank))
 
-                        if optRank then
-                            inputRank = table.KeyFromValue(ranks, string.upper(optRank))
-                            if !inputRank then
-                                return "@cRankInvalidInput", optRank
-                            end
-                        end
+                if (!newRank) then
+                    return "@cRankInvalidInput", rank
+                end
+            else
+                if (string.find(name, ranks[#ranks])) then
+                    return "@cRankMaxRank", name
+                end
 
-                        if inputRank then
-                            newKey = inputRank
-                        else
-                            newKey = table.KeyFromValue(ranks, v) + 1
-                        end
+                for k, v in ipairs(ranks) do
+                    if (string.find(name, v)) then
+                        newRank = next(ranks, k)
 
-                        if !(#ranks < newKey) then
-                            local newRank = ranks[newKey]
-                            local newName = string.gsub(target:GetName(), v, newRank)
-                            target:SetName(newName:gsub('#', '#'))
-
-                            for _1, v1 in ipairs(player.GetAll()) do
-                                if (self:OnCheckAccess(v1) or v1 == target:GetPlayer()) then
-                                    v1:NotifyLocalized("cRankPromotion", client:GetName(), originalName, newName)
-                                end
-                            end
-
-                            -- Break out of the OnRun function or else it loops till error
-                            return
-                        else
-                            return "@cRankMaxRank", target:GetName()
-                        end
+                        break
                     end
                 end
-                return "@cRankInvalidRank", target:GetName()
+            end
+
+            if (newRank) then
+                newRank = ranks[newRank]
+
+                local newName = name:gsub("%:([%w]+)%.",
+                    string.format(":%s.", newRank)
+                )
+
+                target:SetName(newName)
+
+                for _, v in ipairs(player.GetAll()) do
+                    if (self:OnCheckAccess(v) or v == target:GetPlayer()) then
+                        v:NotifyLocalized("cRankPromotion", client:GetName(), name, newName)
+                    end
+                end
             else
-                return "@cRankInvalidFaction", target:GetName()
+                return "@cRankInvalidRank", name
             end
         else
-            return "@cRankConfigDisabled"
+            return "@cRankInvalidFaction", target:GetName()
         end
     end
 })
@@ -118,59 +106,53 @@ ix.command.Add("RankDemote", {
     OnCheckAccess = function(self, client)
         return client:IsDispatch()
     end,
-    OnRun = function(self, client, target, optRank)
-        local faction = target:GetFaction()
-        local ranks = PLUGIN.rankTable[faction]
-        local name = target:GetName()
-        local newKey, inputRank
+    OnRun = function(self, client, target, rank)
+        local ranks = PLUGIN.rankTable[target:GetFaction()]
 
-        -- Overwatch : Allow Rank Manager [True:False]
-        if ix.config.Get("allowRankManager") then
-            local originalName = target:GetName()
+        -- Checks if player is in a valid faction from rankTable
+        if (istable(ranks)) then
+            local name = target:GetName()
+            local newRank
 
-            -- Checks if player is in a valid faction from self.rankTable
-            if (ranks) then
-                for _, v in ipairs(ranks) do
-                    if string.find(name, v) then
+            if (rank) then
+                newRank = table.KeyFromValue(ranks, string.upper(rank))
 
-                        if optRank then
-                            inputRank = table.KeyFromValue(ranks, string.upper(optRank))
-                            if !inputRank then
-                                return "@cRankInvalidInput", optRank
-                            end
-                        end
-
-                        if inputRank then
-                            newKey = inputRank
-                        else
-                            newKey = table.KeyFromValue(ranks, v) - 1
-                        end
-
-                        if !(1 > newKey) then
-                            local newRank = ranks[newKey]
-                            local newName = string.gsub(target:GetName(), v, newRank)
-                            target:SetName(newName:gsub('#', '#'))
-
-                            for _1, v1 in ipairs(player.GetAll()) do
-                                if (self:OnCheckAccess(v1) or v1 == target:GetPlayer()) then
-                                    v1:NotifyLocalized("cRankDemotion", client:GetName(), originalName, newName)
-                                end
-                            end
-
-                            -- Break out of the OnRun function or else it loops till error
-                            return
-                        else
-                            return "@cRankMinRank", target:GetName()
-                        end
-                    end
+                if (!newRank) then
+                    return "@cRankInvalidInput", rank
+                end
+            else
+                if (string.find(name, ranks[1])) then
+                    return "@cRankMinRank", name
                 end
 
-                return "@cRankInvalidRank", target:GetName()
+                for k, v in ipairs(ranks) do
+                    if (string.find(name, v)) then
+                        newRank = math.Clamp(k - 1, 1, #ranks)
+
+                        break
+                    end
+                end
+            end
+
+            if (newRank) then
+                newRank = ranks[newRank]
+
+                local newName = name:gsub("%:([%w]+)%.",
+                    string.format(":%s.", newRank)
+                )
+
+                target:SetName(newName)
+
+                for _, v in ipairs(player.GetAll()) do
+                    if (self:OnCheckAccess(v) or v == target:GetPlayer()) then
+                        v:NotifyLocalized("cRankDemotion", client:GetName(), name, newName)
+                    end
+                end
             else
-                return "@cRankInvalidFaction", target:GetName()
+                return "@cRankInvalidRank", name
             end
         else
-            return "@cRankConfigDisabled"
+            return "@cRankInvalidFaction", target:GetName()
         end
     end
 })
