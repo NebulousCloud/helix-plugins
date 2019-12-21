@@ -1,0 +1,6 @@
+Allows classes to be obtainable with whitelists.
+Add the below funtion to any class you wish to restrict to whitelists.
+
+function CLASS:CanSwitchTo(client)
+    return client:HasClassWhitelist(self.index)
+end
