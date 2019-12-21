@@ -13,7 +13,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 ix.lang.AddTable("english", {
 	cmdPlyUnClassWhitelist = "Disallows someone to change to a specific class within a faction.",
 	cmdPlyClassWhitelist = "Allows someone to change to a specific class within a faction.",
-	privilege = "Manage Character Whitelist",
 	classwhitelist = "%s has whitelisted %s for the %s class.",
 	unclasswhitelist = "%s has unwhitelisted %s from the %s class."
 })
