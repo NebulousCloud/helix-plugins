@@ -1,0 +1,9 @@
+
+themes/ananke/
+public/
+
+content/*
+!content/plugins/
+
+content/plugins/*
+!content/plugins/_index.md

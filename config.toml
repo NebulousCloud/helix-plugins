@@ -1,0 +1,11 @@
+
+baseURL = "https://plugins.gethelix.co/"
+languageCode = "en-us"
+title = "Helix Plugin Center"
+theme = "helix"
+
+[params]
+	repoURL = "https://github.com/nebulouscloud/helix-plugins/"
+
+[permalinks]
+	plugins = "/:title/"

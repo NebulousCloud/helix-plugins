@@ -1,0 +1,41 @@
+
+{{ $downloadUrl := printf "%s%s/master/%s" .Site.Params.repoURL (cond (eq .Params.pluginType "file") "blob" "tree") .Params.repoPath -}}
+<aside>
+	<a class="download" href="#download" data-git-download-url="{{ $downloadUrl }}">
+		<span class="text">Download</span>
+		<div class="via">GitHub</div>
+	</a>
+
+	<div class="info box">
+		<h1>Schema</h1>
+		<h2>
+			{{ with .Params.schema }}
+				{{ . }}
+			{{ else }}
+				Any
+			{{ end }}
+		</h2>
+	</div>
+
+	{{ if not (eq .Date .Lastmod) }}
+		<div class="info box">
+			<h1>Last Updated</h1>
+			<h2 data-relative-date="{{ dateFormat "2006-01-02T15:04:05Z0700" .Lastmod }}">
+				{{- dateFormat "January 2, 2006" .Lastmod -}}
+			</h2>
+		</div>
+	{{ end }}
+
+	<div class="info box">
+		<h1>Published</h1>
+		<h2>
+			{{- with .Date -}}
+				{{- dateFormat "January 2, 2006" . -}}
+			{{- else -}}
+				Unknown
+			{{- end -}}
+		</h2>
+	</div>
+
+	<a class="report" href="#">Report plugin</a>
+</aside>

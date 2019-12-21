@@ -1,0 +1,13 @@
+{{ define "main" }}
+	<h1>{{ with eq .Params.verified true }}
+			<span class="verified" data-tooltip="Verified"></span>
+		{{- end -}}
+		{{ .Title }}
+	</h1>
+	<h2>by {{ .Params.author }}</h2>
+
+	<article>
+		{{- partial "plugin_main.html" . -}}
+		{{- partial "plugin_sidebar.html" . -}}
+	</article>
+{{ end }}

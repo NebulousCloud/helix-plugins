@@ -1,0 +1,20 @@
+<summary class="tabs">
+	<header>
+		<ul>
+			<li class="active"><a href="#description">Description</a></li>
+			<li><a href="#license">License</a></li>
+		</ul>
+	</header>
+
+	<div class="page active" data-index="description">
+		{{ .Content }}
+	</div>
+
+	<div class="page" data-index="license">
+		{{- with .Params.license -}}
+			{{ trim . "\r\n" }}
+		{{- else -}}
+			The author has not included any licensing information for this plugin. Please report this plugin with the link in the sidebar.
+		{{- end -}}
+	</div>
+</summary>

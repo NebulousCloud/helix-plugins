@@ -1,0 +1,454 @@
+
+:root {
+	--content-width: 960px;
+	--blurb-height: 640px;
+
+	--padding-big: 48px;
+	--padding-normal: 24px;
+	--padding-small: 16px;
+	--padding-tiny: 10px;
+
+	--font-gigantic: 42px;
+	--font-huge: 32px;
+	--font-big: 24px;
+	--font-normal: 16px;
+	--font-tiny: 12px;
+
+	--color-accent: rgb(115, 53, 142);
+	--color-white: rgb(255, 255, 255);
+	--color-white-accent: rgb(203, 190, 209);
+	--color-black: rgb(0, 0, 0);
+	--color-lightgrey: rgb(160, 160, 160);
+	--color-background-light: rgb(240, 240, 240);
+	--color-background-dark: rgb(33, 33, 33);
+
+	--border-content: 1px solid rgb(100, 100, 100);
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+
+	font-family: Segoe UI, Helvetica, Arial, sans-serif;
+	background-color: var(--color-background-light);
+}
+
+a {
+	text-decoration: none;
+	color: var(--color-accent);
+}
+
+/* contents of an element that are to be centered in the content width */
+.contents {
+	width: var(--content-width);
+	margin: 0 auto;
+}
+
+/* tooltip */
+[data-tooltip]:before {
+	position: absolute;
+	content: attr(data-tooltip);
+	opacity: 0;
+	z-index: 999;
+
+	padding: 4px;
+	margin-bottom: 4px;
+	transform: translateX(calc(-100% - var(--padding-tiny))) translateY(-2px);
+
+	text-align: center;
+	font-size: var(--font-normal);
+	font-weight: 400;
+
+	transition: opacity 150ms ease-in-out;
+	color: var(--color-white);
+	background-color: var(--color-background-dark);
+}
+
+[data-tooltip]:hover:before {
+	opacity: 1;
+}
+
+nav {
+	width: 100%;
+	padding-top: var(--padding-small);
+	padding-bottom: var(--padding-small);
+
+	color: var(--color-white);
+	background-color: var(--color-accent);
+}
+
+nav .contents {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+nav h1 {
+	font-size: var(--font-big);
+	font-weight: 300;
+	flex-grow: 1;
+}
+
+nav ul li {
+	display: inline;
+	margin-left: var(--padding-small);
+}
+
+nav a {
+	color: var(--color-white);
+}
+
+main {
+	flex: 1;
+	width: var(--content-width);
+	margin: var(--padding-normal) auto var(--padding-normal) auto;
+}
+
+/* front page blurb */
+.blurb {
+	height: var(--blurb-height);
+
+	color: var(--color-white);
+	background-color: var(--color-accent);
+}
+
+.blurb .contents {
+	height: 75%;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.blurb h1 {
+	margin-top: calc(-var(--padding-normal));
+
+	font-size: var(--font-gigantic);
+	font-weight: 300;
+}
+
+.blurb p {
+	margin-top: var(--padding-normal);
+	font-size: var(--font-normal);
+
+	max-width: calc(var(--content-width) / 2);
+}
+
+.blurb .buttons {
+	margin-top: var(--padding-normal);
+}
+
+.blurb .buttons a {
+	display: inline-block;
+	padding: var(--padding-tiny);
+
+	border: 1px solid var(--color-white);
+	color: var(--color-white);
+}
+
+.blurb .buttons a.main {
+	margin-right: var(--padding-small);
+
+	color: var(--color-accent);
+	background-color: var(--color-white);
+}
+
+/* plugin title */
+main h1 {
+	font-weight: 300;
+	font-size: var(--font-huge);
+	white-space: nowrap;
+}
+
+main h1 .verified {
+	display: inline-block;
+	height: var(--font-big);
+	width: var(--font-big);
+	margin-right: var(--padding-tiny);
+
+	background-image: url(/img/check-circle.svg);
+}
+
+main h2 {
+	margin-bottom: var(--padding-normal);
+
+	font-weight: 300;
+	font-size: var(--font-big);
+}
+
+/* front page sections */
+main section {
+	margin-top: var(--padding-big);
+	padding: var(--padding-big);
+
+	background-color: var(--color-white);
+}
+
+main .divider-text {
+	margin-top: var(--padding-big);
+	text-align: center;
+}
+
+main .divider-text h1 {
+	font-size: var(--font-huge);
+	font-weight: 300;
+}
+
+main section#server-owners {
+	margin-top: calc(var(--blurb-height) * -0.25);
+}
+
+main section ul {
+	display: flex;
+	justify-content: space-between;
+}
+
+main section ul li {
+	display: block;
+	width: 25%;
+	list-style-type: none;
+
+	text-align: center;
+}
+
+main section ul li p {
+	margin-top: var(--padding-small);
+	text-align: left;
+}
+
+main section ul li img {
+	width: 48px;
+	height: 48px;
+}
+
+/* plugin contents */
+main article {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: flex-start;
+}
+
+main article .box {
+	padding: var(--padding-small);
+	background-color: var(--color-white);
+}
+
+/* plugin details */
+main article summary {
+	width: 66.666666%;
+	margin-right: var(--padding-small);
+}
+
+main article summary header ul li {
+	display: inline-block;
+	padding: var(--padding-tiny);
+
+	list-style-type: none;
+}
+
+main article summary header ul li.active {
+	background-color: var(--color-white);
+}
+
+main article summary header ul li.active a {
+	color: var(--color-black);
+}
+
+main article summary .page {
+	display: none;
+	padding: var(--padding-small);
+
+	background-color: var(--color-white);
+}
+
+main article summary .page.active {
+	display: block;
+}
+
+main article summary .page h1 {
+	font-size: var(--font-big);
+}
+
+main article summary .page .config {
+	margin-top: var(--padding-tiny);
+	padding-bottom: var(--padding-tiny);
+
+	border-bottom: 1px solid var(--color-white-accent);
+}
+
+main article summary .page .config:first-of-type {
+	margin-top: 0;
+}
+
+main article summary .page .config:last-of-type {
+	padding-bottom: 0;
+	border: 0;
+}
+
+main article summary .page .config .default:before {
+	content: "Default: ";
+}
+
+main article summary .page .config .default {
+	color: var(--color-lightgrey);
+}
+
+main article summary .page .config .description {
+	margin-top: var(--padding-tiny);
+}
+
+main article summary .page[data-index="license"] {
+	white-space: pre-line;
+}
+
+/* generic file tree */
+ul.files li {
+	margin-left: var(--padding-normal);
+	list-style: none;
+	line-height: 1.5;
+}
+
+ul.files > li:first-of-type {
+	margin-left: 0;
+}
+
+/* plugin metadata */
+main article aside {
+	width: 33.333333%;
+
+	display: flex;
+	flex-direction: column;
+}
+
+main article aside .download {
+	padding: var(--padding-small);
+	margin-bottom: var(--padding-small);
+
+	text-align: center;
+	font-size: var(--font-big);
+	font-weight: 300;
+
+	color: var(--color-white);
+	background-color: var(--color-accent);
+}
+
+main article aside .download .text {
+	pointer-events: none;
+}
+
+main article aside .download .via::before {
+	content: "via ";
+}
+
+main article aside .download .via {
+	font-size: var(--font-tiny);
+	font-weight: 400;
+	pointer-events: none;
+
+	color: var(--color-white-accent);
+}
+
+main article aside .info {
+	margin-bottom: var(--padding-small);
+	text-align: center;
+}
+
+main article aside .info h1 {
+	font-size: var(--font-normal);
+	font-weight: 400;
+}
+
+main article aside .info h2 {
+	margin: 0;
+
+	font-size: var(--font-big);
+	font-weight: 300;
+}
+
+main article aside ul li {
+	list-style-type: none;
+}
+
+main article aside .report {
+	text-align: center;
+}
+
+/* plugin list */
+.plugin-list {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-content: space-between;
+	align-items: center;
+}
+
+.plugin-list .plugin {
+	display: block;
+	width: calc(50% - var(--padding-normal) / 2);
+	padding: var(--padding-small);
+	margin-bottom: var(--padding-normal);
+
+	color: var(--color-black);
+	background-color: var(--color-white);
+}
+
+.plugin-list .plugin h1 {
+	font-size: var(--font-big);
+}
+
+.plugin-list .plugin .info {
+	display: flex;
+	align-items: center;
+}
+
+.plugin-list .plugin .info .title {
+	flex-grow: 1;
+	font-size: var(--font-normal);
+}
+
+.plugin-list .plugin .info .updated {
+	font-size: var(--font-tiny);
+	color: var(--color-lightgrey);
+}
+
+/* footer */
+footer {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+
+	padding-top: var(--padding-big);
+	padding-bottom: var(--padding-big);
+
+	color: var(--color-lightgrey);
+	background-color: var(--color-background-dark);
+}
+
+footer > * {
+	display: inline-block;
+	margin-right: var(--padding-big);
+}
+
+footer .logo {
+	font-size: var(--font-big);
+}
+
+footer .divider {
+	height: 100px;
+	width: 1px;
+	border-left: 1px solid var(--color-accent);
+}
+
+footer a {
+	color: var(--color-white);
+}
