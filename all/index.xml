@@ -6,10 +6,19 @@
     <description>Recent content on Helix Plugin Center</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 05 Apr 2019 21:41:43 +0100</lastBuildDate>
+    <lastBuildDate>Sun, 22 Dec 2019 01:42:44 +0200</lastBuildDate>
     
 	<atom:link href="https://plugins.gethelix.co/all/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Player Flags</title>
+      <link>https://plugins.gethelix.co/player-flags/</link>
+      <pubDate>Sun, 22 Dec 2019 01:42:44 +0200</pubDate>
+      
+      <guid>https://plugins.gethelix.co/player-flags/</guid>
+      <description>Allows flags to be assigned to players rather than characters.</description>
+    </item>
     
     <item>
       <title>Legs</title>
