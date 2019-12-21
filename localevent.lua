@@ -29,7 +29,7 @@ ix.command.Add("LocalEvent", {
 
 -- Chat registration.
 ix.chat.Register("localevent", {
-	CanHear = ix.config.Get("localEventRange", 280) * 2,
+	CanHear = ix.config.Get("localEventRange", 560),
 	OnChatAdd = function(self, speaker, text)
 		chat.AddText(Color(255, 255, 0), text)
 	end,
