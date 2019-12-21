@@ -1,6 +1,6 @@
 local PLUGIN = PLUGIN
 
-PLUGIN.name = "CLASS Whitelists"
+PLUGIN.name = "Class Whitelists"
 PLUGIN.description = "Allows classes to be obtainable with whitelists."
 PLUGIN.author = "wowm0d"
 PLUGIN.license = [[
@@ -20,46 +20,42 @@ ix.lang.AddTable("english", {
 local playerMeta = FindMetaTable("Player")
 
 if (SERVER) then
-	do
-		function playerMeta:SetClassWhitelisted(class, whitelisted)
-			if (!whitelisted) then
-				whitelisted = nil
-			end
-
-			local data = ix.class.list[class]
-
-			if (data) then
-				local classWhitelists = self:GetData("classWhitelists", {})
-				classWhitelists[Schema.folder] = classWhitelists[Schema.folder] or {}
-				classWhitelists[Schema.folder][data.uniqueID] = whitelisted and true or nil
-
-				self:SetData("classWhitelists", classWhitelists)
-				self:SaveData()
-
-				return true
-			end
-
-			return false
+	function playerMeta:SetClassWhitelisted(class, whitelisted)
+		if (!whitelisted) then
+			whitelisted = nil
 		end
-	end
-end
 
-do
-	function playerMeta:HasClassWhitelist(class)
 		local data = ix.class.list[class]
 
 		if (data) then
-			if (data.isDefault) then
-				return true
-			end
+			local classWhitelists = self:GetData("classWhitelists", {})
+			classWhitelists[Schema.folder] = classWhitelists[Schema.folder] or {}
+			classWhitelists[Schema.folder][data.uniqueID] = whitelisted and true or nil
 
-			local ixData = self:GetData("classWhitelists", {})
+			self:SetData("classWhitelists", classWhitelists)
+			self:SaveData()
 
-			return ixData[Schema.folder] and ixData[Schema.folder][data.uniqueID] == true or false
+			return true
 		end
 
 		return false
 	end
+end
+
+function playerMeta:HasClassWhitelist(class)
+	local data = ix.class.list[class]
+
+	if (data) then
+		if (data.isDefault) then
+			return true
+		end
+
+		local ixData = self:GetData("classWhitelists", {})
+
+		return ixData[Schema.folder] and ixData[Schema.folder][data.uniqueID] == true or false
+	end
+
+	return false
 end
 
 do
