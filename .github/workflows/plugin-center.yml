@@ -1,5 +1,9 @@
 name: Plugin Center
-on: [push]
+on:
+  push:
+    branches:
+      - master
+      - plugin-center
 
 jobs:
   build-deploy:
