@@ -4,12 +4,17 @@
   
   <url>
     <loc>https://plugins.gethelix.co/all/</loc>
-    <lastmod>2019-12-22T01:42:44+02:00</lastmod>
+    <lastmod>2019-12-21T23:44:14+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://plugins.gethelix.co/</loc>
-    <lastmod>2019-12-22T01:42:44+02:00</lastmod>
+    <lastmod>2019-12-21T23:44:14+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://plugins.gethelix.co/overwatch-voices/</loc>
+    <lastmod>2019-12-21T23:44:14+00:00</lastmod>
   </url>
   
   <url>
@@ -50,6 +55,11 @@
   <url>
     <loc>https://plugins.gethelix.co/disable-character-swap/</loc>
     <lastmod>2018-12-10T01:07:50-05:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://plugins.gethelix.co/local-event/</loc>
+    <lastmod>2019-12-21T23:44:14+00:00</lastmod>
   </url>
   
   <url>

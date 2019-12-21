@@ -6,10 +6,19 @@
     <description>Recent content on Helix Plugin Center</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 22 Dec 2019 01:42:44 +0200</lastBuildDate>
+    <lastBuildDate>Sat, 21 Dec 2019 23:44:14 +0000</lastBuildDate>
     
 	<atom:link href="https://plugins.gethelix.co/all/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Overwatch Voices</title>
+      <link>https://plugins.gethelix.co/overwatch-voices/</link>
+      <pubDate>Sat, 21 Dec 2019 23:44:14 +0000</pubDate>
+      
+      <guid>https://plugins.gethelix.co/overwatch-voices/</guid>
+      <description>Adds all the missing CP voice lines from the HL2 Beta Leak as well as adding in voice lines for Airwatch.</description>
+    </item>
     
     <item>
       <title>Player Flags</title>
@@ -82,6 +91,15 @@ Installation  Download the zip Extract it into your Schema&#39;s plugin folder  
       
       <guid>https://plugins.gethelix.co/disable-character-swap/</guid>
       <description>Prevents players from switching characters when enabled.</description>
+    </item>
+    
+    <item>
+      <title>Local Event</title>
+      <link>https://plugins.gethelix.co/local-event/</link>
+      <pubDate>Sun, 09 Dec 2018 05:19:10 +0000</pubDate>
+      
+      <guid>https://plugins.gethelix.co/local-event/</guid>
+      <description>Adds in a new /LocalEvent command only heard from a certain distance, it appears in yellow rather than orange.</description>
     </item>
     
     <item>
