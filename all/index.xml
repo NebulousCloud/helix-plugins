@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Helix Plugin Center</title>
+    <link>https://plugins.gethelix.co/all/</link>
+    <description>Recent content on Helix Plugin Center</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 05 Apr 2019 21:41:43 +0100</lastBuildDate>
+    
+	<atom:link href="https://plugins.gethelix.co/all/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Legs</title>
+      <link>https://plugins.gethelix.co/legs/</link>
+      <pubDate>Fri, 05 Apr 2019 21:41:43 +0100</pubDate>
+      
+      <guid>https://plugins.gethelix.co/legs/</guid>
+      <description>Renders the characters legs to the local player.</description>
+    </item>
+    
+    <item>
+      <title>Flashlight item</title>
+      <link>https://plugins.gethelix.co/flashlight-item/</link>
+      <pubDate>Thu, 04 Apr 2019 23:06:27 +0300</pubDate>
+      
+      <guid>https://plugins.gethelix.co/flashlight-item/</guid>
+      <description>ix-flashlight A flashlight item for Helix. Released to the public domain.
+Installation  Download the zip Extract it into your Schema&#39;s plugin folder  </description>
+    </item>
+    
+    <item>
+      <title>Anti-AFK</title>
+      <link>https://plugins.gethelix.co/anti-afk/</link>
+      <pubDate>Thu, 04 Apr 2019 20:47:42 +0100</pubDate>
+      
+      <guid>https://plugins.gethelix.co/anti-afk/</guid>
+      <description>Stops AFK players from earning wages and kicks when server is full.</description>
+    </item>
+    
+    <item>
+      <title>Warmth</title>
+      <link>https://plugins.gethelix.co/warmth/</link>
+      <pubDate>Thu, 28 Feb 2019 20:32:11 -0500</pubDate>
+      
+      <guid>https://plugins.gethelix.co/warmth/</guid>
+      <description>Adds a warmth dependency for characters.</description>
+    </item>
+    
+    <item>
+      <title>Perma Remove</title>
+      <link>https://plugins.gethelix.co/perma-remove/</link>
+      <pubDate>Tue, 22 Jan 2019 19:23:06 +0000</pubDate>
+      
+      <guid>https://plugins.gethelix.co/perma-remove/</guid>
+      <description>Allows staff to permanently remove map entities.</description>
+    </item>
+    
+    <item>
+      <title>Localized damage</title>
+      <link>https://plugins.gethelix.co/localized-damage/</link>
+      <pubDate>Thu, 20 Dec 2018 23:35:14 +0100</pubDate>
+      
+      <guid>https://plugins.gethelix.co/localized-damage/</guid>
+      <description>Damage are different depending on which limb is being hurt.</description>
+    </item>
+    
+    <item>
+      <title>Disable Character Swap</title>
+      <link>https://plugins.gethelix.co/disable-character-swap/</link>
+      <pubDate>Sun, 09 Dec 2018 05:19:10 +0000</pubDate>
+      
+      <guid>https://plugins.gethelix.co/disable-character-swap/</guid>
+      <description>Prevents players from switching characters when enabled.</description>
+    </item>
+    
+    <item>
+      <title>Persistent Corpses</title>
+      <link>https://plugins.gethelix.co/persistent-corpses/</link>
+      <pubDate>Sun, 09 Dec 2018 03:34:13 +0000</pubDate>
+      
+      <guid>https://plugins.gethelix.co/persistent-corpses/</guid>
+      <description>Makes player corpses stay on the map after the player has respawned.</description>
+    </item>
+    
+  </channel>
+</rss>

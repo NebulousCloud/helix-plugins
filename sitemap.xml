@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>https://plugins.gethelix.co/all/</loc>
+    <lastmod>2019-12-21T01:06:42-05:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://plugins.gethelix.co/</loc>
+    <lastmod>2019-12-21T01:06:42-05:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://plugins.gethelix.co/legs/</loc>
+    <lastmod>2019-05-04T19:03:32+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://plugins.gethelix.co/flashlight-item/</loc>
+    <lastmod>2019-04-04T23:06:27+03:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://plugins.gethelix.co/anti-afk/</loc>
+    <lastmod>2019-04-04T20:47:42+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://plugins.gethelix.co/warmth/</loc>
+    <lastmod>2019-02-28T20:32:11-05:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://plugins.gethelix.co/perma-remove/</loc>
+    <lastmod>2019-12-08T07:01:14+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://plugins.gethelix.co/localized-damage/</loc>
+    <lastmod>2018-12-20T23:35:14+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://plugins.gethelix.co/disable-character-swap/</loc>
+    <lastmod>2018-12-10T01:07:50-05:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://plugins.gethelix.co/persistent-corpses/</loc>
+    <lastmod>2019-12-21T01:06:42-05:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://plugins.gethelix.co/categories/</loc>
+  </url>
+  
+  <url>
+    <loc>https://plugins.gethelix.co/tags/</loc>
+  </url>
+  
+</urlset>
