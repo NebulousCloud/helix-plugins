@@ -1,6 +1,6 @@
 {{ define "main" }}
 	<div class="plugin-list">
-		{{ range .Pages.ByLastmod }}
+		{{ range .Pages.ByLastmod.Reverse }}
 			<a href="{{ .Permalink }}" class="plugin">
 				<h1>{{ .Title }}</h1>
 				<div class="info">
