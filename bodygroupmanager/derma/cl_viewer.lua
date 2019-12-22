@@ -79,43 +79,26 @@ function PANEL:PopulateBodygroupOptions()
     self.bodygroupIndex = {}
 
     for k, v in pairs(self.target.player:GetBodyGroups()) do
+        -- Disregard the model bodygroup.
         if !(v.id == 0) then
             local index = v.id
 
             self.bodygroupBox[v.id] = self:Add("DPanel")
-            self.bodygroupBox[v.id]:SetPos(325, (75*index) + 25)
-            self.bodygroupBox[v.id]:SetSize(375, 50)
+            self.bodygroupBox[v.id]:Dock(TOP)
+            self.bodygroupBox[v.id]:DockMargin(300, 25, 25, 0)
+            self.bodygroupBox[v.id]:SetHeight(50)
 
-            -- Disregard the model bodygroup.
-            self.bodygroupName[v.id] = self:Add("DLabel")
+            self.bodygroupName[v.id] = self.bodygroupBox[v.id]:Add("DLabel")
             self.bodygroupName[v.id].index = v.id
-            self.bodygroupName[v.id]:SetText(v.name)
-            self.bodygroupName[v.id]:SetColor(Color(255,255,255))
+            self.bodygroupName[v.id]:SetText(v.name:gsub("^%l", string.upper))
             self.bodygroupName[v.id]:SetFont("ixMediumFont")
-            self.bodygroupName[v.id]:SetPos(350, (75*index))
-            self.bodygroupName[v.id]:SetSize(400, 100)
+            self.bodygroupName[v.id]:Dock(LEFT)
+            self.bodygroupName[v.id]:DockMargin(30, 0, 0, 0)
+            self.bodygroupName[v.id]:SetWidth(200)
 
-            self.bodygroupPrevious[v.id] = self:Add("DButton")
-            self.bodygroupPrevious[v.id].index = v.id
-            self.bodygroupPrevious[v.id]:SetPos(450, (75*index) + 35)
-            self.bodygroupPrevious[v.id]:SetSize(75, 30)
-            self.bodygroupPrevious[v.id]:SetText("Previous")
-            self.bodygroupPrevious[v.id].DoClick = function()
-                local index = v.id
-                if 0 == self.bodygroupIndex[index].value then
-                    return
-                end
-                self.bodygroupIndex[index].value = self.bodygroupIndex[index].value - 1
-                self.bodygroupIndex[index]:SetText(self.bodygroupIndex[index].value)
-                self.model.Entity:SetBodygroup(index, self.bodygroupIndex[index].value)
-
-            end
-
-
-            self.bodygroupNext[v.id] = self:Add("DButton")
+            self.bodygroupNext[v.id] = self.bodygroupBox[v.id]:Add("DButton")
             self.bodygroupNext[v.id].index = v.id
-            self.bodygroupNext[v.id]:SetPos(590, (75*index) + 35)
-            self.bodygroupNext[v.id]:SetSize(75, 30)
+            self.bodygroupNext[v.id]:Dock(RIGHT)
             self.bodygroupNext[v.id]:SetText("Next")
             self.bodygroupNext[v.id].DoClick = function()
                 local index = v.id
@@ -128,14 +111,28 @@ function PANEL:PopulateBodygroupOptions()
                 self.model.Entity:SetBodygroup(index, self.bodygroupIndex[index].value)
             end
 
-            self.bodygroupIndex[v.id] = self:Add("DLabel")
+            self.bodygroupIndex[v.id] = self.bodygroupBox[v.id]:Add("DLabel")
             self.bodygroupIndex[v.id].index = v.id
             self.bodygroupIndex[v.id].value = self.target.player:GetBodygroup(index)
             self.bodygroupIndex[v.id]:SetText(self.bodygroupIndex[v.id].value)
             self.bodygroupIndex[v.id]:SetFont("ixMediumFont")
-            self.bodygroupIndex[v.id]:SetColor(Color(255,255,255))
-            self.bodygroupIndex[v.id]:SetPos(550, (75*index))
-            self.bodygroupIndex[v.id]:SetSize(100, 100)
+            self.bodygroupIndex[v.id]:Dock(RIGHT)
+            self.bodygroupIndex[v.id]:SetContentAlignment(5)
+
+            self.bodygroupPrevious[v.id] = self.bodygroupBox[v.id]:Add("DButton")
+            self.bodygroupPrevious[v.id].index = v.id
+            self.bodygroupPrevious[v.id]:Dock(RIGHT)
+            self.bodygroupPrevious[v.id]:SetText("Previous")
+            self.bodygroupPrevious[v.id].DoClick = function()
+                local index = v.id
+                if 0 == self.bodygroupIndex[index].value then
+                    return
+                end
+                self.bodygroupIndex[index].value = self.bodygroupIndex[index].value - 1
+                self.bodygroupIndex[index]:SetText(self.bodygroupIndex[index].value)
+                self.model.Entity:SetBodygroup(index, self.bodygroupIndex[index].value)
+
+            end
 
             self.model.Entity:SetBodygroup(index, self.target.player:GetBodygroup(index))
         end
