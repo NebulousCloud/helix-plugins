@@ -6,10 +6,37 @@
     <description>Recent content on Helix Plugin Center</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 21 Dec 2019 17:50:35 -0600</lastBuildDate>
+    <lastBuildDate>Sun, 22 Dec 2019 00:49:49 +0000</lastBuildDate>
     
 	<atom:link href="https://plugins.gethelix.co/all/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Overwatch Rank Manager</title>
+      <link>https://plugins.gethelix.co/overwatch-rank-manager/</link>
+      <pubDate>Sun, 22 Dec 2019 00:49:49 +0000</pubDate>
+      
+      <guid>https://plugins.gethelix.co/overwatch-rank-manager/</guid>
+      <description>Allows Overwatch to manage ranks.</description>
+    </item>
+    
+    <item>
+      <title>Better Description Display</title>
+      <link>https://plugins.gethelix.co/better-description-display/</link>
+      <pubDate>Sun, 22 Dec 2019 13:47:56 +1300</pubDate>
+      
+      <guid>https://plugins.gethelix.co/better-description-display/</guid>
+      <description>A better description display for when you look at people.</description>
+    </item>
+    
+    <item>
+      <title>Weight</title>
+      <link>https://plugins.gethelix.co/weight/</link>
+      <pubDate>Sun, 22 Dec 2019 13:47:56 +1300</pubDate>
+      
+      <guid>https://plugins.gethelix.co/weight/</guid>
+      <description>Allows for weight to be added to items.</description>
+    </item>
     
     <item>
       <title>Class Whitelists</title>
