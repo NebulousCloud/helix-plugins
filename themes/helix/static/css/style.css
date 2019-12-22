@@ -14,6 +14,8 @@
 	--font-normal: 16px;
 	--font-tiny: 12px;
 
+	--font-style-normal: Segoe UI, Helvetica, Arial, sans-serif;
+
 	--color-accent: rgb(115, 53, 142);
 	--color-white: rgb(255, 255, 255);
 	--color-white-accent: rgb(203, 190, 209);
@@ -36,7 +38,7 @@ body {
 	min-height: 100vh;
 	flex-direction: column;
 
-	font-family: Segoe UI, Helvetica, Arial, sans-serif;
+	font-family: var(--font-style-normal);
 	background-color: var(--color-background-light);
 }
 
@@ -305,8 +307,9 @@ main article summary .page .config .description {
 	margin-top: var(--padding-tiny);
 }
 
-main article summary .page[data-index="license"] {
+main article summary .page[data-index="license"] pre {
 	white-space: pre-line;
+	font-family: var(--font-style-normal);
 }
 
 /* generic file tree */

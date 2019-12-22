@@ -11,10 +11,10 @@
 	</div>
 
 	<div class="page" data-index="license">
-		{{- with .Params.license -}}
+		<pre>{{- with .Params.license -}}
 			{{ trim . "\r\n" }}
 		{{- else -}}
 			The author has not included any licensing information for this plugin. Please report this plugin with the link in the sidebar.
-		{{- end -}}
+		{{- end -}}</pre>
 	</div>
 </summary>
