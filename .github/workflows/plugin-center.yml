@@ -1,0 +1,59 @@
+name: Plugin Center Redeploy
+on:
+  push:
+    branches:
+      - master
+      - plugin-center
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Pull plugins
+      run: |
+        git clone --depth=10000 https://github.com/NebulousCloud/helix-plugins.git plugins
+
+    - name: Pull plugin center
+      uses: actions/checkout@v2-beta
+      with:
+        repository: NebulousCloud/helix-plugins
+        ref: plugin-center
+        path: plugin-center
+
+    - name: Pull plugin scraper
+      uses: actions/checkout@v2-beta
+      with:
+        repository: impulsh/helix-plugin-scraper
+        ref: master
+        path: scraper
+        token: ${{ secrets.PLUGIN_CENTER_TOKEN }}
+
+    - name: Build Lua
+      uses: leafo/gh-actions-lua@v5
+
+    - name: Build Luarocks
+      uses: leafo/gh-actions-luarocks@v2
+
+    - name: Build Hugo
+      uses: peaceiris/actions-hugo@v2
+
+    - name: Build plugin scraper
+      working-directory: scraper
+      run: luarocks make
+
+    - name: Process plugins
+      working-directory: scraper
+      run: lua main.lua ../plugins --batch --no-validate-metadata --output ../plugin-center/content/plugins
+
+    - name: Build plugin center
+      working-directory: plugin-center
+      run: hugo
+
+    - name: Deploy plugin center
+      if: success()
+      uses: peaceiris/actions-gh-pages@v2
+      env:
+        ACTIONS_DEPLOY_KEY: ${{ secrets.PLUGIN_CENTER_DEPLOY }}
+        PUBLISH_BRANCH: gh-pages
+        PUBLISH_DIR: ./plugin-center/public
