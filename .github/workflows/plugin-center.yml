@@ -44,7 +44,7 @@ jobs:
 
     - name: Process plugins
       working-directory: scraper
-      run: lua main.lua ../plugins --batch --output ../plugin-center/content/plugins
+      run: lua main.lua ../plugins --batch --no-validate-metadata --output ../plugin-center/content/plugins
       
     - name: Build plugin center
       working-directory: plugin-center
