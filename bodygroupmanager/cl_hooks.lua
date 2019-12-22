@@ -1,0 +1,5 @@
+netstream.Hook("ixBodygroupView", function(target)
+    local panel = vgui.Create("ixBodygroupView")
+    panel:SetViewModel(target.player:GetModel())
+    panel:SetTarget(target)
+end)
