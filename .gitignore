@@ -1,6 +1,7 @@
 
 themes/ananke/
 public/
+resources/_gen
 
 content/*
 !content/plugins/

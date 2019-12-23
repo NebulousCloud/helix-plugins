@@ -1,3 +1,10 @@
+{{ $filesaver := resources.Get "js/filesaver.min.js" -}}
+{{ $jszip := resources.Get "js/jszip.min.js" -}}
+{{ $gitzip := resources.Get "js/gitzip.js" -}}
+{{ $app := resources.Get "js/app.js" -}}
+
+{{ $js := slice $filesaver $jszip $gitzip $app | resources.Concat "js/bundle.js" | resources.Minify | resources.Fingerprint -}}
+
 <footer>
 	<div class="logo">Helix</div>
 	<div class="divider"></div>
@@ -7,7 +14,4 @@
 	<a href="{{ .Site.BaseURL }}">Plugins</a>
 </footer>
 
-<script type="text/javascript" src="/js/filesaver.min.js"></script>
-<script type="text/javascript" src="/js/jszip.min.js"></script>
-<script type="text/javascript" src="/js/gitzip.js"></script>
-<script type="text/javascript" src="/js/app.js"></script>
+<script type="text/javascript" src="{{ $js.Permalink }}"></script>
