@@ -4,6 +4,10 @@ PLUGIN.name = "Bodygroup Manager"
 PLUGIN.author = "Gary Tate"
 PLUGIN.description = "Allows players and administration to have an easier time customising bodygroups."
 
+if SERVER then
+    util.AddNetworkString("ixBodygroupView")
+end
+
 ix.command.Add("CharEditBodygroup", {
     description = "cmdEditBodygroup",
     adminOnly = true,
@@ -11,11 +15,9 @@ ix.command.Add("CharEditBodygroup", {
         ix.type.character
     },
     OnRun = function(self, client, target)
-        if !netstream then
-            ErrorNoHalt("Bodygroupmanager requires Netstream to run.")
-            return
-        end
-        netstream.Start(client, "ixBodygroupView", target)
+        net.Start("ixBodygroupView")
+            net.WriteTable(target)
+        net.Send(client)
     end
 })
 

@@ -21,7 +21,11 @@ function PANEL:Init()
         for _, v in pairs(self.bodygroupIndex) do
             table.insert(bodygroups, v.index, v.value)
         end
-        netstream.Start("ixBodygroupTableSet", self.target, bodygroups)
+        
+        net.Start("ixBodygroupTableSet")
+            net.WriteEntity(self.target.player)
+            net.WriteTable(bodygroups)
+        net.SendToServer()
     end
 
     self.model = self:Add("DModelPanel")
