@@ -1,3 +1,4 @@
+util.AddNetworkString("ixBodygroupView")
 util.AddNetworkString("ixBodygroupTableSet")
 
 ix.log.AddType("bodygroupEditor", function(client, target)
@@ -5,12 +6,21 @@ ix.log.AddType("bodygroupEditor", function(client, target)
 end)
 
 net.Receive("ixBodygroupTableSet", function(length, client)
-    local target = net.ReadEntity()
-    local bodygroups = net.ReadTable()
-    if (client:IsAdmin()) then
-        for k, v in pairs(bodygroups) do
-            target:SetBodygroup(k, v)
-        end
-        ix.log.Add(client, "bodygroupEditor", client, target)
+    if (!ix.command.HasAccess(client, "CharEditBodygroup")) then
+        return
     end
+
+    local target = net.ReadEntity()
+
+    if (!IsValid(target) or !target:IsPlayer() or !target:GetCharacter()) then
+        return
+    end
+
+    local bodygroups = net.ReadTable()
+
+    for k, v in pairs(bodygroups) do
+        target:SetBodygroup(tonumber(k) or 0, tonumber(v) or 0)
+    end
+
+    ix.log.Add(client, "bodygroupEditor", target)
 end)

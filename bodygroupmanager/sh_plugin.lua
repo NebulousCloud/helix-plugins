@@ -1,22 +1,22 @@
-local PLUGIN = PLUGIN or {}
+local PLUGIN = PLUGIN
 
 PLUGIN.name = "Bodygroup Manager"
 PLUGIN.author = "Gary Tate"
 PLUGIN.description = "Allows players and administration to have an easier time customising bodygroups."
 
-if SERVER then
-    util.AddNetworkString("ixBodygroupView")
-end
+ix.lang.AddTable("english", {
+    cmdEditBodygroup = "Customise the bodygroups of a target."
+})
 
 ix.command.Add("CharEditBodygroup", {
     description = "cmdEditBodygroup",
     adminOnly = true,
     arguments = {
-        ix.type.character
+        bit.bor(ix.type.player, ix.type.optional)
     },
     OnRun = function(self, client, target)
         net.Start("ixBodygroupView")
-            net.WriteTable(target)
+            net.WriteEntity(target or client)
         net.Send(client)
     end
 })

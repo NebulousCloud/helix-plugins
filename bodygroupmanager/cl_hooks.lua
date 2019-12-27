@@ -1,6 +1,6 @@
 net.Receive("ixBodygroupView", function()
-    local target = net.ReadTable()
+    local target = net.ReadEntity()
     local panel = vgui.Create("ixBodygroupView")
-    panel:SetViewModel(target.player:GetModel())
+    panel:SetViewModel(target:GetModel())
     panel:SetTarget(target)
 end)

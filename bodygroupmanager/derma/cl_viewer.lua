@@ -1,4 +1,4 @@
-local PLUGIN = PLUGIN or {}
+local PLUGIN = PLUGIN
 
 local PANEL = {}
 
@@ -21,9 +21,9 @@ function PANEL:Init()
         for _, v in pairs(self.bodygroupIndex) do
             table.insert(bodygroups, v.index, v.value)
         end
-        
+
         net.Start("ixBodygroupTableSet")
-            net.WriteEntity(self.target.player)
+            net.WriteEntity(self.target)
             net.WriteTable(bodygroups)
         net.SendToServer()
     end
@@ -72,7 +72,7 @@ end
 function PANEL:SetTarget(target)
     self.target = target
     self:PopulateBodygroupOptions()
-    self:SetTitle(target.player:Name())
+    self:SetTitle(target:GetName())
 end
 
 function PANEL:PopulateBodygroupOptions()
@@ -82,7 +82,7 @@ function PANEL:PopulateBodygroupOptions()
     self.bodygroupNext = {}
     self.bodygroupIndex = {}
 
-    for k, v in pairs(self.target.player:GetBodyGroups()) do
+    for k, v in pairs(self.target:GetBodyGroups()) do
         -- Disregard the model bodygroup.
         if !(v.id == 0) then
             local index = v.id
@@ -109,7 +109,7 @@ function PANEL:PopulateBodygroupOptions()
                 if (self.model.Entity:GetBodygroupCount(index) - 1) <= self.bodygroupIndex[index].value then
                     return
                 end
-                
+
                 self.bodygroupIndex[index].value = self.bodygroupIndex[index].value + 1
                 self.bodygroupIndex[index]:SetText(self.bodygroupIndex[index].value)
                 self.model.Entity:SetBodygroup(index, self.bodygroupIndex[index].value)
@@ -117,7 +117,7 @@ function PANEL:PopulateBodygroupOptions()
 
             self.bodygroupIndex[v.id] = self.bodygroupBox[v.id]:Add("DLabel")
             self.bodygroupIndex[v.id].index = v.id
-            self.bodygroupIndex[v.id].value = self.target.player:GetBodygroup(index)
+            self.bodygroupIndex[v.id].value = self.target:GetBodygroup(index)
             self.bodygroupIndex[v.id]:SetText(self.bodygroupIndex[v.id].value)
             self.bodygroupIndex[v.id]:SetFont("ixMediumFont")
             self.bodygroupIndex[v.id]:Dock(RIGHT)
@@ -138,7 +138,7 @@ function PANEL:PopulateBodygroupOptions()
 
             end
 
-            self.model.Entity:SetBodygroup(index, self.target.player:GetBodygroup(index))
+            self.model.Entity:SetBodygroup(index, self.target:GetBodygroup(index))
         end
     end
 end
