@@ -14,6 +14,7 @@ $font-normal: 16px;
 $font-tiny: 12px;
 
 $font-style-normal: Segoe UI, Helvetica, Arial, sans-serif;
+$font-style-code: Consolas, monospace;
 
 $color-accent: rgb(115, 53, 142);
 $color-white: rgb(255, 255, 255);
@@ -279,6 +280,91 @@ main {
 				&[data-index="license"] pre {
 					white-space: pre-line;
 					font-family: $font-style-normal;
+				}
+
+				// description page
+				&[data-index="description"] {
+					word-wrap: break-word;
+					line-height: 1.5;
+
+					& > :first-child {
+						margin-top: 0 !important;
+					}
+
+					& > :last-child {
+						margin-bottom: 0 !important;
+					}
+
+					h1 {
+						margin-top: $padding-normal;
+						padding-bottom: .3em;
+						margin-bottom: $padding-small;
+
+						font-size: $font-huge;
+						font-weight: 600;
+
+						border-bottom: 1px solid $color-background-light;
+					}
+
+					h2 {
+						margin-top: $padding-normal;
+						margin-bottom: $padding-small;
+
+						font-size: $font-big;
+						font-weight: 600;
+						line-height: 1.25;
+					}
+
+					h3 {
+						margin-top: $padding-normal;
+						margin-bottom: $padding-tiny;
+
+						font-weight: 600;
+					}
+
+					p {
+						margin-bottom: 16px;
+					}
+
+					pre {
+						padding: $padding-tiny;
+						margin-bottom: $padding-small;
+						line-height: 1.45;
+
+						word-wrap: normal;
+						background-color: $color-background-light;
+						overflow: auto;
+
+						& > code {
+							padding: 0;
+
+							display: inline;
+							word-break: normal;
+							white-space: pre;
+							overflow: visible;
+							max-width: 100%;
+
+							background: none;
+						}
+					}
+
+					code {
+						padding: 2px 4px 2px 4px;
+
+						font-family: $font-style-code;
+						font-size: 85%;
+
+						background-color: $color-background-light;
+					}
+
+					ul li, ol li {
+						margin-left: $padding-big;
+						line-height: 1.5;
+					}
+
+					img {
+						max-width: 100%;
+					}
 				}
 			}
 		}
