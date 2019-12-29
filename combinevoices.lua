@@ -272,5 +272,5 @@ Schema.voices.Add("Airwatch", "0", "Zero.", "npc/overwatch/radiovoice/zero.wav")
 Schema.voices.Add("Airwatch", "Zone", "Zone.", "npc/overwatch/radiovoice/zone.wav")
 
 Schema.voices.AddClass("Airwatch", function(client)
-	return client:Team() == CLASS_SCN
+	return client:IsDispatch()
 end)
