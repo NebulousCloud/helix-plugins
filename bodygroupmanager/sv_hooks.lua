@@ -18,9 +18,14 @@ net.Receive("ixBodygroupTableSet", function(length, client)
 
     local bodygroups = net.ReadTable()
 
+    local groups = {}
+
     for k, v in pairs(bodygroups) do
         target:SetBodygroup(tonumber(k) or 0, tonumber(v) or 0)
+        groups[tonumber(k) or 0] = tonumber(v) or 0
     end
+
+    target:GetCharacter():SetData("groups", groups)
 
     ix.log.Add(client, "bodygroupEditor", target)
 end)
