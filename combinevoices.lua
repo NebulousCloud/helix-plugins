@@ -6,7 +6,7 @@ PLUGIN.author = "Ice Bear#2034"
 PLUGIN.description = "Adds all the missing CP voice lines from the HL2 Beta Leak as well as adding in voice lines for Airwatch."
 PLUGIN.schema = "HL2 RP"
 PLUGIN.license = [[
-Copyright 2019 Oscar Detnon
+Copyright 2019-2020 DevAppeared
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
