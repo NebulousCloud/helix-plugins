@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded",function(event)
 {const tabIndex=tab.getAttribute("href").substring(1);const tabPage=container.querySelector(`.page[data-index="${tabIndex}"]`);if(!tabPage)
 {console.error(`attempted to set up tab "${tabIndex}" without corresponding page`);return;}
 tab.addEventListener("click",function(event)
-{SetActiveTab(container,tabIndex);});});});const dateElements=document.querySelectorAll("[data-relative-date]");dateElements.forEach(function(element)
+{SetActiveTab(container,tabIndex);history.replaceState(undefined,undefined,"#"+tabIndex)});});});const dateElements=document.querySelectorAll("[data-relative-date]");dateElements.forEach(function(element)
 {const updatedDate=new Date(element.getAttribute("data-relative-date"));element.textContent=GetTimeSince(updatedDate);})
 if(tabElements.length==1&&location.hash.length>0)
 {const container=tabElements[0];const index=location.hash.substring(1);if(container.querySelector(`.page[data-index="${index}"]`))
