@@ -2,6 +2,7 @@
 	<header>
 		<ul>
 			<li class="active"><a href="#description">Description</a></li>
+			{{ with .Params.configs }}<li><a href="#configs">Configs</a></li>{{ end }}
 			<li><a href="#license">License</a></li>
 		</ul>
 	</header>
@@ -9,6 +10,21 @@
 	<div class="page active" data-index="description">
 		{{ .Content }}
 	</div>
+
+	{{- with .Params.configs -}}
+		<div class="page" data-index="configs">
+			<div class="info">Servers can customize usage of this plugin with these settings</div>
+			{{- range $k, $v := . }}
+				<div class="config">
+					<h1>
+						{{ index $v "name" }}
+						<span class="default">(default: {{ index $v "default" }})</span>
+					</h1>
+					<p>{{ index $v "description" }}</p>
+				</div>
+			{{- end }}
+		</div>
+	{{- end -}}
 
 	<div class="page" data-index="license">
 		<pre>{{- with .Params.license -}}

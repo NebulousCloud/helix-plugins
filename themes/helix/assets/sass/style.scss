@@ -366,6 +366,26 @@ main {
 						max-width: 100%;
 					}
 				}
+
+				&[data-index="configs"] {
+					.info {
+						padding: $padding-small;
+
+						text-align: center;
+						background-color: $color-background-light;
+					}
+
+					.config {
+						margin-top: $padding-normal;
+
+						.default {
+							display: inline-block;
+
+							font-size: $font-normal;
+							color: $color-lightgrey;
+						}
+					}
+				}
 			}
 		}
 
