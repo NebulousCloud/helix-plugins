@@ -152,6 +152,7 @@ document.addEventListener("DOMContentLoaded", function(event)
 			tab.addEventListener("click", function(event)
 			{
 				SetActiveTab(container, tabIndex);
+				history.replaceState(undefined, undefined, "#" + tabIndex)
 			});
 		});
 	});
