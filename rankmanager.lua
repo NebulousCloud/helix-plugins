@@ -13,6 +13,7 @@ local PLUGIN = PLUGIN
 PLUGIN.name = "Overwatch Rank Manager"
 PLUGIN.author = "Gary Tate"
 PLUGIN.description = "Allows Overwatch to manage ranks."
+PLUGIN.schema = "HL2 RP"
 PLUGIN.license = [[
 The MIT License (MIT)
 Copyright (c) 2019 Gary Tate
