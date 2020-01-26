@@ -13,6 +13,14 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ]]
+PLUGIN.readme = [[
+Makes player corpses stay on the map after the player has respawned. Items can also be set to drop into the ragdoll's inventory
+upon death.
+
+## Enabling drops
+To enable items to be put into a corpse's inventory when a player dies, you must set the `dropItemsOnDeath` config to `true`,
+and then add `ITEM.bDropOnDeath = true` to any items that you want to be placed into the inventory.
+]]
 
 PLUGIN.hardCorpseMax = 64
 
@@ -171,7 +179,7 @@ if (SERVER) then
 		if (ix.config.Get("dropItemsOnDeath")) then
 			for _, slot in pairs(charInventory.slots) do
 				for _, item in pairs(slot) do
-					if (item.dropOnDeath) then
+					if (item.bDropOnDeath) then
 						item:Transfer(inventory:GetID(), item.gridX, item.gridY)
 					end
 				end
