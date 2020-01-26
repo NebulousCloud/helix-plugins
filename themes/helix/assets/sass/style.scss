@@ -387,6 +387,7 @@ main {
 							display: inline-block;
 							height: $font-normal;
 							width: $font-normal;
+							margin-right: 4px;
 
 							&.admin {
 								background-image: url(/img/lock.svg);

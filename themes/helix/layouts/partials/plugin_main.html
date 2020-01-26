@@ -21,8 +21,8 @@
 					<h1>
 						{{- if (index $v "adminOnly") -}}
 							<span class="icon admin" data-tooltip="This command requires admin privileges to run"></span>
-						{{- end }}
-						{{ $.Site.Params.commandPrefix }}{{ index $v "name" }}
+						{{- end -}}
+						{{- $.Site.Params.commandPrefix }}{{ index $v "name" -}}
 					</h1>
 					<p>{{ index $v "description" }}</p>
 				</div>
