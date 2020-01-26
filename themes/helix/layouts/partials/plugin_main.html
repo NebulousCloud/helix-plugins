@@ -2,7 +2,9 @@
 	<header>
 		<ul>
 			<li class="active"><a href="#description">Description</a></li>
+			{{ with .Params.commands }}<li><a href="#commands">Commands</a></li>{{ end }}
 			{{ with .Params.configs }}<li><a href="#configs">Configs</a></li>{{ end }}
+			{{ with .Params.options }}<li><a href="#options">Options</a></li>{{ end }}
 			<li><a href="#license">License</a></li>
 		</ul>
 	</header>
@@ -11,11 +13,43 @@
 		{{ .Content }}
 	</div>
 
+	{{- with .Params.commands -}}
+		<div class="page descriptive-list" data-index="commands">
+			<div class="info">Players can use these commands to interact with this plugin</div>
+			{{- range $k, $v := . }}
+				<div class="entry">
+					<h1>
+						{{- if (index $v "adminOnly") -}}
+							<span class="icon admin" data-tooltip="This command requires admin privileges to run"></span>
+						{{- end }}
+						{{ $.Site.Params.commandPrefix }}{{ index $v "name" }}
+					</h1>
+					<p>{{ index $v "description" }}</p>
+				</div>
+			{{- end }}
+		</div>
+	{{- end -}}
+
 	{{- with .Params.configs -}}
-		<div class="page" data-index="configs">
+		<div class="page descriptive-list" data-index="configs">
 			<div class="info">Servers can customize usage of this plugin with these settings</div>
 			{{- range $k, $v := . }}
-				<div class="config">
+				<div class="entry">
+					<h1>
+						{{ index $v "name" }}
+						<span class="default">(default: {{ index $v "default" }})</span>
+					</h1>
+					<p>{{ index $v "description" }}</p>
+				</div>
+			{{- end }}
+		</div>
+	{{- end -}}
+
+	{{- with .Params.options -}}
+		<div class="page descriptive-list" data-index="options">
+			<div class="info">Players can customize their experience with these personal settings</div>
+			{{- range $k, $v := . }}
+				<div class="entry">
 					<h1>
 						{{ index $v "name" }}
 						<span class="default">(default: {{ index $v "default" }})</span>

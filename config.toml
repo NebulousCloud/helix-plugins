@@ -7,6 +7,7 @@ theme = "helix"
 [params]
 	helixURL = "https://gethelix.co/"
 	repoURL = "https://github.com/nebulouscloud/helix-plugins/"
+	commandPrefix = "/"
 
 [permalinks]
 	plugins = "/:title/"

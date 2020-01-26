@@ -59,14 +59,14 @@ a {
 	opacity: 0;
 	z-index: 999;
 
-	padding: 4px;
-	margin-bottom: 4px;
-	transform: translateX(calc(-100% - #{$padding-tiny})) translateY(-2px);
+	padding: $padding-tiny;
+	transform: translateX(-50%) translateY(calc(-100% - #{$padding-tiny}));
 
 	text-align: center;
 	font-size: $font-normal;
 	font-weight: 400;
 
+	pointer-events: none;
 	transition: opacity 150ms ease-in-out;
 	color: $color-white;
 	background-color: $color-background-dark;
@@ -367,16 +367,31 @@ main {
 					}
 				}
 
-				&[data-index="configs"] {
+				&.descriptive-list {
 					.info {
+						margin-bottom: $padding-small;
 						padding: $padding-small;
 
 						text-align: center;
 						background-color: $color-background-light;
 					}
 
-					.config {
-						margin-top: $padding-normal;
+					.entry {
+						margin-bottom: $padding-normal;
+
+						&:last-of-type {
+							margin-bottom: 0;
+						}
+
+						.icon {
+							display: inline-block;
+							height: $font-normal;
+							width: $font-normal;
+
+							&.admin {
+								background-image: url(/img/lock.svg);
+							}
+						}
 
 						.default {
 							display: inline-block;
