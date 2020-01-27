@@ -80,16 +80,18 @@ function PANEL:PopulateBodygroupOptions()
     self.bodygroupName = {}
     self.bodygroupPrevious = {}
     self.bodygroupNext = {}
-    self.bodygroupIndex = {}
+	self.bodygroupIndex = {}
+	self.scrollBar = vgui.Create("DScrollPanel", self)
+	self.scrollBar:Dock(FILL)
 
     for k, v in pairs(self.target:GetBodyGroups()) do
         -- Disregard the model bodygroup.
         if !(v.id == 0) then
-            local index = v.id
+			local index = v.id
 
-            self.bodygroupBox[v.id] = self:Add("DPanel")
+            self.bodygroupBox[v.id] = self.scrollBar:Add("DPanel")
             self.bodygroupBox[v.id]:Dock(TOP)
-            self.bodygroupBox[v.id]:DockMargin(300, 25, 25, 0)
+            self.bodygroupBox[v.id]:DockMargin(300, 20, 20, 0)
             self.bodygroupBox[v.id]:SetHeight(50)
 
             self.bodygroupName[v.id] = self.bodygroupBox[v.id]:Add("DLabel")
