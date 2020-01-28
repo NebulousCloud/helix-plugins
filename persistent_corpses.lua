@@ -18,8 +18,8 @@ Makes player corpses stay on the map after the player has respawned. Items can a
 upon death.
 
 ## Enabling drops
-To enable items to be put into a corpse's inventory when a player dies, you must set the `dropItemsOnDeath` config to `true`,
-and then add `ITEM.bDropOnDeath = true` to any items that you want to be placed into the inventory.
+To allow items to be put into a corpse's inventory when a player dies, you must set the `dropItemsOnDeath` config to `true`,
+and then add `ITEM.bDropOnDeath = true` to any item that you want to be placed into the inventory.
 ]]
 
 PLUGIN.hardCorpseMax = 64
@@ -84,6 +84,16 @@ if (SERVER) then
 
 		for k, _ in ipairs(toRemove) do
 			table.remove(self.corpses, k)
+		end
+	end
+
+	function PLUGIN:RemoveEquippableItem(client, item)
+		if (item.Unequip) then
+			item:Unequip(client)
+		elseif (item.RemoveOutfit) then
+			item:RemoveOutfit(client)
+		elseif (item.RemovePart) then
+			item:RemovePart(client)
 		end
 	end
 
@@ -180,6 +190,10 @@ if (SERVER) then
 			for _, slot in pairs(charInventory.slots) do
 				for _, item in pairs(slot) do
 					if (item.bDropOnDeath) then
+						if (item:GetData("equip")) then
+							self:RemoveEquippableItem(client, item)
+						end
+
 						item:Transfer(inventory:GetID(), item.gridX, item.gridY)
 					end
 				end
