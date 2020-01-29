@@ -14,9 +14,7 @@ ix.command.Add("ItemSpawnerAdd", {
 		local location = client:GetEyeTrace().HitPos
 		location.z = location.z + 10
 
-		local complete = PLUGIN:AddSpawner(client, location, title)
-
-		return complete and "success" or "error"
+		PLUGIN:AddSpawner(client, location, title)
 	end
 })
 

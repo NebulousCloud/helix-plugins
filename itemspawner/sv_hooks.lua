@@ -55,7 +55,7 @@ net.Receive("ixItemSpawnerChanges", function(length, client)
 		if (v.ID == changes[1]) then
 			v.title = changes[2]
 			v.delay = math.Clamp(changes[3], 1, 10000)
-			v.rarity  = math.Clamp(changes[4] 0, 100)
+			v.rarity  = math.Clamp(changes[4], 0, 100)
 		end
 	end
 
