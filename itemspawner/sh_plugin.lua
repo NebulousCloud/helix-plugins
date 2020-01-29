@@ -41,8 +41,10 @@ function PLUGIN:RemoveSpawner(client, title)
 	for k, v in ipairs(PLUGIN.spawner.positions) do
 		if (v.title:lower() == title:lower()) then
 			table.remove(PLUGIN.spawner.positions, k)
+			return true
 		end
 	end
+	return false
 end
 
 function PLUGIN:Think()

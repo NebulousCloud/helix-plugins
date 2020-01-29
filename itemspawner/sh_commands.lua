@@ -27,7 +27,7 @@ ix.command.Add("ItemSpawnerRemove", {
 		return ix.config.Get("spawnerActive", false) and client:IsSuperAdmin()
 	end,
 	OnRun = function(self, client, title)
-		PLUGIN:RemoveSpawner(client, title)
+		return PLUGIN:RemoveSpawner(client, title) and "@cmdRemoved" or "@cmdNoRemoved"
 	end
 })
 
