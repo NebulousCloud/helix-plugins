@@ -3,14 +3,11 @@ local PLUGIN = PLUGIN
 
 ix.command.Add("ItemSpawnerAdd", {
 	description = "@cmdItemSpawnerAdd",
+	privilege = "Item Spawner",
 	arguments = {
 		ix.type.string
 	},
-	OnCheckAccess = function(self, client)
-		return ix.config.Get("spawnerActive", false) and client:IsSuperAdmin()
-	end,
 	OnRun = function(self, client, title)
-
 		local location = client:GetEyeTrace().HitPos
 		location.z = location.z + 10
 
@@ -20,12 +17,10 @@ ix.command.Add("ItemSpawnerAdd", {
 
 ix.command.Add("ItemSpawnerRemove", {
 	description = "@cmdItemSpawnerRemove",
+	privilege = "Item Spawner",
 	arguments = {
 		ix.type.string
 	},
-	OnCheckAccess = function(self, client)
-		return ix.config.Get("spawnerActive", false) and client:IsSuperAdmin()
-	end,
 	OnRun = function(self, client, title)
 		return PLUGIN:RemoveSpawner(client, title) and "@cmdRemoved" or "@cmdNoRemoved"
 	end
@@ -33,8 +28,8 @@ ix.command.Add("ItemSpawnerRemove", {
 
 ix.command.Add("ItemSpawnerList", {
 	description = "@cmdItemSpawnerList",
-	superAdminOnly = true,
-	OnRun = function(self, client, title)
+	privilege = "Item Spawner",
+	OnRun = function(self, client)
 		if (#PLUGIN.spawner.positions == 0) then
 			return "@cmdNoSpawnPoints"
 		end
