@@ -143,7 +143,11 @@ ix.command.Add("WaypointUpdate", {
 		    color = PLUGIN.waypoints[index].color or faction.color or Color(255, 255, 255)
 		end
 
-		local time = CurTime() + time or PLUGIN.waypoints[index].time
+		if (time) then
+			time = CurTime() + time
+		else
+		    time = PLUGIN.waypoints[index].time
+		end
 
 		local waypoint = {}
 		waypoint.pos = PLUGIN.waypoints[index].pos
