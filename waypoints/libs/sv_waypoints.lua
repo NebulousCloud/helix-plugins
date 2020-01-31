@@ -1,8 +1,6 @@
 
 local PLUGIN = PLUGIN
 
-local curTime = CurTime()
-
 Schema.waypoints = Schema.waypoints or {}
 
 function Schema.waypoints:AddWaypoint(position, text, color, time, addedBy)
