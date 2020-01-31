@@ -8,11 +8,6 @@ PLUGIN.spawner = PLUGIN.spawner or {}
 PLUGIN.items = PLUGIN.items or {}
 PLUGIN.spawner.positions = PLUGIN.spawner.positions or {}
 
-CAMI.RegisterPrivilege({
-	Name = "Helix - Item Spawner",
-	MinAccess = "superadmin"
-})
-
 PLUGIN.items.common = {
 	"pistol"
 }

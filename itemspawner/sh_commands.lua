@@ -4,6 +4,7 @@ local PLUGIN = PLUGIN
 ix.command.Add("ItemSpawnerAdd", {
 	description = "@cmdItemSpawnerAdd",
 	privilege = "Item Spawner",
+	superAdminOnly = true,
 	arguments = {
 		ix.type.string
 	},
@@ -18,6 +19,7 @@ ix.command.Add("ItemSpawnerAdd", {
 ix.command.Add("ItemSpawnerRemove", {
 	description = "@cmdItemSpawnerRemove",
 	privilege = "Item Spawner",
+	superAdminOnly = true,
 	arguments = {
 		ix.type.string
 	},
@@ -29,6 +31,7 @@ ix.command.Add("ItemSpawnerRemove", {
 ix.command.Add("ItemSpawnerList", {
 	description = "@cmdItemSpawnerList",
 	privilege = "Item Spawner",
+	superAdminOnly = true,
 	OnRun = function(self, client)
 		if (#PLUGIN.spawner.positions == 0) then
 			return "@cmdNoSpawnPoints"

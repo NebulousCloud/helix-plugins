@@ -7,9 +7,6 @@ Adds automated item spawners with customizable respawn time and chances of rare 
 - Copy/move folder into your schema plugin folder
 - Add spawnpoints with /ItemSpawnerAdd
 
-## Access
-Alter ```CAMI.RegisterPrivilege()``` on L11 of sh_plugins to change who can access the plugin.
-
 ## Preview
 ![Manager](https://i.imgur.com/S8de3cq.jpg)
 ![Editing](https://i.imgur.com/iuNK7jc.jpg)

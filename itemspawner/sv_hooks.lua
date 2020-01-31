@@ -63,9 +63,8 @@ function PLUGIN:ForceSpawn(client, spawner)
 end
 
 function PLUGIN:Think()
-	if !(ix.config.Get("spawnerActive")) then return end
-
 	if (table.IsEmpty(PLUGIN.spawner.positions) or !(ix.config.Get("spawnerActive", false))) then return end
+
 	for k, v in pairs(PLUGIN.spawner.positions) do
 		if (v.lastSpawned + (v.delay * 60) < os.time()) then
 			v.lastSpawned = os.time()
