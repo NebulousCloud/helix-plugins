@@ -35,10 +35,10 @@ if (CLIENT) then
 		end
 	end
 
-	local genericHeight = draw.GetFontHeight("ixGenericFont")
-	local descHeight = draw.GetFontHeight("ixItemDescFont")
-
 	function PLUGIN:HUDPaint()
+		local genericHeight = draw.GetFontHeight("ixGenericFont")
+		local descHeight = draw.GetFontHeight("ixItemDescFont")
+
 		for k, v in pairs(drawInfo) do
 			-- [[ Alpha Handling ]] --
 
