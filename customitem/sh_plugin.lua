@@ -1,11 +1,11 @@
 local PLUGIN = PLUGIN
 
-PLUGIN.name = "Custom Scripts"
+PLUGIN.name = "Custom Items"
 PLUGIN.author = "Gary Tate"
-PLUGIN.description = "Enables staff members to create custom scripts."
+PLUGIN.description = "Enables staff members to create custom items."
 
-ix.command.Add("CreateCustomScript", {
-    description = "@cmdCreateCustomScript",
+ix.command.Add("CreateCustomItem", {
+    description = "@cmdCreateCustomItem",
     superAdminOnly = true,
     arguments = {
         ix.type.string,

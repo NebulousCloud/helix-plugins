@@ -1,3 +1,3 @@
 LANGUAGE = {
-	cmdCreateCustomScript = "Create a custom script."
+	cmdCreateCustomItem = "Create a custom item."
 }
