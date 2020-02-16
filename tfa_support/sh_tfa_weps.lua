@@ -39,7 +39,7 @@ PLUGIN.GunData[ "tfa_ins2_ak74m" ] = {
 		KickHorizontal = 0.35,
 		Spread = .021,
 		IronAccuracy = .01
-	}
+	},
 	
 	--Sec == Secondary
 	Sec = {}
