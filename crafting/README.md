@@ -4,12 +4,15 @@ Crafting is a custom built from the ground up plugin designed for the Helix Fram
 ## Credits
 ZeMysticalTaco - Creation of the Plugin
 
-Website: www.friendlyfireindustries.net
+Steam: www.steamcommunity.com/id/lemastersigh
 
 # Documentation
 To use the Crafting plugin, simply drag and drop into your schema's plugins folder, and open up the 'sh_plugin.lua' file to add recipes.
 
 To add new items, either add the item normally using files or use the 'sh_items.lua' file, the default set of items are a very miniscule amount and may have little use for your purposes.
+
+## Schemas
+This plugin SHOULD work for any Schema, if there are any innate compatibilities with any other Schema's it's down to the Schema author or you to fix them.
 
 ## Item Structure
 ```
