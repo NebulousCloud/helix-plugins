@@ -58,7 +58,7 @@ do
 	CLASS.indicator = "chatPerforming"
 
 	function CLASS:CanHear(speaker, listener, data)
-		return (speaker:GetPos() - listener:GetPos()):LengthSqr() <= (data.range or 500)
+		return (speaker:GetPos() - listener:GetPos()):LengthSqr() <= (data.range and data.range^2 or 250000)
 	end
 
 	function CLASS:OnChatAdd(speaker, text)
