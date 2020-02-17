@@ -12,6 +12,11 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ]]
 
+CAMI.RegisterPrivilege({
+	Name = "Helix - Admin Context Options",
+	MinAccess = "admin"
+})
+
 properties.Add("ixViewPlayerProperty", {
 	MenuLabel = "#View Player",
 	Order = 1,
@@ -19,7 +24,7 @@ properties.Add("ixViewPlayerProperty", {
 	Format = "%s | %s\nHealth: %s\nArmor: %s",
 
 	Filter = function(self, entity, client)
-		return client:IsAdmin() and entity:IsPlayer()
+		return CAMI.PlayerHasAccess(LocalPlayer(), "Helix - Admin Context Options", nil) and entity:IsPlayer()
 	end,
 
 	Action = function(self, entity)
@@ -42,7 +47,7 @@ properties.Add("ixSetHealthProperty", {
 	MenuIcon = "icon16/heart.png",
 
 	Filter = function(self, entity, client)
-		return client:IsAdmin() and entity:IsPlayer()
+		return CAMI.PlayerHasAccess(LocalPlayer(), "Helix - Admin Context Options", nil) and entity:IsPlayer()
 	end,
 
 	MenuOpen = function( self, option, ent, tr )
@@ -84,7 +89,7 @@ properties.Add("ixSetArmorProperty", {
 	MenuIcon = "icon16/shield.png",
 
 	Filter = function(self, entity, client)
-		return client:IsAdmin() and entity:IsPlayer()
+		return CAMI.PlayerHasAccess(LocalPlayer(), "Helix - Admin Context Options", nil) and entity:IsPlayer()
 	end,
 
 	MenuOpen = function( self, option, ent, tr )
@@ -125,7 +130,7 @@ properties.Add("ixSetDescriptionProperty", {
 	MenuIcon = "icon16/book_edit.png",
 
 	Filter = function(self, entity, client)
-		return client:IsAdmin() and entity:IsPlayer()
+		return CAMI.PlayerHasAccess(LocalPlayer(), "Helix - Admin Context Options", nil) and entity:IsPlayer()
 	end,
 
 	Action = function(self, entity)
@@ -144,7 +149,3 @@ properties.Add("ixSetDescriptionProperty", {
 	end
 
 })
-
-hook.Add("CanProperty", "bone_manipulate", function(ply, property, ent)
-	return false
-end)
