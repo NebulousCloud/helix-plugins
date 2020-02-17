@@ -34,7 +34,7 @@ properties.Add("ixViewPlayerProperty", {
 	end,
 
 	Receive = function(self, length, client)
-		if (client:IsAdmin()) then
+		if (CAMI.PlayerHasAccess(LocalPlayer(), "Helix - Admin Context Options", nil)) then
 			local entity = net.ReadEntity()
 			client:NotifyLocalized(string.format(self.Format, entity:Nick(), entity:SteamID(), entity:Health(), entity:Armor()))
 		end
@@ -73,7 +73,7 @@ properties.Add("ixSetHealthProperty", {
 	end,
 
 	Receive = function(self, length, client)
-		if (client:IsAdmin()) then
+		if (CAMI.PlayerHasAccess(LocalPlayer(), "Helix - Admin Context Options", nil)) then
 			local entity = net.ReadEntity()
 			local health = net.ReadUInt(8)
 
@@ -115,7 +115,7 @@ properties.Add("ixSetArmorProperty", {
 	end,
 
 	Receive = function(self, length, client)
-		if (client:IsAdmin()) then
+		if (CAMI.PlayerHasAccess(LocalPlayer(), "Helix - Admin Context Options", nil)) then
 			local entity = net.ReadEntity()
 			local armor = net.ReadUInt(8)
 
@@ -140,7 +140,7 @@ properties.Add("ixSetDescriptionProperty", {
 	end,
 
 	Receive = function(self, length, client)
-		if (client:IsAdmin()) then
+		if (CAMI.PlayerHasAccess(LocalPlayer(), "Helix - Admin Context Options", nil)) then
 			local entity = net.ReadEntity()
 			client:RequestString("Set the character's description.", "New Description", function(text)
 				entity:GetCharacter():SetDescription(text)
