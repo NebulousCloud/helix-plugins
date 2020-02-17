@@ -24,7 +24,7 @@ properties.Add("ixViewPlayerProperty", {
 	Format = "%s | %s\nHealth: %s\nArmor: %s",
 
 	Filter = function(self, entity, client)
-		return CAMI.PlayerHasAccess(LocalPlayer(), "Helix - Admin Context Options", nil) and entity:IsPlayer()
+		return CAMI.PlayerHasAccess(client, "Helix - Admin Context Options", nil) and entity:IsPlayer()
 	end,
 
 	Action = function(self, entity)
@@ -34,7 +34,7 @@ properties.Add("ixViewPlayerProperty", {
 	end,
 
 	Receive = function(self, length, client)
-		if (CAMI.PlayerHasAccess(LocalPlayer(), "Helix - Admin Context Options", nil)) then
+		if (CAMI.PlayerHasAccess(client, "Helix - Admin Context Options", nil)) then
 			local entity = net.ReadEntity()
 			client:NotifyLocalized(string.format(self.Format, entity:Nick(), entity:SteamID(), entity:Health(), entity:Armor()))
 		end
@@ -47,7 +47,7 @@ properties.Add("ixSetHealthProperty", {
 	MenuIcon = "icon16/heart.png",
 
 	Filter = function(self, entity, client)
-		return CAMI.PlayerHasAccess(LocalPlayer(), "Helix - Admin Context Options", nil) and entity:IsPlayer()
+		return CAMI.PlayerHasAccess(client, "Helix - Admin Context Options", nil) and entity:IsPlayer()
 	end,
 
 	MenuOpen = function( self, option, ent, tr )
@@ -73,7 +73,7 @@ properties.Add("ixSetHealthProperty", {
 	end,
 
 	Receive = function(self, length, client)
-		if (CAMI.PlayerHasAccess(LocalPlayer(), "Helix - Admin Context Options", nil)) then
+		if (CAMI.PlayerHasAccess(client, "Helix - Admin Context Options", nil)) then
 			local entity = net.ReadEntity()
 			local health = net.ReadUInt(8)
 
@@ -89,7 +89,7 @@ properties.Add("ixSetArmorProperty", {
 	MenuIcon = "icon16/shield.png",
 
 	Filter = function(self, entity, client)
-		return CAMI.PlayerHasAccess(LocalPlayer(), "Helix - Admin Context Options", nil) and entity:IsPlayer()
+		return CAMI.PlayerHasAccess(client, "Helix - Admin Context Options", nil) and entity:IsPlayer()
 	end,
 
 	MenuOpen = function( self, option, ent, tr )
@@ -115,7 +115,7 @@ properties.Add("ixSetArmorProperty", {
 	end,
 
 	Receive = function(self, length, client)
-		if (CAMI.PlayerHasAccess(LocalPlayer(), "Helix - Admin Context Options", nil)) then
+		if (CAMI.PlayerHasAccess(client, "Helix - Admin Context Options", nil)) then
 			local entity = net.ReadEntity()
 			local armor = net.ReadUInt(8)
 
@@ -130,7 +130,7 @@ properties.Add("ixSetDescriptionProperty", {
 	MenuIcon = "icon16/book_edit.png",
 
 	Filter = function(self, entity, client)
-		return CAMI.PlayerHasAccess(LocalPlayer(), "Helix - Admin Context Options", nil) and entity:IsPlayer()
+		return CAMI.PlayerHasAccess(client, "Helix - Admin Context Options", nil) and entity:IsPlayer()
 	end,
 
 	Action = function(self, entity)
@@ -140,7 +140,7 @@ properties.Add("ixSetDescriptionProperty", {
 	end,
 
 	Receive = function(self, length, client)
-		if (CAMI.PlayerHasAccess(LocalPlayer(), "Helix - Admin Context Options", nil)) then
+		if (CAMI.PlayerHasAccess(client, "Helix - Admin Context Options", nil)) then
 			local entity = net.ReadEntity()
 			client:RequestString("Set the character's description.", "New Description", function(text)
 				entity:GetCharacter():SetDescription(text)
