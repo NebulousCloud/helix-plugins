@@ -11,6 +11,9 @@ To use the Crafting plugin, simply drag and drop into your schema's plugins fold
 
 To add new items, either add the item normally using files or use the 'sh_items.lua' file, the default set of items are a very miniscule amount and may have little use for your purposes.
 
+## Dependencies
+This plugin depends on the netstream2 library, but does not come with it. If you experience errors, that is what you should try installing first.
+
 ## Schemas
 This plugin SHOULD work for any Schema, if there are any innate compatibilities with any other Schema's it's down to the Schema author or you to fix them.
 
