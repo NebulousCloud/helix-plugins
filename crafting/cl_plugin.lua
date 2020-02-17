@@ -73,7 +73,7 @@ function PANEL:Init()
 		if v["blueprint"] then
 			local data = LocalPlayer():GetCharacter():GetData("blueprints", {})
 
-			--print(v["blueprint"])
+			----print(v["blueprint"])
 			if table.HasValue(data, v["blueprint"]) then
 				local item = self:AddItem(v["name"], v["model"], v["desc"], v["req"], v["results"], v["skill"], v["blueprint"], v["guns"], v["entity"])
 				item.id = v["id"]
@@ -156,8 +156,8 @@ function PANEL:Init()
 			surface.PlaySound("UI/buttonclickrelease.wav")
 		end)
 		local parent = self:GetParent()
-		print(parent)
-		print(parent.id)
+		--print(parent)
+		--print(parent.id)
 		netstream.Start("ixCraftItem", {parent.id})
 	end
 end
@@ -206,7 +206,7 @@ function PANEL:SetItem(name, icon, desc, req, results, skill, blueprint, guns, e
 
 		for k, v in pairs(self.requirements) do
 			if inv:GetItemCount(k) < v then
-				print(inv:GetItemCount(k))
+				--print(inv:GetItemCount(k))
 				local i = ix.item.Get(k)
 				missing[#missing + 1] = i.name
 			end

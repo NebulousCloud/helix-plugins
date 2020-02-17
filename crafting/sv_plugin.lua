@@ -20,7 +20,7 @@ netstream.Hook("ixCraftItem", function(ply, data, data2)
 
 	for k, v in pairs(requirements) do
 		if inv:GetItemCount(k) < v then
-			print(inv:GetItemCount(k))
+			--print(inv:GetItemCount(k))
 			local i = ix.item.Get(k)
 			missing[#missing + 1] = i.name
 		end
