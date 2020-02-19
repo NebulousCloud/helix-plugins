@@ -1,6 +1,7 @@
 {{ define "main" }}
 	<div class="plugin-list">
-		{{ range .Pages.ByLastmod.Reverse }}
+		{{ $paginator := .Paginate (where .Pages "Type" "plugins") }}
+		{{ range $paginator.Pages.ByLastmod.Reverse }}
 			<a href="{{ .Permalink }}" class="plugin">
 				<h1>{{ .Title }}</h1>
 				<div class="info">
@@ -9,5 +10,7 @@
 				</div>
 			</a>
 		{{ end }}
-	</ul>
+	</div>
+
+	{{ partial "pagination.html" . }}
 {{ end }}

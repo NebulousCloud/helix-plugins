@@ -3,6 +3,7 @@ baseURL = "https://plugins.gethelix.co/"
 languageCode = "en-us"
 title = "Helix Plugin Center"
 theme = "helix"
+paginate = 14
 
 [params]
 	helixURL = "https://gethelix.co/"

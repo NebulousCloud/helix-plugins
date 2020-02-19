@@ -506,6 +506,30 @@ main {
 	}
 }
 
+ul.pagination {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+
+	li {
+		display: inline-block;
+		list-style-type: none;
+		padding: ($padding-tiny / 2) $padding-tiny;
+
+		&.active {
+			background-color: $color-accent;
+
+			a {
+				color: $color-white;
+			}
+		}
+
+		&.disabled a {
+			color: $color-lightgrey;
+		}
+	}
+}
+
 // main footer
 footer {
 	display: flex;
