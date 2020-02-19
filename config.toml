@@ -6,6 +6,7 @@ theme = "helix"
 paginate = 14
 
 [params]
+	description = "Browse, download, and install Helix plugins through the officially maintained repository of verified plugins."
 	helixURL = "https://gethelix.co/"
 	repoURL = "https://github.com/nebulouscloud/helix-plugins/"
 	commandPrefix = "/"
