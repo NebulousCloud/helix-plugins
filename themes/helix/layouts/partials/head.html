@@ -9,5 +9,5 @@
 
 	<link rel="stylesheet" type="text/css" href="{{ $style.Permalink }}">
 
-	<title>{{ .Site.Title }}</title>
+	<title>{{ if .Params.repoPath }}{{ .Title }} - {{ end }}{{ .Site.Title }}</title>
 </head>
