@@ -147,6 +147,8 @@ nav {
 		// don't use padding in parent to make sure entire container is clickable on some row
 		margin-left: ($padding-normal / 2) + 4px;
 		width: $content-width / 2;
+		visibility: visible;
+		opacity: 1;
 
 		color: $color-white;
 		background-color: $color-accent;
@@ -154,6 +156,7 @@ nav {
 
 		&.hidden {
 			opacity: 0;
+			visibility: collapse;
 		}
 
 		.result {
