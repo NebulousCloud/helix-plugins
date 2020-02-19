@@ -25,6 +25,7 @@ $color-background-light: rgb(240, 240, 240);
 $color-background-dark: rgb(33, 33, 33);
 
 $border-content: 1px solid rgb(100, 100, 100);
+$searchbar-width: 256px;
 
 * {
 	margin: 0;
@@ -103,6 +104,76 @@ nav {
 
 	a {
 		color: $color-white;
+	}
+}
+
+// search bar
+#search {
+	input {
+		width: 24px + $padding-tiny; // image is 24x24
+		padding: ($padding-tiny / 2) $padding-tiny;
+		border: 1px solid transparent;
+		font-size: $font-normal;
+
+		background: url(/img/search-thin.svg) no-repeat;
+		background-position: right ($padding-tiny / 2) center;
+		color: transparent;
+		cursor: pointer;
+
+		transition: all 250ms;
+
+		&::placeholder {
+			color: transparent;
+		}
+
+		&:focus {
+			width: $searchbar-width;
+			border: 1px solid $color-white;
+			cursor: auto;
+			color: $color-white;
+
+			&::placeholder {
+				color: $color-white-accent;
+			}
+		}
+	}
+
+	// results list
+	.results {
+		position: absolute;
+		display: flex;
+		flex-direction: column;
+
+		// don't use padding in parent to make sure entire container is clickable on some row
+		margin-left: ($padding-normal / 2) + 4px;
+		width: $content-width / 2;
+
+		color: $color-white;
+		background-color: $color-accent;
+		transition: all 250ms;
+
+		&.hidden {
+			opacity: 0;
+		}
+
+		.result {
+			padding: 0 $padding-normal;
+			padding-bottom: $padding-normal;
+
+			color: inherit;
+
+			&:first-of-type {
+				padding-top: $padding-normal;
+			}
+		}
+
+		// alternate styling for front page
+		&.alternate {
+			margin-top: $padding-normal - 4px;
+
+			color: $color-black;
+			background-color: $color-white;
+		}
 	}
 }
 

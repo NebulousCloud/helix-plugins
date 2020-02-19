@@ -1,0 +1,13 @@
+[
+	{{- range $k, $v := where .Site.Pages "Type" "plugins" }}
+		{{- if .Params.repoPath }}{{- if gt $k 1 }},{{ end }}
+			{
+				"url": "{{ .RelPermalink }}",
+				"name": "{{ .Title }}",
+				"author": "{{ .Params.author }}",
+				"schema": "{{ .Params.schema }}",
+				"description": {{ (trim (.Content | plainify) "\n") | jsonify }}
+			}
+		{{- end }}
+	{{- end }}
+]

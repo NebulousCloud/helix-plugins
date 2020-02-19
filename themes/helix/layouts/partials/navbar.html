@@ -2,6 +2,10 @@
 	<div class="contents">
 		<h1><a href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a></h1>
 		<ul>
+			<li id="search">
+				<input type="text" autocomplete="off" placeholder="Search plugins..." />
+				<div class="results hidden{{ if .IsHome }} alternate{{ end }}"></div>
+			</li>
 			<li><a href="{{ .Site.Params.helixURL }}">Home</a></li>
 			<li><a href="{{ .Site.BaseURL }}all">Plugins</a></li>
 			<li><a href="https://github.com/nebulouscloud/helix-plugins/pulls">Submit</a></li>

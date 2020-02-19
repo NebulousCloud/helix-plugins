@@ -1,9 +1,10 @@
 {{ $filesaver := resources.Get "js/filesaver.min.js" -}}
 {{ $jszip := resources.Get "js/jszip.min.js" -}}
 {{ $gitzip := resources.Get "js/gitzip.js" -}}
+{{ $lunr := resources.Get "js/lunr.js" -}}
 {{ $app := resources.Get "js/app.js" -}}
 
-{{ $js := slice $filesaver $jszip $gitzip $app | resources.Concat "js/bundle.js" | resources.Minify | resources.Fingerprint -}}
+{{ $js := slice $filesaver $jszip $gitzip $lunr $app | resources.Concat "js/bundle.js" | resources.Minify | resources.Fingerprint -}}
 
 <footer>
 	<div class="logo">Helix</div>
@@ -13,5 +14,7 @@
 	<a href="https://discord.gg/2AutUcF">Discord</a>
 	<a href="{{ .Site.BaseURL }}">Plugins</a>
 </footer>
+
+{{ partial "js_templates.html" . -}}
 
 <script type="text/javascript" src="{{ $js.Permalink }}"></script>

@@ -5,6 +5,9 @@ title = "Helix Plugin Center"
 theme = "helix"
 paginate = 14
 
+[outputs]
+	section = ["HTML", "JSON"]
+
 [params]
 	description = "Browse, download, and install Helix plugins through the officially maintained repository of verified plugins."
 	helixURL = "https://gethelix.co/"
