@@ -415,7 +415,6 @@ main {
 			// plugin download button
 			.download {
 				padding: $padding-small;
-				margin-bottom: $padding-small;
 
 				text-align: center;
 				font-size: $font-big;
@@ -439,6 +438,18 @@ main {
 
 					color: $color-white-accent;
 				}
+			}
+
+			// plugin view source button
+			.view-source {
+				padding: $padding-tiny;
+				margin-bottom: $padding-small;
+
+				text-align: center;
+				font-size: $font-tiny;
+
+				color: $color-white-accent;
+				background-color: darken($color-accent, 10%);
 			}
 
 			// generic plugin metadata info box
