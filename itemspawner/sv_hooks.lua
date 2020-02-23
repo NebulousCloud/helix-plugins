@@ -5,7 +5,6 @@ PLUGIN.spawner = PLUGIN.spawner or {}
 PLUGIN.items = PLUGIN.items or {}
 PLUGIN.spawner.positions = PLUGIN.spawner.positions or {}
 
-
 PLUGIN.items.common = {
 	"pistol"
 }
