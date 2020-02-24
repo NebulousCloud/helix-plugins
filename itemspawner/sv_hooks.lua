@@ -1,6 +1,18 @@
 
 local PLUGIN = PLUGIN
 
+PLUGIN.spawner = PLUGIN.spawner or {}
+PLUGIN.items = PLUGIN.items or {}
+PLUGIN.spawner.positions = PLUGIN.spawner.positions or {}
+
+PLUGIN.items.common = {
+	"pistol"
+}
+
+PLUGIN.items.rare = {
+	"shotgun"
+}
+
 util.AddNetworkString("ixItemSpawnerManager")
 util.AddNetworkString("ixItemSpawnerDelete")
 util.AddNetworkString("ixItemSpawnerEdit")
@@ -9,11 +21,11 @@ util.AddNetworkString("ixItemSpawnerSpawn")
 util.AddNetworkString("ixItemSpawnerChanges")
 
 function PLUGIN:LoadData()
-	PLUGIN.spawner = self:GetData() or {}
+	PLUGIN.spawner.positions = self:GetData() or {}
 end
 
 function PLUGIN:SaveData()
-	self:SetData(PLUGIN.spawner)
+	self:SetData(PLUGIN.spawner.positions)
 end
 
 function PLUGIN:AddSpawner(client, position, title)
