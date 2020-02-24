@@ -48,15 +48,20 @@ ix.command.Add("WaypointAdd", {
 				return "@invalidWaypointColor", colorName, PLUGIN:ListColors()
 			end
 		else
-		    color = faction.color or Color(255, 255, 255)
+			color = faction.color or color_white
 		end
 
-		local waypoint = {}
-		waypoint.pos = client:GetEyeTraceNoCursor().HitPos + Vector(0, 0, 30)
-		waypoint.text = text
-		waypoint.color = color
-		waypoint.addedBy = client
-		waypoint.time = CurTime() + time
+		local position = client:GetEyeTraceNoCursor().HitPos
+
+		position:Add(Vector(0, 0, 30))
+
+		local waypoint = {
+			pos = position,
+			text = text,
+			color = color,
+			addedBy = client,
+			time = CurTime() + time
+	    }
 
 		PLUGIN:AddWaypoint(waypoint)
 		return "@addedWaypoint"
@@ -81,16 +86,21 @@ ix.command.Add("WaypointAddND", {
 				return "@invalidWaypointColor", colorName, PLUGIN:ListColors()
 			end
 		else
-		    color = faction.color or Color(255, 255, 255)
+			color = faction.color or color_white
 		end
 
-		local waypoint = {}
-		waypoint.pos = client:GetEyeTraceNoCursor().HitPos + Vector(0, 0, 30)
-		waypoint.noDistance = true
-		waypoint.text = text
-		waypoint.color = color
-		waypoint.addedBy = client
-		waypoint.time = CurTime() + time
+		local position = client:GetEyeTraceNoCursor().HitPos
+
+		position:Add(Vector(0, 0, 30))
+
+		local waypoint = {
+			pos = position,
+			noDistance = true,
+			text = text,
+			color = color,
+			addedBy = client,
+			time = CurTime() + time
+	    }
 
 		PLUGIN:AddWaypoint(waypoint)
 		return "@addedWaypoint"
@@ -101,7 +111,9 @@ ix.command.Add("WaypointUpdate", {
 	description = "@cmdWaypointUpdate",
 	arguments = {ix.type.string, bit.bor(ix.type.number, ix.type.optional), bit.bor(ix.type.string, ix.type.optional)},
 	OnRun = function(self, client, text, time, color)
-		local pos = client:GetEyeTraceNoCursor().HitPos + Vector(0, 0, 30)
+		local pos = client:GetEyeTraceNoCursor().HitPos
+		pos:Add(Vector(0, 0, 30))
+
 		local index = nil
 		local minDistanceSqr = nil
 
@@ -140,22 +152,23 @@ ix.command.Add("WaypointUpdate", {
 				return "@invalidWaypointColor", colorName, PLUGIN:ListColors()
 			end
 		else
-		    color = PLUGIN.waypoints[index].color or faction.color or Color(255, 255, 255)
+			color = PLUGIN.waypoints[index].color or faction.color or color_white
 		end
 
 		if (time) then
 			time = CurTime() + time
 		else
-		    time = PLUGIN.waypoints[index].time
+			time = PLUGIN.waypoints[index].time
 		end
 
-		local waypoint = {}
-		waypoint.pos = PLUGIN.waypoints[index].pos
-		waypoint.noDistance = PLUGIN.waypoints[index].noDistance
-		waypoint.addedBy = PLUGIN.waypoints[index].addedBy
-		waypoint.text = text
-		waypoint.color = color
-		waypoint.time = time
+		local waypoint = {
+			pos = PLUGIN.waypoints[index].pos,
+			noDistance = PLUGIN.waypoints[index].noDistance,
+			text = text,
+			color = color,
+			addedBy = PLUGIN.waypoints[index].addedBy,
+			time = time
+	    }
 
 		PLUGIN:UpdateWaypoint(index, waypoint)
 		return "@updatedWaypoint"
@@ -166,7 +179,9 @@ ix.command.Add("WaypointRemove", {
 	description = "@cmdWaypointRemove",
 	OnRun = function(self, client)
 		local trace = client:GetEyeTraceNoCursor()
-		local pos = trace.HitPos + Vector(0, 0, 30)
+		local pos = trace.HitPos
+		pos:Add(Vector(0, 0, 30))
+
 		local index = nil
 		local minDistanceSqr = nil
 

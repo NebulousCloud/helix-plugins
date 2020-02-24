@@ -8,11 +8,12 @@ function PLUGIN:PlayerLoadedCharacter(client, character, currentChar)
 
 	if (faction.canSeeWaypoints) then
 		net.Start("SetupWaypoints")
+			net.WriteBool(true)
 			net.WriteTable(self.waypoints)
 		net.Send(client)
 	else
 		net.Start("SetupWaypoints")
-			net.WriteTable({})
+			net.WriteBool(false)
 		net.Send(client)
 	end
 end
@@ -27,7 +28,7 @@ function PLUGIN:Think()
 
 		for k, waypoint in pairs(self.waypoints) do
 			if (waypoint.time < curTime) then
-				toRemove[#toRemove + 1] = k
+				table.insert(toRemove, k)
 			end
 		end
 
@@ -39,6 +40,7 @@ function PLUGIN:Think()
 			end
 
 			net.Start("SetupWaypoints")
+				net.WriteBool(true)
 				net.WriteTable(self.waypoints)
 			net.Send(self:GetPlayers())
 		end
