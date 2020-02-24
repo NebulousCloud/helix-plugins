@@ -24,7 +24,7 @@ function PLUGIN:RemoveWaypoints()
 	self.waypoints = {}
 
 	net.Start("SetupWaypoints")
-		net.WriteTable({})
+		net.WriteBool(false)
 	net.Send(self:GetPlayers())
 end
 
@@ -33,6 +33,7 @@ function PLUGIN:UpdateWaypoint(index, newValue)
 		table.remove(self.waypoints, index)
 
 		net.Start("SetupWaypoints")
+			net.WriteBool(true)
 			net.WriteTable(self.waypoints)
 		net.Send(self:GetPlayers())
 	else
