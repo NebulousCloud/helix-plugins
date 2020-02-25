@@ -1,0 +1,75 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta property="og:title" content="Crafting"><meta property="og:description" content="Crafting Crafting is a custom built from the ground up plugin designed for the Helix Framework, made by Alex Grist & Impulse for Garry's Mod.
+Credits ZeMysticalTaco - Creation of the Plugin
+Steam: www.steamcommunity.com/id/lemastersigh
+Documentation To use the Crafting plugin, simply drag and drop into your schema's plugins folder, and open up the &lsquo;sh_plugin.lua&rsquo; file to add recipes.
+To add new items, either add the item normally using files or use the &lsquo;sh_items."><meta property="og:type" content="article"><meta property="og:url" content="https://plugins.gethelix.co/crafting/"><meta property="article:published_time" content="2020-02-24T22:39:31-06:00"><meta property="article:modified_time" content="2020-02-24T22:39:31-06:00"><meta itemprop=name content="Crafting"><meta itemprop=description content="Crafting Crafting is a custom built from the ground up plugin designed for the Helix Framework, made by Alex Grist & Impulse for Garry's Mod.
+Credits ZeMysticalTaco - Creation of the Plugin
+Steam: www.steamcommunity.com/id/lemastersigh
+Documentation To use the Crafting plugin, simply drag and drop into your schema's plugins folder, and open up the &lsquo;sh_plugin.lua&rsquo; file to add recipes.
+To add new items, either add the item normally using files or use the &lsquo;sh_items."><meta itemprop=datePublished content="2020-02-24T22:39:31-06:00"><meta itemprop=dateModified content="2020-02-24T22:39:31-06:00"><meta itemprop=wordCount content="843"><meta itemprop=keywords content><meta name=twitter:card content="summary"><meta name=twitter:title content="Crafting"><meta name=twitter:description content="Crafting Crafting is a custom built from the ground up plugin designed for the Helix Framework, made by Alex Grist & Impulse for Garry's Mod.
+Credits ZeMysticalTaco - Creation of the Plugin
+Steam: www.steamcommunity.com/id/lemastersigh
+Documentation To use the Crafting plugin, simply drag and drop into your schema's plugins folder, and open up the &lsquo;sh_plugin.lua&rsquo; file to add recipes.
+To add new items, either add the item normally using files or use the &lsquo;sh_items."><link rel=stylesheet type=text/css href=https://plugins.gethelix.co/sass/style.min.575d344602e75a1d3de04e4355abbd1e4c8659bd21f1e905dd2a449d7e6bdf1d.css><title>Crafting - Helix Plugin Center</title></head><body><nav><div class=contents><h1><a href=https://plugins.gethelix.co/>Helix Plugin Center</a></h1><ul><li id=search><input type=text autocomplete=off placeholder="Search plugins..."><div class="results hidden"></div></li><li><a href=https://gethelix.co/>Home</a></li><li><a href=https://plugins.gethelix.co/all>Plugins</a></li><li><a href=https://github.com/nebulouscloud/helix-plugins/pulls>Submit</a></li></ul></div></nav><main><h1>Crafting</h1><h2>by ZeMysticalTaco</h2><article><summary class=tabs><header><ul><li class=active><a href=#description>Description</a></li><li><a href=#commands>Commands</a></li><li><a href=#license>License</a></li></ul></header><div class="page active" data-index=description><h1 id=crafting>Crafting</h1><p>Crafting is a custom built from the ground up plugin designed for the Helix Framework, made by Alex Grist & Impulse for Garry's Mod.</p><h2 id=credits>Credits</h2><p>ZeMysticalTaco - Creation of the Plugin</p><p>Steam: <a href=http://www.steamcommunity.com/id/lemastersigh>www.steamcommunity.com/id/lemastersigh</a></p><h1 id=documentation>Documentation</h1><p>To use the Crafting plugin, simply drag and drop into your schema's plugins folder, and open up the &lsquo;sh_plugin.lua&rsquo; file to add recipes.</p><p>To add new items, either add the item normally using files or use the &lsquo;sh_items.lua&rsquo; file, the default set of items are a very miniscule amount and may have little use for your purposes.</p><h2 id=dependencies>Dependencies</h2><p>This plugin depends on the netstream2 library, but does not come with it. If you experience errors, that is what you should try installing first.</p><h2 id=schemas>Schemas</h2><p>This plugin SHOULD work for any Schema, if there are any innate compatibilities with any other Schema's it's down to the Schema author or you to fix them.</p><h2 id=item-structure>Item Structure</h2><pre><code>ITEMS.refined_metal = {
+	[&quot;name&quot;] = &quot;Refined Metal&quot;, --The name of the item.
+	[&quot;model&quot;] = &quot;models/props_c17/canisterchunk02a.mdl&quot;, --The model of the item.
+	[&quot;description&quot;] = &quot;A small chunk of refined metal, useless unless combined with other items.&quot;, --The description of the item.
+	[&quot;width&quot;] = 1, --The width of the item in your inventory.
+	[&quot;height&quot;] = 1, --The height of the item in your inventory.
+	[&quot;chance&quot;] = 10 --How many tickets the item will receive in the Item Spawner plugin, also released by me.
+}
+</code></pre><h2 id=tools>Tools</h2><p>Tools are like items however they will not be taken when using the recipe.</p><pre><code>ITEMS.normal_screwdriver = {
+	[&quot;name&quot;] = &quot;Screwdriver&quot;,
+	[&quot;model&quot;] = &quot;models/props_c17/TrapPropeller_Lever.mdl&quot;,
+	[&quot;description&quot;] = &quot;A full fledged screwdriver.&quot;,
+	[&quot;width&quot;] = 2,
+	[&quot;height&quot;] = 1,
+	[&quot;chance&quot;] = 20,
+	[&quot;tool&quot;] = true --This is what indicates the item as a tool.
+}
+</code></pre><h2 id=recipe-structure>Recipe Structure</h2><pre><code>	[&quot;metal_downgrade_refined&quot;] = {
+		[&quot;name&quot;] = &quot;Breakdown: Refined Metal&quot;, -- The name of the recipe, I generally like to use the naming convention of 'type:item' since there is limited space.
+		[&quot;model&quot;] = &quot;models/props_c17/canisterchunk02a.mdl&quot;, -- The model of the re cipe.
+		[&quot;desc&quot;] = &quot;Break down Refined Metal into Reclaimed Metal.&quot;, --The description of the recipe.
+		[&quot;requirements&quot;] = {[&quot;refined_metal&quot;] = 1, [&quot;scrap_hammer&quot;] = 1}, --Requirements of the item, the UNIQUE ID of the item goes here, not the NAME, the Unique ID will most likely be what the file is called, for instance sh_refined_metal.lua OR if you added it through the file, what you titled your entry, so if you titled it ITEMS.refined_metal it will be 'refined_metal'.
+		[&quot;results&quot;] = {[&quot;reclaimed_metal&quot;] = 2}, --The results of the item.
+		[&quot;category&quot;] = &quot;Metal Breakdown&quot;, --Future use, the category of the item.
+	},
+</code></pre><h2 id=blueprints>Blueprints</h2><p>Recipes have an optional argument called &lsquo;blueprint&rsquo; which specifies if the player needs to learn it first. There are two &lsquo;charMeta&rsquo; handles that allow you to give or remove a blueprint from a player, it's up to you to decide on how you want to give or remove a blueprint from someone.
+<code>char:RemoveBlueprint(blueprint) char:GiveBlueprint(blueprint)</code></p><pre><code>	[&quot;metal_downgrade_refined&quot;] = {
+		[&quot;name&quot;] = &quot;Breakdown: Refined Metal&quot;, -- The name of the recipe, I generally like to use the naming convention of 'type:item' since there is limited space.
+		[&quot;model&quot;] = &quot;models/props_c17/canisterchunk02a.mdl&quot;, -- The model of the re cipe.
+		[&quot;desc&quot;] = &quot;Break down Refined Metal into Reclaimed Metal.&quot;, --The description of the recipe.
+		[&quot;requirements&quot;] = {[&quot;refined_metal&quot;] = 1, [&quot;scrap_hammer&quot;] = 1}, --Requirements of the item, the UNIQUE ID of the item goes here, not the NAME, the Unique ID will most likely be what the file is called, for instance sh_refined_metal.lua OR if you added it through the file, what you titled your entry, so if you titled it ITEMS.refined_metal it will be 'refined_metal'.
+		[&quot;results&quot;] = {[&quot;reclaimed_metal&quot;] = 2}, --The results of the item.
+		[&quot;category&quot;] = &quot;Metal Breakdown&quot;, --Future use, the category of the item.
+		[&quot;blueprint&quot;] = &quot;refined_metal_downgrade&quot; --This is what identifies it as needing a blueprint, the blueprint does not have to be unique and you can assign multiple items to a blueprint.
+	},
+</code></pre><h2 id=attributes>Attributes</h2><p>The plugin comes with two attributes that are added automatically, Engineering and Gunsmithing, you can ALSO make a recipe REQUIRE attributes. Recipes will gradually increment engineering when crafted by default.</p><pre><code>	[&quot;metal_upgrade_reclaimed&quot;] = {
+		[&quot;name&quot;] = &quot;Metal: Reclaimed Metal&quot;,
+		[&quot;model&quot;] = &quot;models/props_c17/oildrumchunk01d.mdl&quot;,
+		[&quot;desc&quot;] = &quot;Break down Refined Metal into Reclaimed Metal.&quot;,
+		[&quot;requirements&quot;] = {[&quot;scrap_metal&quot;] = 3},
+		[&quot;results&quot;] = {[&quot;reclaimed_metal&quot;] = 1},
+		[&quot;category&quot;] = &quot;Metal Upgrade&quot;,
+		[&quot;skill&quot;] = {[&quot;eng&quot;] = 1, [&quot;guns&quot;] = 5} --This is what identifies it as requiring attributes, use the ATTRIBUTE UNIQUE ID, which will be the name of the FILE, if it's sh_eng.lua then the ID is 'eng'.
+	}
+</code></pre><h2 id=gunsmithing>Gunsmithing</h2><p>Geared a little towards more traditional serious roleplay, Gunsmithing is an optional attribute you can add to an item, a recipe with the &lsquo;guns&rsquo; indentation will increment gunsmithing as well.</p><pre><code>	[&quot;metal_upgrade_reclaimed&quot;] = {
+		[&quot;name&quot;] = &quot;Metal: Reclaimed Metal&quot;,
+		[&quot;model&quot;] = &quot;models/props_c17/oildrumchunk01d.mdl&quot;,
+		[&quot;desc&quot;] = &quot;Break down Refined Metal into Reclaimed Metal.&quot;,
+		[&quot;requirements&quot;] = {[&quot;scrap_metal&quot;] = 3},
+		[&quot;results&quot;] = {[&quot;reclaimed_metal&quot;] = 1},
+		[&quot;category&quot;] = &quot;Metal Upgrade&quot;,
+		[&quot;guns&quot;] = true --This is what identifies it as being a gunsmithing skill.
+	}
+</code></pre><p>There are future updates planned for this plugin to include support for entities and to include support for category based UI.</p></div><div class="page descriptive-list" data-index=commands><div class=info>Players can use these commands to interact with this plugin</div><div class=entry><h1><span class="icon admin" data-tooltip="This command requires admin privileges to run"></span>/BlueprintGive</h1><p>Give a blueprint to a player.</p></div><div class=entry><h1><span class="icon admin" data-tooltip="This command requires admin privileges to run"></span>/BlueprintRemove</h1><p>Give a blueprint to a player.</p></div></div><div class=page data-index=license><pre>Copyright 2020 ZeMysticalTaco
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &#34;Software&#34;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &#34;AS IS&#34;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</pre></div></summary><aside><a class=download href=#download data-git-download-url=https://github.com/nebulouscloud/helix-plugins/tree/master/crafting><span class=text>Download</span><div class=via>GitHub</div></a><a class=view-source href=https://github.com/nebulouscloud/helix-plugins/tree/master/crafting target=_blank>View source &#187;</a><div class="info box"><h1>Schema</h1><h2>Any</h2></div><div class="info box"><h1>Published</h1><h2>February 24, 2020</h2></div><a class=report href=#>Report plugin</a></aside></article></main><footer><div class=logo>Helix</div><div class=divider></div><a href=https://nebulouscloud.github.io/helix/manual/00-getting-started.md.html>Get Started</a>
+<a href=https://nebulouscloud.github.io/helix/>Documentation</a>
+<a href=https://discord.gg/2AutUcF>Discord</a>
+<a href=https://plugins.gethelix.co/>Plugins</a></footer><template id=search-result><a class=result><h1>Plugin Title</h1><p>Plugin description.</p></a></template><script type=text/javascript src=https://plugins.gethelix.co/js/bundle.min.b989aa2445ac89cc437b973d5698790fab8974f139a81881e97ade3283b1a1ac.js></script></body></html>
