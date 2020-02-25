@@ -1,4 +1,4 @@
-//To add a new item or remove an item, this is the file to do it.
+--To add a new item or remove an item, this is the file to do it.
 
 local ITEMS = {}
 

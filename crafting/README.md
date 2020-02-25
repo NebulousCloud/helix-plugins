@@ -20,12 +20,12 @@ This plugin SHOULD work for any Schema, if there are any innate compatibilities 
 ## Item Structure
 ```
 ITEMS.refined_metal = {
-	["name"] = "Refined Metal", //The name of the item.
-	["model"] = "models/props_c17/canisterchunk02a.mdl", //The model of the item.
-	["description"] = "A small chunk of refined metal, useless unless combined with other items.", //The description of the item.
-	["width"] = 1, //The width of the item in your inventory.
-	["height"] = 1, //The height of the item in your inventory.
-	["chance"] = 10 //How many tickets the item will receive in the Item Spawner plugin, also released by me.
+	["name"] = "Refined Metal", --The name of the item.
+	["model"] = "models/props_c17/canisterchunk02a.mdl", --The model of the item.
+	["description"] = "A small chunk of refined metal, useless unless combined with other items.", --The description of the item.
+	["width"] = 1, --The width of the item in your inventory.
+	["height"] = 1, --The height of the item in your inventory.
+	["chance"] = 10 --How many tickets the item will receive in the Item Spawner plugin, also released by me.
 }
 ```
 
@@ -39,19 +39,19 @@ ITEMS.normal_screwdriver = {
 	["width"] = 2,
 	["height"] = 1,
 	["chance"] = 20,
-	["tool"] = true //This is what indicates the item as a tool.
+	["tool"] = true --This is what indicates the item as a tool.
 }
 ```
 
 ## Recipe Structure
 ```
 	["metal_downgrade_refined"] = {
-		["name"] = "Breakdown: Refined Metal", // The name of the recipe, I generally like to use the naming convention of 'type:item' since there is limited space.
-		["model"] = "models/props_c17/canisterchunk02a.mdl", // The model of the re cipe.
-		["desc"] = "Break down Refined Metal into Reclaimed Metal.", //The description of the recipe.
-		["requirements"] = {["refined_metal"] = 1, ["scrap_hammer"] = 1}, //Requirements of the item, the UNIQUE ID of the item goes here, not the NAME, the Unique ID will most likely be what the file is called, for instance sh_refined_metal.lua OR if you added it through the file, what you titled your entry, so if you titled it ITEMS.refined_metal it will be 'refined_metal'.
-		["results"] = {["reclaimed_metal"] = 2}, //The results of the item.
-		["category"] = "Metal Breakdown", //Future use, the category of the item.
+		["name"] = "Breakdown: Refined Metal", -- The name of the recipe, I generally like to use the naming convention of 'type:item' since there is limited space.
+		["model"] = "models/props_c17/canisterchunk02a.mdl", -- The model of the re cipe.
+		["desc"] = "Break down Refined Metal into Reclaimed Metal.", --The description of the recipe.
+		["requirements"] = {["refined_metal"] = 1, ["scrap_hammer"] = 1}, --Requirements of the item, the UNIQUE ID of the item goes here, not the NAME, the Unique ID will most likely be what the file is called, for instance sh_refined_metal.lua OR if you added it through the file, what you titled your entry, so if you titled it ITEMS.refined_metal it will be 'refined_metal'.
+		["results"] = {["reclaimed_metal"] = 2}, --The results of the item.
+		["category"] = "Metal Breakdown", --Future use, the category of the item.
 	},
 ```
 
@@ -62,13 +62,13 @@ Recipes have an optional argument called 'blueprint' which specifies if the play
 
 ```
 	["metal_downgrade_refined"] = {
-		["name"] = "Breakdown: Refined Metal", // The name of the recipe, I generally like to use the naming convention of 'type:item' since there is limited space.
-		["model"] = "models/props_c17/canisterchunk02a.mdl", // The model of the re cipe.
-		["desc"] = "Break down Refined Metal into Reclaimed Metal.", //The description of the recipe.
-		["requirements"] = {["refined_metal"] = 1, ["scrap_hammer"] = 1}, //Requirements of the item, the UNIQUE ID of the item goes here, not the NAME, the Unique ID will most likely be what the file is called, for instance sh_refined_metal.lua OR if you added it through the file, what you titled your entry, so if you titled it ITEMS.refined_metal it will be 'refined_metal'.
-		["results"] = {["reclaimed_metal"] = 2}, //The results of the item.
-		["category"] = "Metal Breakdown", //Future use, the category of the item.
-		["blueprint"] = "refined_metal_downgrade" //This is what identifies it as needing a blueprint, the blueprint does not have to be unique and you can assign multiple items to a blueprint.
+		["name"] = "Breakdown: Refined Metal", -- The name of the recipe, I generally like to use the naming convention of 'type:item' since there is limited space.
+		["model"] = "models/props_c17/canisterchunk02a.mdl", -- The model of the re cipe.
+		["desc"] = "Break down Refined Metal into Reclaimed Metal.", --The description of the recipe.
+		["requirements"] = {["refined_metal"] = 1, ["scrap_hammer"] = 1}, --Requirements of the item, the UNIQUE ID of the item goes here, not the NAME, the Unique ID will most likely be what the file is called, for instance sh_refined_metal.lua OR if you added it through the file, what you titled your entry, so if you titled it ITEMS.refined_metal it will be 'refined_metal'.
+		["results"] = {["reclaimed_metal"] = 2}, --The results of the item.
+		["category"] = "Metal Breakdown", --Future use, the category of the item.
+		["blueprint"] = "refined_metal_downgrade" --This is what identifies it as needing a blueprint, the blueprint does not have to be unique and you can assign multiple items to a blueprint.
 	},
 ```
 ## Attributes
@@ -82,7 +82,7 @@ The plugin comes with two attributes that are added automatically, Engineering a
 		["requirements"] = {["scrap_metal"] = 3},
 		["results"] = {["reclaimed_metal"] = 1},
 		["category"] = "Metal Upgrade",
-		["skill"] = {["eng"] = 1, ["guns"] = 5} //This is what identifies it as requiring attributes, use the ATTRIBUTE UNIQUE ID, which will be the name of the FILE, if it's sh_eng.lua then the ID is 'eng'.
+		["skill"] = {["eng"] = 1, ["guns"] = 5} --This is what identifies it as requiring attributes, use the ATTRIBUTE UNIQUE ID, which will be the name of the FILE, if it's sh_eng.lua then the ID is 'eng'.
 	}
 ```
 
@@ -96,7 +96,7 @@ Geared a little towards more traditional serious roleplay, Gunsmithing is an opt
 		["requirements"] = {["scrap_metal"] = 3},
 		["results"] = {["reclaimed_metal"] = 1},
 		["category"] = "Metal Upgrade",
-		["guns"] = true //This is what identifies it as being a gunsmithing skill.
+		["guns"] = true --This is what identifies it as being a gunsmithing skill.
 	}
 ```
 
