@@ -41,7 +41,6 @@ function PANEL:Init()
 	local createButton = self.teamsPanel:Add("ixMenuButton")
 	createButton:SetText("tabCreateTeam")
 	createButton:SizeToContents()
-	createButton:SetContentAlignment(5)
 	createButton:SetZPos(-99)
 	createButton:Dock(BOTTOM)
 	createButton.DoClick = function()
@@ -58,7 +57,6 @@ function PANEL:Init()
 		local leaveButton = self.teamsPanel:Add("ixMenuButton")
 		leaveButton:SetText("tabLeaveTeam")
 		leaveButton:SizeToContents()
-		leaveButton:SetContentAlignment(5)
 		leaveButton:Dock(BOTTOM)
 		leaveButton.DoClick = function()
 			ix.command.Send("PTLeave")
@@ -82,12 +80,12 @@ function PANEL:AddTeam(name)
 		self:OnCategorySelected(name)
 	end
 	button.DoRightClick = function(this)
-		if (LocalPlayer().curTeam != name or !LocalPlayer().isTeamOwner and !LocalPlayer():IsDispatch()) then return end
+		if ((LocalPlayer().curTeam != name or !LocalPlayer().isTeamOwner) and !LocalPlayer():IsDispatch()) then return end
 
 		local reassignMenu = DermaMenu(this)
 
 		reassignMenu:AddOption(L("TeamReassign"), function()
-			ix.command.Send("PTReassign")
+			Derma_StringRequest(L("cmdPTReassign"), L("cmdReassignPTDesc"), name, function(text) ix.command.Send("PTReassign", text, name) end)
 		end)
 
 		reassignMenu:Open()
@@ -107,7 +105,8 @@ function PANEL:AddTeam(name)
 
 	button.Paint = function(this, width, height)
 		local alpha = panel:IsVisible() and this.backgroundAlpha or this.currentBackgroundAlpha
-		derma.SkinFunc("DrawImportantBackground", 0, 0, width, height, ColorAlpha(ix.config.Get("color"), alpha))
+		surface.SetDrawColor(ColorAlpha(ix.config.Get("color"), alpha))
+		surface.DrawRect(0, 0, width, height)
 	end
 
 	self.teamSubpanels[name] = panel
@@ -148,7 +147,6 @@ function PANEL:OnTeamSelected(index)
 		self.joinButton = self.teamsPanel:Add("ixMenuButton")
 		self.joinButton:SetText("tabJoinTeam")
 		self.joinButton:SizeToContents()
-		self.joinButton:SetContentAlignment(5)
 		self.joinButton:Dock(BOTTOM)
 		self.joinButton.DoClick = function(this)
 			ix.command.Send("PTJoin", index)
@@ -201,9 +199,10 @@ hook.Add("PopulateTeamMenu", "ixTeamMenu", function(tabs)
 				member.Paint = function(this, width, height)
 					derma.SkinFunc("DrawImportantBackground", 0, 0, width, height, ColorAlpha(this.backgroundColor, this.currentBackgroundAlpha))
 				end
-				member.DoClick = function(this)
-					if (!LocalPlayer().isTeamOwner and !LocalPlayer():IsDispatch()) then return end
-					if (LocalPlayer().curTeam != k and !LocalPlayer():IsDispatch()) then return end
+				member.DoRightClick = function(this)
+					if (!LocalPlayer():IsDispatch()) then
+						if (!LocalPlayer().isTeamOwner or LocalPlayer().curTeam != k) then return end
+					end
 
 					local interactMenu = DermaMenu(this)
 					local member = interactMenu:AddOption(v2.client:Name())
@@ -217,11 +216,11 @@ hook.Add("PopulateTeamMenu", "ixTeamMenu", function(tabs)
 					end
 
 					interactMenu:AddOption(L("TeamTransferOwner"), function()
-						ix.command.Send("ptlead", v2.client:Name())
+						ix.command.Send("PTLead", v2.client:Name())
 					end):SetIcon( "icon16/award_star_gold_1.png" )
 
 					interactMenu:AddOption(L("TeamKickMember"), function()
-						ix.command.Send("ptkick", v2.client:Name())
+						ix.command.Send("PTKick", v2.client:Name())
 					end):SetIcon( "icon16/cross.png" )
 
 					interactMenu:Open()

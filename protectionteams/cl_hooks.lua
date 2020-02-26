@@ -26,12 +26,10 @@ function PLUGIN:OnSetTeamOwner(client, index)
 end
 
 function PLUGIN:PopulateCharacterInfo(client, character, container)
-	if (LocalPlayer():IsCombine()) then
-		if (client.curTeam) then
-			local curTeam = container:AddRowAfter("name", "curTeam")
-			curTeam:SetText(L("TeamStatus", client.curTeam, client.isTeamOwner and L("TeamOwnerStatus") or L("TeamMemberStatus")))
-			curTeam:SetBackgroundColor(client.isTeamOwner and Color(50,150,100) or Color(50,100,150))
-		end
+	if (LocalPlayer():IsCombine() and client.curTeam) then
+		local curTeam = container:AddRowAfter("name", "curTeam")
+		curTeam:SetText(L("TeamStatus", client.curTeam, client.isTeamOwner and L("TeamOwnerStatus") or L("TeamMemberStatus")))
+		curTeam:SetBackgroundColor(client.isTeamOwner and Color(50,150,100) or Color(50,100,150))
 	end
 end
 

@@ -30,7 +30,8 @@ There are also player variables set on client & server:
 - LocalPlayer().curTeam & client.curTeam -- team index
 - LocalPlayer().isTeamOwner & client.isTeamOwner -- bool
 
-Everything is securely networked so clients that should not receive PT tables don't.
+## Preview
+![Menu](https://i.imgur.com/YkPh2zr.png)
 
 If you like this plugin and want to see more consider getting me a coffee. https://ko-fi.com/wowm0d
 ]]
@@ -101,26 +102,21 @@ ix.command.Add("PTLead", {
 			return "@CannotUseTeamCommands"
 		end
 
-		local index
-
 		if (target == client or !target) then
-			index = client.curTeam
+			target = client
+		end
 
-			if (!PLUGIN.teams[index]) then return "@NoCurrentTeam" end
+		local index = target.curTeam
 
-			if (!PLUGIN.teams[index]["owner"]) then
-				target = client
-			else
-				return "@TeamAlreadyHasOwner"
+		if (!PLUGIN.teams[index]) then return "@TargetNoCurrentTeam" end
+
+		if (!client:IsDispatch()) then
+			if (client.curTeam != target.curTeam) then return "@TargetNotSameTeam" end
+
+			if (PLUGIN.teams[index]["owner"]) then
+				if (target == client) then return "@TeamAlreadyHasOwner" end
+				if (!client.isTeamOwner) then return "@CannotPromoteTeamMembers" end
 			end
-		elseif (target) then
-			index = target.curTeam
-
-			if (!PLUGIN.teams[index]) then return "@TargetNoCurrentTeam" end
-
-			if (client.curTeam != target.curTeam and !client:IsDispatch()) then return "@TargetNotSameTeam" end
-
-			if (!client.isTeamOwner and !client:IsDispatch()) then return "@CannotPromoteTeamMembers" end
 		end
 
 		if (target == client or !target) then
@@ -157,22 +153,27 @@ ix.command.Add("PTKick", {
 
 ix.command.Add("PTReassign", {
 	description = "@cmdPTReassign",
-	arguments = bit.bor(ix.type.number, ix.type.optional),
-	OnRun = function(self, client, newIndex)
+	arguments = {bit.bor(ix.type.number, ix.type.optional), bit.bor(ix.type.number, ix.type.optional)},
+	OnRun = function(self, client, newIndex, oldIndex)
 		if (!client:IsCombine()) then
 			return "@CannotUseTeamCommands"
 		end
 
 		local index = client.curTeam
 
-		if (!PLUGIN.teams[index]) then return "@NoCurrentTeam" end
-
-		if (!newIndex) then
-			return client:RequestString("@cmdPTReassign", "@cmdReassignPTDesc", function(text) ix.command.Run(client, "PTReassign", {text}) end, "")
+		if (!oldIndex and index) then
+			oldIndex = index
 		end
 
-		if (!client.isTeamOwner and !client:IsDispatch()) then return "@CannotReassignTeamIndex" end
+		if (!client:IsDispatch()) then
+			if (!PLUGIN.teams[oldIndex]) then return "@NoCurrentTeam" end
+			if (!client.isTeamOwner) then return "@CannotReassignTeamIndex" end
+		end
 
-		return PLUGIN:ReassignTeam(index, newIndex)
+		if (newIndex and oldIndex) then
+			return PLUGIN:ReassignTeam(oldIndex, newIndex)
+		else
+		    return client:RequestString("@cmdPTReassign", "@cmdReassignPTDesc", function(text) ix.command.Run(client, "PTReassign", {text, oldIndex}) end, "")
+		end
 	end
 })

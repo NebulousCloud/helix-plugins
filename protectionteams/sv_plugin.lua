@@ -10,7 +10,7 @@ util.AddNetworkString("ixPTOwner")
 util.AddNetworkString("ixPTReassign")
 
 function PLUGIN:CreateTeam(client, index, bNetworked)
-	if (client.curTeam) then
+	if (IsValid(client) and client.curTeam) then
 		return "@AlreadyHasTeam"
 	end
 
@@ -27,8 +27,10 @@ function PLUGIN:CreateTeam(client, index, bNetworked)
 		members = {client}
 	}
 
-	client.curTeam = index
-	client.isTeamOwner = true
+	if (IsValid(client)) then
+		client.curTeam = index
+		client.isTeamOwner = true
+	end
 
 	if (!bNetworked) then
 		net.Start("ixPTCreate")
@@ -55,7 +57,7 @@ function PLUGIN:ReassignTeam(index, newIndex, bNetworked)
 
 	self:DeleteTeam(index, true)
 
-	self:CreateTeam(curTeam["owner"], newIndex)
+	self:CreateTeam(curTeam["owner"], newIndex, true)
 
 	self.teams[newIndex]["members"] = curTeam["members"]
 
