@@ -173,7 +173,7 @@ ix.command.Add("PTReassign", {
 		if (newIndex and oldIndex) then
 			return PLUGIN:ReassignTeam(oldIndex, newIndex)
 		else
-		    return client:RequestString("@cmdPTReassign", "@cmdReassignPTDesc", function(text) ix.command.Run(client, "PTReassign", {text, oldIndex}) end, "")
+			return client:RequestString("@cmdPTReassign", "@cmdReassignPTDesc", function(text) ix.command.Run(client, "PTReassign", {text, oldIndex}) end, "")
 		end
 	end
 })
