@@ -10,6 +10,30 @@ Copyright 2020 wowm0d
 This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/.
 ]]
+PLUGIN.readme = [[
+Adds joinable protection teams for combine to join from the tab menu.
+
+---
+
+> The Protection Team menu automatically updates whenever a PT action occurs. ex: PT Creation, PT Joined, etc...
+It is possible to modify the plugin to suit your schema, however by default it works OOTB with HL2 RP.
+
+There are client & server hooks ran after any PT action:
+- PLUGIN:OnCreateTeam(client, index)
+- PLUGIN:OnReassignTeam(index, newIndex)
+- PLUGIN:OnSetTeamOwner(client, index)
+- PLUGIN:OnDeleteTeam(index)
+- PLUGIN:OnJoinTeam(client, index)
+- PLUGIN:OnLeaveTeam(client, index)
+
+There are also player variables set on client & server:
+- LocalPlayer().curTeam & client.curTeam -- team index
+- LocalPlayer().isTeamOwner & client.isTeamOwner -- bool
+
+Everything is securely networked so clients that should not receive PT tables don't.
+
+If you like this plugin and want to see more consider getting me a coffee. https://ko-fi.com/wowm0d
+]]
 
 PLUGIN.teams = {}
 
