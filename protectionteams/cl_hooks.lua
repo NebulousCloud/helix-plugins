@@ -43,6 +43,7 @@ net.Receive("ixPTSync", function()
 
 		for _, client in pairs(player.GetAll()) do
 			client.curTeam = nil
+			client.isTeamOwner = nil
 		end
 
 		return
@@ -55,6 +56,12 @@ net.Receive("ixPTSync", function()
 	for index, teamTbl in pairs(teams) do
 		for _, client in pairs(teamTbl["members"]) do
 			client.curTeam = index
+		end
+
+		local owner = teamTbl["owner"]
+
+		if (IsValid(owner)) then
+			owner.isTeamOwner = true
 		end
 	end
 end)

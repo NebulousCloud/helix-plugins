@@ -55,7 +55,7 @@ end
 function PLUGIN:DeleteTeam(index)
 	self.teams[index] = nil
 
-	for _, client in pairs(self:GetRecievers()) do
+	for _, client in pairs(self:GetReceivers()) do
 		if (client.curTeam == index) then
 			client.curTeam = nil
 

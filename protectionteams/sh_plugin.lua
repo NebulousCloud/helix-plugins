@@ -13,7 +13,7 @@ To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-
 
 PLUGIN.teams = {}
 
-function PLUGIN:GetRecievers()
+function PLUGIN:GetReceivers()
 	local recievers = {}
 
 	for _, client in pairs(player.GetAll()) do

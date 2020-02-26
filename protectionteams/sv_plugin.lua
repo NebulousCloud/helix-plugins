@@ -34,7 +34,7 @@ function PLUGIN:CreateTeam(client, index, bNetworked)
 		net.Start("ixPTCreate")
 			net.WriteUInt(index, 8)
 			net.WriteEntity(client)
-		net.Send(self:GetRecievers())
+		net.Send(self:GetReceivers())
 	end
 
 	hook.Run("OnCreateTeam", client, index)
@@ -67,7 +67,7 @@ function PLUGIN:ReassignTeam(index, newIndex, bNetworked)
 		net.Start("ixPTReassign")
 			net.WriteUInt(index, 8)
 			net.WriteUInt(newIndex, 8)
-		net.Send(self:GetRecievers())
+		net.Send(self:GetReceivers())
 	end
 
 	hook.Run("OnReassignTeam", index, newIndex)
@@ -92,7 +92,7 @@ function PLUGIN:SetTeamOwner(index, client, bNetworked)
 		net.Start("ixPTOwner")
 			net.WriteUInt(index, 8)
 			net.WriteEntity(client)
-		net.Send(self:GetRecievers())
+		net.Send(self:GetReceivers())
 	end
 
 	hook.Run("OnSetTeamOwner", client, index)
@@ -105,7 +105,7 @@ end
 function PLUGIN:DeleteTeam(index, bNetworked)
 	self.teams[index] = nil
 
-	for _, client in pairs(self:GetRecievers()) do
+	for _, client in pairs(self:GetReceivers()) do
 		if (client.curTeam == index) then
 			client.curTeam = nil
 
@@ -118,7 +118,7 @@ function PLUGIN:DeleteTeam(index, bNetworked)
 	if (!bNetworked) then
 		net.Start("ixPTDelete")
 			net.WriteUInt(index, 8)
-		net.Send(self:GetRecievers())
+		net.Send(self:GetReceivers())
 	end
 
 	hook.Run("OnDeleteTeam", index)
@@ -145,7 +145,7 @@ function PLUGIN:JoinTeam(client, index, bNetworked)
 		net.Start("ixPTJoin")
 			net.WriteUInt(index, 8)
 			net.WriteEntity(client)
-		net.Send(self:GetRecievers())
+		net.Send(self:GetReceivers())
 	end
 
 	hook.Run("OnJoinTeam", client, index)
@@ -170,7 +170,7 @@ function PLUGIN:LeaveTeam(client, bNetworked)
 			net.Start("ixPTLeave")
 				net.WriteUInt(index, 8)
 				net.WriteEntity(client)
-			net.Send(self:GetRecievers())
+			net.Send(self:GetReceivers())
 		end
 
 		if (client.isTeamOwner) then
