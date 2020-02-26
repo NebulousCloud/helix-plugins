@@ -81,6 +81,18 @@ function PANEL:AddTeam(name)
 	button.DoClick = function(this)
 		self:OnCategorySelected(name)
 	end
+	button.DoRightClick = function(this)
+		if (LocalPlayer().curTeam != name or !LocalPlayer().isTeamOwner and !LocalPlayer():IsDispatch()) then return end
+
+		local reassignMenu = DermaMenu(this)
+
+		reassignMenu:AddOption(L("TeamReassign"), function()
+			ix.command.Send("PTReassign")
+		end)
+
+		reassignMenu:Open()
+		this.Menu = reassignMenu
+	end
 
 	local panel = self.canvasPanel:Add("DScrollPanel")
 	panel:SetVisible(false)

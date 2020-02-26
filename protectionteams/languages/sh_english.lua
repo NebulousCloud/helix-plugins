@@ -13,6 +13,7 @@ LANGUAGE = {
 
 	TeamTransferOwner = "Transfer Lead",
 	TeamKickMember = "Kick Member",
+	TeamReassign = "Reassign Index",
 
 	CannotUseTeamCommands = "You cannot use PT commands!",
 	CannotPromoteTeamMembers = "You cannot promote PT members!",
@@ -40,6 +41,7 @@ LANGUAGE = {
 	LeftTeam = "Successfully left PT '%s'.",
 
 	cmdCreatePTDesc = "Enter the number index for your new Protection Team. (1-99)",
+	cmdReassignPTDesc = "Reassign Squad Index", "Enter a new number index for your current Squad. (1-99)",
 	cmdPTCreate = "Create a Protection Team.",
 	cmdPTLeave = "Leave your Protection Team.",
 	cmdPTLead = "Promote a PT member to PT lead or assume the lead position.",

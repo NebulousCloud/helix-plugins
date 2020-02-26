@@ -133,7 +133,7 @@ ix.command.Add("PTKick", {
 
 ix.command.Add("PTReassign", {
 	description = "@cmdPTReassign",
-	arguments = ix.type.number,
+	arguments = bit.bor(ix.type.number, ix.type.optional),
 	OnRun = function(self, client, newIndex)
 		if (!client:IsCombine()) then
 			return "@CannotUseTeamCommands"
@@ -141,12 +141,10 @@ ix.command.Add("PTReassign", {
 
 		local index = client.curTeam
 
-		if (!index) then
-			return "@CannotUseTeamCommands"
-		end
+		if (!PLUGIN.teams[index]) then return "@NoCurrentTeam" end
 
-		if (!PLUGIN.teams[index]) then
-			return "@TeamNonExistent", tostring(index)
+		if (!newIndex) then
+			return client:RequestString("@cmdPTReassign", "@cmdReassignPTDesc", function(text) ix.command.Run(client, "PTReassign", {text}) end, "")
 		end
 
 		if (!client.isTeamOwner and !client:IsDispatch()) then return "@CannotReassignTeamIndex" end
