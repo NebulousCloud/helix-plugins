@@ -53,6 +53,19 @@ net.Receive("SetupWaypoints", function()
 
 	local data = net.ReadTable()
 
+	for index, waypoint in pairs(data) do
+		local text = waypoint.text
+
+		-- check for any phrases and replace the text
+		if (text:sub(1, 1) == "@") then
+			waypoint.text = "<:: "..L(text:sub(2), unpack(waypoint.arguments)).." ::>"
+		else
+			waypoint.text = "<:: "..text.." ::>"
+		end
+
+		data[index] = waypoint
+	end
+
 	PLUGIN.waypoints = data
 end)
 
