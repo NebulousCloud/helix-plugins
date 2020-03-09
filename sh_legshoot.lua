@@ -7,7 +7,7 @@ if SERVER then
         [HITGROUP_LEFTLEG] = true,
         [HITGROUP_RIGHTLEG] = true
     }
-    local resFactions = {  //table with factions enums that should be resistant to these effects
+    local resFactions = {  --table with factions enums that should be resistant to these effects
         [FACTION_OTA] = true
     }
     function PLUGIN:ScalePlayerDamage(ply,hitgroup,dmginfo )
@@ -18,7 +18,7 @@ if SERVER then
                 local chance = math.random(1,100)
                 if (chance<=40) then
                     ply:SetRagdolled(true, 10)   
-                    --else // negotiable, I havent tested this.
+                    --else -- negotiable, I havent tested this.
                     -- char:AddBoost("legShoot","stm",-50)   
                     --  char:AddBoost("legShoot","stamina",-60)     
                 end
