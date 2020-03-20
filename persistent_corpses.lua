@@ -24,6 +24,10 @@ and then add `ITEM.bDropOnDeath = true` to any item that you want to be placed i
 
 PLUGIN.hardCorpseMax = 64
 
+ix.lang.AddTable("english", {
+	searchingCorpse = "Searching corpse..."
+})
+
 ix.config.Add("persistentCorpses", true, "Whether or not corpses remain on the map after a player dies and respawns.", nil, {
 	category = "Persistent Corpses"
 })
