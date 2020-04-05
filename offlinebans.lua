@@ -24,8 +24,35 @@ ix.lang.AddTable("english", {
 	cmdCharBanOfflineCharacterLoaded = "%s is loaded on the server."
 })
 
-function PLUGIN:CheckCharacterLoaded(id, steamID)
+function PLUGIN:IsCharacterLoaded(id)
 	return ix.char.loaded[tonumber(id)]
+end
+
+function PLUGIN:GetCharacter(client, character, steamID64)
+	local data, id
+
+	local query = mysql:Select("ix_characters")
+		query:Select("data")
+		query:Select("id")
+
+		query:Where("schema", Schema.folder)
+		query:Where("name", character)
+		query:Where("steamID", steamID64)
+
+		query:Callback(function(result)
+			if (result) then
+				if (#result == 1) then
+					data, id = result[1].data, result[1].id
+				else
+					client:NotifyLocalized("cmdCharBanOfflineOverloadedResult")
+				end
+			else
+				client:NotifyLocalized("cmdCharBanOfflineNoResult")
+			end
+		end)
+	query:Execute()
+
+	return data, id
 end
 
 ix.command.Add("CharBanOffline", {
@@ -38,35 +65,14 @@ ix.command.Add("CharBanOffline", {
 	},
 	OnRun = function(self, client, character, steamID)
 		local steamID64 = util.SteamIDTo64(steamID)
-		local data, id
+		local data, id = PLUGIN:GetCharacter(client, character, steamID64)
 
-		local query = mysql:Select("ix_characters")
-			query:Select("data")
-			query:Select("id")
-
-			query:Where("schema", Schema.folder)
-			query:Where("name", character)
-			query:Where("steamID", steamID64)
-
-			query:Callback(function(result)
-				if (result) then
-					if (#result == 1) then
-						data, id = result[1].data, result[1].id
-					else
-						client:NotifyLocalized("cmdCharBanOfflineOverloadedResult")
-					end
-				else
-					client:NotifyLocalized("cmdCharBanOfflineNoResult")
-				end
-			end)
-		query:Execute()
-
-		if (PLUGIN:CheckCharacterLoaded(id, steamID)) then
+		if (id and PLUGIN:IsCharacterLoaded(id)) then
 			client:NotifyLocalized("cmdCharBanOfflineCharacterLoaded", character)
 			return
 		end
 
-		if (data) then
+		if (data and id) then
 			local dataTable = util.JSONToTable(data)
 
 			if (dataTable["banned"]) then
@@ -77,22 +83,17 @@ ix.command.Add("CharBanOffline", {
 				local query = mysql:Update("ix_characters")
 					query:Update("data", util.TableToJSON(dataTable))
 					query:Where("schema", Schema.folder)
-					query:Where("name", character)
-					query:Where("steamID", steamID64)
-
-					query:Callback(function(result)
-						for _, v in ipairs(player.GetAll()) do
-							if (self:OnCheckAccess(v)) then
-								v:NotifyLocalized("cmdCharBanOfflineSuccess", client:GetName(), character, steamID)
-							end
-						end
-					end)
-
+					query:Where("id", id)
 				query:Execute()
-			end
-			
-		end
 
+				for _, v in ipairs(player.GetAll()) do
+					if (self:OnCheckAccess(v)) then
+						v:NotifyLocalized("cmdCharBanOfflineSuccess", client:GetName(), character, steamID)
+					end
+				end
+
+			end
+		end
 	end
 })
 
@@ -106,35 +107,14 @@ ix.command.Add("CharUnbanOffline", {
 	},
 	OnRun = function(self, client, character, steamID)
 		local steamID64 = util.SteamIDTo64(steamID)
-		local data, id
+		local data, id = PLUGIN:GetCharacter(client, character, steamID64)
 
-		local query = mysql:Select("ix_characters")
-			query:Select("data")
-			query:Select("id")
-
-			query:Where("schema", Schema.folder)
-			query:Where("name", character)
-			query:Where("steamID", steamID64)
-
-			query:Callback(function(result)
-				if (result) then
-					if (#result == 1) then
-						data, id = result[1].data, result[1].id
-					else
-						client:NotifyLocalized("cmdCharBanOfflineOverloadedResult")
-					end
-				else
-					client:NotifyLocalized("cmdCharBanOfflineNoResult")
-				end
-			end)
-		query:Execute()
-
-		if (PLUGIN:CheckCharacterLoaded(id, steamID)) then
+		if (id and PLUGIN:IsCharacterLoaded(id)) then
 			client:NotifyLocalized("cmdCharBanOfflineCharacterLoaded", character)
 			return
 		end
 
-		if (data) then
+		if (data and id) then
 			local dataTable = util.JSONToTable(data)
 
 			if (!dataTable["banned"]) then
@@ -147,19 +127,15 @@ ix.command.Add("CharUnbanOffline", {
 					query:Where("schema", Schema.folder)
 					query:Where("name", character)
 					query:Where("steamID", steamID64)
-
-					query:Callback(function(result)
-						for _, v in ipairs(player.GetAll()) do
-							if (self:OnCheckAccess(v)) then
-								v:NotifyLocalized("cmdCharUnbanOfflineSuccess", client:GetName(), character, steamID)
-							end
-						end
-					end)
-
 				query:Execute()
-			end
-			
-		end
 
+				for _, v in ipairs(player.GetAll()) do
+					if (self:OnCheckAccess(v)) then
+						v:NotifyLocalized("cmdCharUnbanOfflineSuccess", client:GetName(), character, steamID)
+					end
+				end
+
+			end
+		end
 	end
 })
