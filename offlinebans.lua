@@ -61,12 +61,17 @@ ix.command.Add("CharBanOffline", {
 	adminOnly = true,
 	arguments = {
 		ix.type.string,
-		bit.bor(ix.type.string, ix.type.optional)
+		ix.type.string,
+		bit.bor(ix.type.number, ix.type.optional)
 	},
-	OnRun = function(self, client, character, steamID)
+	OnRun = function(self, client, character, steamID, minutes)
 		local steamID64 = util.SteamIDTo64(steamID)
 		local data, id = PLUGIN:GetCharacter(client, character, steamID64)
 
+		if (minutes) then
+			minutes = os.time() + math.max(math.ceil(minutes * 60), 60)
+		end
+		
 		if (id and PLUGIN:IsCharacterLoaded(id)) then
 			client:NotifyLocalized("cmdCharBanOfflineCharacterLoaded", character)
 			return
@@ -75,10 +80,11 @@ ix.command.Add("CharBanOffline", {
 		if (data and id) then
 			local dataTable = util.JSONToTable(data)
 
-			if (dataTable["banned"]) then
+			-- Allow if temporary ban is present in data.
+			if (dataTable["banned"] and dataTable["banned"] == true) then
 				client:NotifyLocalized("cmdCharBanOfflineAlreadyBanned", character)
 			else
-				dataTable["banned"] = true
+				dataTable["banned"] = minutes or true
 
 				local query = mysql:Update("ix_characters")
 					query:Update("data", util.TableToJSON(dataTable))
@@ -103,7 +109,7 @@ ix.command.Add("CharUnbanOffline", {
 	adminOnly = true,
 	arguments = {
 		ix.type.string,
-		bit.bor(ix.type.string, ix.type.optional)
+		ix.type.string
 	},
 	OnRun = function(self, client, character, steamID)
 		local steamID64 = util.SteamIDTo64(steamID)
@@ -125,8 +131,7 @@ ix.command.Add("CharUnbanOffline", {
 				local query = mysql:Update("ix_characters")
 					query:Update("data", util.TableToJSON(dataTable))
 					query:Where("schema", Schema.folder)
-					query:Where("name", character)
-					query:Where("steamID", steamID64)
+					query:Where("id", id)
 				query:Execute()
 
 				for _, v in ipairs(player.GetAll()) do
