@@ -29,7 +29,6 @@ function PLUGIN:IsCharacterLoaded(id)
 end
 
 function PLUGIN:GetCharacter(client, character, steamID64, callback)
-	local data, id
 
 	local query = mysql:Select("ix_characters")
 		query:Select("data")
