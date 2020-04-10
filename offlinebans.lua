@@ -28,7 +28,7 @@ function PLUGIN:IsCharacterLoaded(id)
 	return ix.char.loaded[tonumber(id)]
 end
 
-function PLUGIN:GetCharacter(client, character, steamID64)
+function PLUGIN:GetCharacter(client, character, steamID64, callback)
 	local data, id
 
 	local query = mysql:Select("ix_characters")
@@ -42,7 +42,7 @@ function PLUGIN:GetCharacter(client, character, steamID64)
 		query:Callback(function(result)
 			if (result) then
 				if (#result == 1) then
-					data, id = result[1].data, result[1].id
+					callback(result[1].data, result[1].id)
 				else
 					client:NotifyLocalized("cmdCharBanOfflineOverloadedResult")
 				end
@@ -52,7 +52,6 @@ function PLUGIN:GetCharacter(client, character, steamID64)
 		end)
 	query:Execute()
 
-	return data, id
 end
 
 ix.command.Add("CharBanOffline", {
@@ -66,12 +65,14 @@ ix.command.Add("CharBanOffline", {
 	},
 	OnRun = function(self, client, character, steamID, minutes)
 		local steamID64 = util.SteamIDTo64(steamID)
-		local data, id = PLUGIN:GetCharacter(client, character, steamID64)
+		local data, id
+
+		PLUGIN:GetCharacter(client, character, steamID64, function(pData, pId) data, id = pData, pId end)
 
 		if (minutes) then
 			minutes = os.time() + math.max(math.ceil(minutes * 60), 60)
 		end
-		
+
 		if (id and PLUGIN:IsCharacterLoaded(id)) then
 			client:NotifyLocalized("cmdCharBanOfflineCharacterLoaded", character)
 			return
@@ -113,7 +114,9 @@ ix.command.Add("CharUnbanOffline", {
 	},
 	OnRun = function(self, client, character, steamID)
 		local steamID64 = util.SteamIDTo64(steamID)
-		local data, id = PLUGIN:GetCharacter(client, character, steamID64)
+		local data, id
+		
+		PLUGIN:GetCharacter(client, character, steamID64, function(pData, pId) data, id = pData, pId end)
 
 		if (id and PLUGIN:IsCharacterLoaded(id)) then
 			client:NotifyLocalized("cmdCharBanOfflineCharacterLoaded", character)
