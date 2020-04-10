@@ -63,7 +63,7 @@ ix.command.Add("CharBanOffline", {
 		ix.type.string,
 		bit.bor(ix.type.number, ix.type.optional)
 	},
-	OnRun = function(self, client, character, steamID, minutes)
+	OnRun = function(self, client, steamID, character, minutes)
 		local steamID64 = util.SteamIDTo64(steamID)
 		local data, id
 
@@ -112,7 +112,7 @@ ix.command.Add("CharUnbanOffline", {
 		ix.type.string,
 		ix.type.string
 	},
-	OnRun = function(self, client, character, steamID)
+	OnRun = function(self, client, steamID, character)
 		local steamID64 = util.SteamIDTo64(steamID)
 		local data, id
 		
