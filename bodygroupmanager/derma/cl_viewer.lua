@@ -3,13 +3,24 @@ local PLUGIN = PLUGIN
 local PANEL = {}
 
 function PANEL:Init()
-	self:SetSize(720, 720)
+
+	local pWidth, pHeight = ScrW() * 0.75, ScrH() * 0.75
+	self:SetSize(pWidth, pHeight)
 	self:Center()
 	self:SetBackgroundBlur(true)
 	self:SetDeleteOnClose(true)
 
 	self:MakePopup()
 	self:SetTitle("Bodygroup Manager")
+
+	self.bodygroups = self:Add("DScrollPanel")
+	self.bodygroups:Dock(RIGHT)
+
+end
+
+function PANEL:Display(target)
+
+	local pWidth, pHeight = ScrW() * 0.75, ScrH() * 0.75
 
 	self.saveButton = self:Add("DButton")
 	self.saveButton:Dock(BOTTOM)
@@ -27,13 +38,42 @@ function PANEL:Init()
 		net.SendToServer()
 	end
 
-	self.model = self:Add("DModelPanel")
-	self.model.rotating = true
-	self.model:SetSize(700, 700)
-	self.model:SetPos(-200, 0)
-	self.model:SetModel(Model("models/props_junk/watermelon01.mdl"))
+	self.model = self:Add("DAdjustableModelPanel")
+	self.model:SetSize(pWidth * 1/2, pHeight)
+	self.model:Dock(LEFT)
+	self.model:SetModel(target:GetModel())
+	self.model:SetLookAng(Angle(10, 225, 0))
+	self.model:SetCamPos(Vector(40, 40, 50))
 
-	self.bodygroups = {}
+	function self.model:FirstPersonControls()
+		local x, y = self:CaptureMouse()
+
+		local scale = self:GetFOV() / 180
+		x = x * -0.5 * scale
+		y = y * 0.5 * scale
+
+		-- Look around
+		self.aLookAngle = self.aLookAngle + Angle( y, x, 0 )
+
+		local Movement = Vector( 0, 0, 0 )
+
+		-- TODO: Use actual key bindings, not hardcoded keys.
+		if ( input.IsKeyDown( KEY_W ) || input.IsKeyDown( KEY_UP ) ) then Movement = Movement + self.aLookAngle:Forward() end
+		if ( input.IsKeyDown( KEY_S ) || input.IsKeyDown( KEY_DOWN ) ) then Movement = Movement - self.aLookAngle:Forward() end
+		if ( input.IsKeyDown( KEY_A ) || input.IsKeyDown( KEY_LEFT ) ) then Movement = Movement - self.aLookAngle:Right() end
+		if ( input.IsKeyDown( KEY_D ) || input.IsKeyDown( KEY_RIGHT ) ) then Movement = Movement + self.aLookAngle:Right() end
+		if ( input.IsKeyDown( KEY_SPACE ) || input.IsKeyDown( KEY_SPACE ) ) then Movement = Movement + self.aLookAngle:Up() end
+		if ( input.IsKeyDown( KEY_LCONTROL ) || input.IsKeyDown( KEY_LCONTROL ) ) then Movement = Movement - self.aLookAngle:Up() end
+
+		local speed = 0.5
+		if ( input.IsShiftDown() ) then speed = 4.0 end
+
+		self.vCamPos = self.vCamPos + Movement * speed
+	end
+
+	self.target = target
+	self:PopulateBodygroupOptions()
+	self:SetTitle(target:GetName())
 
 	function self.model:LayoutEntity(Entity)
 		Entity:SetAngles(Angle(0,45,0))
@@ -63,15 +103,6 @@ function PANEL:Init()
 		end
 
 	end
-
-	PLUGIN.viewer = self
-
-end
-
-function PANEL:SetTarget(target)
-	self.target = target
-	self:PopulateBodygroupOptions()
-	self:SetTitle(target:GetName())
 end
 
 function PANEL:PopulateBodygroupOptions()
@@ -80,17 +111,16 @@ function PANEL:PopulateBodygroupOptions()
 	self.bodygroupPrevious = {}
 	self.bodygroupNext = {}
 	self.bodygroupIndex = {}
-	self.scrollBar = vgui.Create("DScrollPanel", self)
-	self.scrollBar:Dock(FILL)
+	self.bodygroups:Dock(FILL)
 
 	for k, v in pairs(self.target:GetBodyGroups()) do
 		-- Disregard the model bodygroup.
 		if !(v.id == 0) then
 			local index = v.id
 
-			self.bodygroupBox[v.id] = self.scrollBar:Add("DPanel")
+			self.bodygroupBox[v.id] = self.bodygroups:Add("DPanel")
 			self.bodygroupBox[v.id]:Dock(TOP)
-			self.bodygroupBox[v.id]:DockMargin(300, 20, 20, 0)
+			self.bodygroupBox[v.id]:DockMargin(20, 20, 20, 0)
 			self.bodygroupBox[v.id]:SetHeight(50)
 
 			self.bodygroupName[v.id] = self.bodygroupBox[v.id]:Add("DLabel")
@@ -141,13 +171,6 @@ function PANEL:PopulateBodygroupOptions()
 
 			self.model.Entity:SetBodygroup(index, self.target:GetBodygroup(index))
 		end
-	end
-end
-
-function PANEL:SetViewModel(model)
-	self.playerModel = model
-	if model then
-		self.model:SetModel(Model(model))
 	end
 end
 

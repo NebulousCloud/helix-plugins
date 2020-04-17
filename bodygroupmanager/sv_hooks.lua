@@ -26,6 +26,7 @@ net.Receive("ixBodygroupTableSet", function(length, client)
     end
 
     target:GetCharacter():SetData("groups", groups)
+    target:GetCharacter():Save()
 
     ix.log.Add(client, "bodygroupEditor", target)
 end)
