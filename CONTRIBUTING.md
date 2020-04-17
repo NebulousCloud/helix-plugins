@@ -46,9 +46,6 @@ Any client-side options created with `ix.option.Add` in your plugin will be auto
 ## Code style
 We don't like imposing on the way you write code just so you can add it to the plugin center, but there are some things to take into consideration before you submit your plugin.
 
-### Avoid C-style syntax
-Garry's Mod Lua has additional C-style comments (`//` and `/**/`) and operators (`||` and `&&`) that are incompatible with the tools used to extract data from your plugin. You'll have to change them to regular Lua comments (`--` and `--[[]]`) and operators (`or` and `and`) in order to submit your plugin. Note that C-style operators for `not` and `~=` are supported (`!` and `!=`), so you can use those specific operators normally.
-
 ### Avoid `IsAdmin`, `IsSuperAdmin` and `IsUserGroup`
 Helix fully leverages [CAMI](https://github.com/glua/CAMI) in order to provide the end-user the flexibility to customize permissions of commands and admin-only functionality to their liking.
 
