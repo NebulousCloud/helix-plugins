@@ -128,11 +128,6 @@ function PANEL:Init()
 		self.categoryPanels[realName] = button
 	end
 
-	if (first) then
-		self.selected = button
-		first = false
-	end
-
 	if (self.selected) then
 		self:LoadRecipes(self.selected.category)
 	end
