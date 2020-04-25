@@ -1,8 +1,8 @@
 
 local PLUGIN = PLUGIN
 
-local color_green = Color(50,150,100)
-local color_red = Color(150, 50, 50)
+local color_green = Color(0, 200, 0)
+local color_red = Color(200, 0, 0)
 
 local PANEL = {}
 
@@ -19,7 +19,7 @@ function PANEL:SetRecipe(recipeTable)
 	self.icon = self:Add("SpawnIcon")
 	self.icon:InvalidateLayout(true)
 	self.icon:Dock(LEFT)
-	self.icon:DockMargin(0, 0, 8, 0)
+	self.icon:DockMargin(16, 0, 16, 0)
 	self.icon:SetMouseInputEnabled(false)
 	self.icon:SetModel(recipeTable:GetModel(), recipeTable:GetSkin())
 	self.icon.PaintOver = function(this) end
@@ -62,7 +62,7 @@ function PANEL:Init()
 	self.categories:Dock(LEFT)
 	self.categories:SetWide(260)
 	self.categories.Paint = function(this, w, h)
-		surface.SetDrawColor(0, 0, 0, 66)
+		surface.SetDrawColor(0, 0, 0, 150)
 		surface.DrawRect(0, 0, w, h)
 	end
 	self.categoryPanels = {}
@@ -103,6 +103,8 @@ function PANEL:Init()
 		button:Dock(TOP)
 		button:SetText(category)
 		button:SizeToContents()
+		button:SetContentAlignment(5)
+		button:SetExpensiveShadow(1, Color(0, 0, 0, 150))
 		button.Paint = function(this, w, h)
 			surface.SetDrawColor(self.selected == this and ix.config.Get("color") or color_transparent)
 			surface.DrawRect(0, 0, w, h)
@@ -124,6 +126,11 @@ function PANEL:Init()
 		end
 
 		self.categoryPanels[realName] = button
+	end
+
+	if (first) then
+		self.selected = button
+		first = false
 	end
 
 	if (self.selected) then
