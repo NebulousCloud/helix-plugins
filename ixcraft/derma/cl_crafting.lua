@@ -2,7 +2,7 @@
 local PLUGIN = PLUGIN
 
 local color_green = Color(50,150,100)
-local color_red = Color(150, 100, 50)
+local color_red = Color(150, 50, 50)
 
 local PANEL = {}
 
