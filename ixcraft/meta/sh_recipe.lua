@@ -1,7 +1,8 @@
 
 local PLUGIN = PLUGIN
+PLUGIN.meta = PLUGIN.meta or {}
 
-local RECIPE = ix.meta.recipe or {}
+local RECIPE = PLUGIN.meta.recipe or {}
 RECIPE.__index = RECIPE
 RECIPE.name = "undefined"
 RECIPE.description = "undefined"
@@ -202,4 +203,4 @@ if (SERVER) then
 	end
 end
 
-ix.meta.recipe = RECIPE
+PLUGIN.meta.recipe = RECIPE

@@ -1,26 +1,26 @@
 
 local PLUGIN = PLUGIN
 
-ix.craft = ix.craft or {}
-ix.craft.recipes = ix.craft.recipes or {}
-ix.craft.stations = ix.craft.stations or {}
+PLUGIN.craft = PLUGIN.craft or {}
+PLUGIN.craft.recipes = PLUGIN.craft.recipes or {}
+PLUGIN.craft.stations = PLUGIN.craft.stations or {}
 
-function ix.craft.LoadFromDir(directory, pathType)
+function PLUGIN.craft.LoadFromDir(directory, pathType)
 	for _, v in ipairs(file.Find(directory.."/sh_*.lua", "LUA")) do
 		local niceName = v:sub(4, -5)
 
 		if (pathType == "recipe") then
 			RECIPE = setmetatable({
 				uniqueID = niceName
-			}, ix.meta.recipe)
+			}, PLUGIN.meta.recipe)
 				ix.util.Include(directory.."/"..v, "shared")
 
-				ix.craft.recipes[niceName] = RECIPE
+				PLUGIN.craft.recipes[niceName] = RECIPE
 			RECIPE = nil
 		elseif (pathType == "station") then
 			STATION = setmetatable({
 				uniqueID = niceName
-			}, ix.meta.station)
+			}, PLUGIN.meta.station)
 				ix.util.Include(directory.."/"..v, "shared")
 
 				if (!scripted_ents.Get("ix_station_"..niceName)) then
@@ -32,16 +32,16 @@ function ix.craft.LoadFromDir(directory, pathType)
 					scripted_ents.Register(STATION_ENT, "ix_station_"..niceName)
 				end
 
-				ix.craft.stations[niceName] = STATION
+				PLUGIN.craft.stations[niceName] = STATION
 			STATION = nil
 		end
 	end
 end
 
-function ix.craft.GetCategories(client)
+function PLUGIN.craft.GetCategories(client)
 	local categories = {}
 
-	for k, v in pairs(ix.craft.recipes) do
+	for k, v in pairs(PLUGIN.craft.recipes) do
 		local category = v.category or "Crafting"
 
 		if (v:OnCanSee(client)) then
@@ -56,11 +56,11 @@ function ix.craft.GetCategories(client)
 	return categories
 end
 
-function ix.craft.FindByName(recipe)
+function PLUGIN.craft.FindByName(recipe)
 	recipe = recipe:lower()
 	local uniqueID
 
-	for k, v in pairs(ix.craft.recipes) do
+	for k, v in pairs(PLUGIN.craft.recipes) do
 		if (recipe:find(v.name:lower())) then
 			uniqueID = k
 
@@ -75,8 +75,8 @@ if (SERVER) then
 	util.AddNetworkString("ixCraftRecipe")
 	util.AddNetworkString("ixCraftRefresh")
 
-	function ix.craft.CraftRecipe(client, uniqueID)
-		local recipeTable = ix.craft.recipes[uniqueID]
+	function PLUGIN.craft.CraftRecipe(client, uniqueID)
+		local recipeTable = PLUGIN.craft.recipes[uniqueID]
 
 		if (recipeTable) then
 			local bCanCraft, failString, c, d, e, f = recipeTable:OnCanCraft(client)
@@ -108,7 +108,7 @@ if (SERVER) then
 	end
 
 	net.Receive("ixCraftRecipe", function(length, client)
-		ix.craft.CraftRecipe(client, net.ReadString())
+		PLUGIN.craft.CraftRecipe(client, net.ReadString())
 
 		timer.Simple(0.2, function()
 			net.Start("ixCraftRefresh")
@@ -123,7 +123,7 @@ do
 	COMMAND.description = "@cmdCraftRecipe"
 
 	function COMMAND:OnRun(client, recipe)
-		ix.craft.CraftRecipe(client, ix.craft.FindByName(recipe))
+		PLUGIN.craft.CraftRecipe(client, PLUGIN.craft.FindByName(recipe))
 	end
 
 	ix.command.Add("CraftRecipe", COMMAND)

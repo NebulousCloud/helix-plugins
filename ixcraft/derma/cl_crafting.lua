@@ -88,7 +88,7 @@ function PANEL:Init()
 
 	local first = true
 
-	for k, v in pairs(ix.craft.recipes) do
+	for k, v in pairs(PLUGIN.craft.recipes) do
 		if (v:OnCanSee(LocalPlayer()) == false) then
 			continue
 		end
@@ -133,7 +133,7 @@ end
 
 function PANEL:LoadRecipes(category, search)
 	category = category	or "Crafting"
-	local recipes = ix.craft.recipes
+	local recipes = PLUGIN.craft.recipes
 
 	self.scroll:Clear()
 	self.scroll:InvalidateLayout(true)
