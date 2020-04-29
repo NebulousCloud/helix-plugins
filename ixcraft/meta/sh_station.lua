@@ -1,7 +1,8 @@
 
 local PLUGIN = PLUGIN
+PLUGIN.meta = PLUGIN.meta or {}
 
-local STATION = ix.meta.station or {}
+local STATION = PLUGIN.meta.station or {}
 STATION.__index = STATION
 STATION.name = "undefined"
 STATION.description = "undefined"
@@ -11,4 +12,4 @@ function STATION:GetModel()
 	return self.model
 end
 
-ix.meta.station = STATION
+PLUGIN.meta.station = STATION

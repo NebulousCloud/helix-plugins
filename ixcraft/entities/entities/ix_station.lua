@@ -36,7 +36,7 @@ if (SERVER) then
 	end
 
 	function ENT:OnVarChanged(name, oldID, newID)
-		local stationTable = ix.craft.stations[newID]
+		local stationTable = PLUGIN.craft.stations[newID]
 
 		if (stationTable) then
 			self:SetModel(stationTable:GetModel())
@@ -63,5 +63,5 @@ else
 end
 
 function ENT:GetStationTable()
-	return ix.craft.stations[self:GetStationID()]
+	return PLUGIN.craft.stations[self:GetStationID()]
 end
