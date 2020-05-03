@@ -1,6 +1,12 @@
 
 local PLUGIN = PLUGIN
 
+function PLUGIN:BuildCraftingMenu()
+	if (table.Empty(self.craft.GetCategories(LocalPlayer()))) then
+		return false
+	end
+end
+
 function PLUGIN:PopulateRecipeTooltip(tooltip, recipe)
 	local canCraft, failString, c, d, e, f = recipe:OnCanCraft(LocalPlayer())
 
@@ -27,7 +33,7 @@ function PLUGIN:PopulateRecipeTooltip(tooltip, recipe)
 
 	if (recipe.tools) then
 		local tools = tooltip:AddRow("tools")
-		tools:SetText("TOOLS")
+		tools:SetText(L("CraftTools"))
 		tools:SetBackgroundColor(Color(150,150,25))
 		tools:SizeToContents()
 
@@ -52,7 +58,7 @@ function PLUGIN:PopulateRecipeTooltip(tooltip, recipe)
 	end
 
 	local requirements = tooltip:AddRow("requirements")
-	requirements:SetText("REQUIREMENTS")
+	requirements:SetText(L("CraftRequirements"))
 	requirements:SetBackgroundColor(Color(25,150,150))
 	requirements:SizeToContents()
 
@@ -76,7 +82,7 @@ function PLUGIN:PopulateRecipeTooltip(tooltip, recipe)
 	end
 
 	local result = tooltip:AddRow("result")
-	result:SetText("RESULTS")
+	result:SetText(L("CraftResults"))
 	result:SetBackgroundColor(derma.GetColor("Warning", tooltip))
 	result:SizeToContents()
 
