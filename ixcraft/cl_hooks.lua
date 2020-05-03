@@ -2,7 +2,7 @@
 local PLUGIN = PLUGIN
 
 function PLUGIN:BuildCraftingMenu()
-	if (table.IsEmpty(self.craft.GetCategories(LocalPlayer()))) then
+	if (table.Empty(self.craft.GetCategories(LocalPlayer()))) then
 		return false
 	end
 end
