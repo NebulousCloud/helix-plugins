@@ -27,7 +27,7 @@ end
 
 function RECIPE:PreHook(name, func)
 	if (!self.preHooks) then
-		self.postHooks = {}
+		self.preHooks = {}
 	end
 
 	self.preHooks[name] = func
