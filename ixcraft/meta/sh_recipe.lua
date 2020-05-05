@@ -159,7 +159,7 @@ if (SERVER) then
 		if (self.requirements) then
 			local removedItems = {}
 
-			for id, itemTable in pairs(inventory:GetItems()) do
+			for _, itemTable in pairs(inventory:GetItems()) do
 				local uniqueID = itemTable.uniqueID
 
 				if (self.requirements[uniqueID]) then
