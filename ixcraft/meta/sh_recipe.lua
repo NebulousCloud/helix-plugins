@@ -167,7 +167,7 @@ if (SERVER) then
 					local amount = self.requirements[uniqueID]
 
 					if (amountRemoved < amount) then
-						inventory:Remove(id)
+						itemTable:Remove()
 
 						removedItems[uniqueID] = amountRemoved + 1
 					end
