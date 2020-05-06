@@ -102,7 +102,7 @@ function PLUGIN:InitializedPlugins()
 				end
 			end
 
-			local ITEM = ix.item.Register( string.Replace( class, prefix, "" ), "base_weapons", nil, nil, true )
+			local ITEM = ix.item.Register( class, "base_weapons", nil, nil, true )
 
 			ITEM.name = dat.Name or orig_wep.PrintName
 			ITEM.price = dat.Price or 4000
