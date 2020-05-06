@@ -23,6 +23,9 @@
 
 
 PLUGIN.GunData[ "tfa_ins2_ak74m" ] = {
+	--Weapon can be Blacklisted and item will be not auto-generated
+	BlackList = false,
+	
 	Slot = "primary",
 	Model = "path_to_model_of_item",
 	iconCam = {
@@ -48,8 +51,5 @@ PLUGIN.GunData[ "tfa_ins2_ak74m" ] = {
 	},
 	
 	--Sec == Secondary
-	Sec = {},
-	
-	--Weapon can be Blacklisted and item will be not auto-generated
-	BlackList = false
+	Sec = {}
 }
