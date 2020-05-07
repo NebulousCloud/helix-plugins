@@ -49,7 +49,7 @@ function RECIPE:OnCanSee(client)
 	end
 
 	if (self.preHooks and self.preHooks["OnCanSee"]) then
-		local a, b, c, d, e, f = self.preHooks["OnCanSee"](client)
+		local a, b, c, d, e, f = self.preHooks["OnCanSee"](self, client)
 
 		if (a != nil) then
 			return a, b, c, d, e, f
@@ -61,7 +61,7 @@ function RECIPE:OnCanSee(client)
 	end
 
 	if (self.postHooks and self.postHooks["OnCanSee"]) then
-		local a, b, c, d, e, f = self.postHooks["OnCanSee"](client)
+		local a, b, c, d, e, f = self.postHooks["OnCanSee"](self, client)
 
 		if (a != nil) then
 			return a, b, c, d, e, f
@@ -79,7 +79,7 @@ function RECIPE:OnCanCraft(client)
 	end
 
 	if (self.preHooks and self.preHooks["OnCanCraft"]) then
-		local a, b, c, d, e, f = self.preHooks["OnCanCraft"](client)
+		local a, b, c, d, e, f = self.preHooks["OnCanCraft"](self, client)
 
 		if (a != nil) then
 			return a, b, c, d, e, f
@@ -127,7 +127,7 @@ function RECIPE:OnCanCraft(client)
 	end
 
 	if (self.postHooks and self.postHooks["OnCanCraft"]) then
-		local a, b, c, d, e, f = self.postHooks["OnCanCraft"](client)
+		local a, b, c, d, e, f = self.postHooks["OnCanCraft"](self, client)
 
 		if (a != nil) then
 			return a, b, c, d, e, f
@@ -146,7 +146,7 @@ if (SERVER) then
 		end
 
 		if (self.preHooks and self.preHooks["OnCraft"]) then
-			local a, b, c, d, e, f = self.preHooks["OnCraft"](client)
+			local a, b, c, d, e, f = self.preHooks["OnCraft"](self, client)
 
 			if (a != nil) then
 				return a, b, c, d, e, f
@@ -192,7 +192,7 @@ if (SERVER) then
 		end
 
 		if (self.postHooks and self.postHooks["OnCraft"]) then
-			local a, b, c, d, e, f = self.postHooks["OnCraft"](client)
+			local a, b, c, d, e, f = self.postHooks["OnCraft"](self, client)
 
 			if (a != nil) then
 				return a, b, c, d, e, f
