@@ -17,7 +17,7 @@ Recipes are put into the /recipes/ folder and crafting stations are put into the
 
 When creating recipes you can add hooks to before and after any action, example:
 ```lua
-RECIPE:PostHook("OnCanCraft", function(client)
+RECIPE:PostHook("OnCanCraft", function(recipeTable, client)
 	for _, v in pairs(ents.FindByClass("ix_station_workbench")) do
 		if (client:GetPos():DistToSqr(v:GetPos()) < 100 * 100) then
 			return true
@@ -27,7 +27,7 @@ RECIPE:PostHook("OnCanCraft", function(client)
 	return false, "You need to be near a workbench."
 end)
 ```
-This will check for a unique crafting station within range called workbench - this hook is called after every other check inside OnCanCraft is made, if you want to hook this before OnCanCraft you would use PreHook instead of PostHook. This hooking feature allows you to literally do anything within your recipes. Available hooks are `"OnCanCraft", "OnCanSee", "OnCraft"` they all have the client as an argument.
+This will check for a unique crafting station within range called workbench - this hook is called after every other check inside OnCanCraft is made, if you want to hook this before OnCanCraft you would use PreHook instead of PostHook. This hooking feature allows you to literally do anything within your recipes. Available hooks are `"OnCanCraft", "OnCanSee", "OnCraft"` they all have the recipeTable and client as arguments.
 Recipe Format:
 ```lua
 RECIPE.name = "RecipeName"
