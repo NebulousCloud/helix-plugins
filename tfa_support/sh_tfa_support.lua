@@ -24,21 +24,6 @@
 
 local PLUGIN = PLUGIN
 
---[[
-DoAutoCreation:
-
-If `true`:
-	Auto-generate items for all weapons with `tfa_` prefix
-
-If `false`:
-	Auto-generate only that items that described in `sh_tfa_weps.lua` file
-
-*Black List works for both methods
-]]
-PLUGIN.DoAutoCreation = true
-
-
-
 PLUGIN.GunData = {}
 ix.util.Include("sh_tfa_weps.lua")
 
