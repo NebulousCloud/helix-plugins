@@ -1,4 +1,7 @@
 local PLUGIN = PLUGIN
+
+PLUGIN.DoAutoCreation = true
+
 PLUGIN.name = "TFA Support"
 PLUGIN.author = "Taxin2012"
 PLUGIN.description = "Support for TFA Weapons Pack"
@@ -41,7 +44,7 @@ If `false`:
 *Black List works for both methods
 ]]
 
-PLUGIN.DoAutoCreation = true
+
 
 ix.util.Include("sh_tfa_support.lua")
 ix.util.Include("cl_tfa_support.lua")
