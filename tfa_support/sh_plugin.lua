@@ -16,7 +16,22 @@ limitations under the License.
 ]]
 
 PLUGIN.readme = [[
+What that plugin does:
 
+Generates items (weapons, ammo, attachments);
+Add ability to use attachments in inventory like items (equip to weapons);
+Automatically changes and registering ammo and ammo types;
+Shows in description what attachments are have the weapon, ammo type and magazine capacity;
+Allows to edit weapons parameters without editing the original weapon.
+
+Before use, edit the sound on those lines in "sh_tfa_support.lua" file:
+142, 236, 306, 354
+
+"sh_tfa_ammo.lua" - Here you can add ammo ( and new ammo types ).
+"sh_tfa_weps.lua" - Here you can edit weapon parameters.
+"sh_tfa_attach.lua" - Here you can add attachments.
+
+You can select: auto-generate all weapons but blacklisted or auto-generate only that weapons that described in sh_tfa_weps.lua file. For that, just edit "PLUGIN.DoAutoCreation" option in "sh_tfa_support.lua" file.
 
 `DoAutoCreation` parameter in `sh_plugin.lua` file:
 If `true`:
