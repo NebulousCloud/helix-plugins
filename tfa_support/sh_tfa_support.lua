@@ -139,7 +139,7 @@ function PLUGIN:InitializedPlugins()
 		end
 
 		ITEM:Hook( "drop", function( item )
-			item.player:EmitSound( "volmos/mzone/interface/inv_drop.ogg" ) 
+			item.player:EmitSound( "physics/metal/metal_box_footstep1.wav" ) 
 		end )
 
 		ITEM.model = dat.Model or v.WorldModel
@@ -233,7 +233,7 @@ function PLUGIN:InitializedPlugins()
 					mods[ data[1] ] = nil
 					item:SetData( "mods", mods )
 
-					item.player:EmitSound( "volmos/mzone/interface/inv_detach_addon.ogg" )
+					item.player:EmitSound( "weapons/crossbow/reload1.wav" )
 
 					local wep = item.player:GetWeapon( item.class )
 					if IsValid( wep ) then
@@ -303,7 +303,7 @@ function PLUGIN:InitializedPlugins()
 						mods[ item.slot ] = item.uniqueID
 						wep_itm:SetData( "mods", mods )
 
-						item.player:EmitSound( "volmos/mzone/interface/inv_detach_addon.ogg" )
+						item.player:EmitSound( "weapons/crossbow/reload1.wav" )
 
 						local wep = item.player:GetWeapon( wep_itm.class )
 						if IsValid( wep ) then
@@ -351,7 +351,7 @@ function PLUGIN:InitializedPlugins()
 		end
 
 		ITEM:Hook( "drop", function(item)
-			item.player:EmitSound( "volmos/mzone/interface/inv_drop.ogg", 80 ) 
+			item.player:EmitSound( "physics/metal/metal_box_footstep1.wav" ) 
 		end )
 	end
 end
