@@ -1,6 +1,6 @@
 
 --
--- Copyright (C) 2019 Taxin2012
+-- Copyright (C) 2020 Taxin2012
 --
 -- Licensed under the Apache License, Version 2.0 (the "License");
 -- you may not use this file except in compliance with the License.
@@ -68,176 +68,182 @@ end
 function PLUGIN:InitializedPlugins()
 	for k, v in next, weapons.GetList() do
 		local class = v.ClassName
-		local prefix = "tfa_"
-
-		if class:find( prefix ) and not class:find( "base" ) then
-			if class:find( "tfa_ins2_" ) then 
-				prefix = "tfa_ins2_"
-			elseif class:find( "tfa_ayykyu_" ) then 
-				prefix = "tfa_ayykyu_"
-			elseif class:find( "tfa_fml_" ) then 
-				prefix = "tfa_fml_" 
+		local dat = self.GunData[ class ]
+		
+		
+		if dat then
+			if dat.BlackList then
+				continue
 			end
+		else
+			if self.DoAutoCreation and class:find( "tfa_" ) and not class:find( "base" ) then
+				dat = {}
+			else
+				continue
+			end
+		end
 
-			--v.MainBullet.Ricochet = function() return true end
-			v.HandleDoor = function() return end
-			v.Primary.DefaultClip = 0
- 
-			local dat = self.GunData[ class ] or {}
-			local orig_wep = weapons.GetStored( v.ClassName )
+		--v.MainBullet.Ricochet = function() return true end
+		v.HandleDoor = function() return end
+		v.Primary.DefaultClip = 0
 
-			if dat.Prim and not table.IsEmpty( dat.Prim ) then
-				for k2, v2 in next, dat.Prim do
-					if v.Primary[ k2 ] then
-						v.Primary[ k2 ] = v2
+		local orig_wep = weapons.GetStored( class )
+
+		if dat.Prim and not table.IsEmpty( dat.Prim ) then
+			for k2, v2 in next, dat.Prim do
+				if v.Primary[ k2 ] then
+					v.Primary[ k2 ] = v2
+				end
+			end
+		end
+
+		if dat.Sec and not table.IsEmpty( dat.Sec ) then
+			for k2, v2 in next, dat.Sec do
+				if v.Secondary[ k2 ] then
+					v.Secondary[ k2 ] = v2
+				end
+			end
+		end
+
+		local ITEM = ix.item.Register( class, "base_weapons", nil, nil, true )
+
+		ITEM.name = dat.Name or orig_wep.PrintName
+		ITEM.price = dat.Price or 4000
+		ITEM.exRender = dat.exRender or false
+		ITEM.class = class
+		ITEM.IsTFA = true
+		ITEM.DoEquipSnd = true
+		
+		if dat.iconCam then
+			ITEM.iconCam = dat.iconCam
+		end
+
+		local atts = {}
+		if v.Attachments then
+			for k, v in next, v.Attachments do
+				if v.atts then
+					for k2, v2 in next, v.atts do
+						table.Merge( atts, { [ v2 ] = true } )
 					end
 				end
 			end
+		end
+		ITEM.Attachments = atts
 
-			if dat.Sec and not table.IsEmpty( dat.Sec ) then
-				for k2, v2 in next, dat.Sec do
-					if v.Secondary[ k2 ] then
-						v.Secondary[ k2 ] = v2
-					end
-				end
-			end
+		if dat.Weight then
+			ITEM.Weight = dat.Weight
+		end
 
-			local ITEM = ix.item.Register( string.Replace( class, prefix, "" ), "base_weapons", nil, nil, true )
+		if dat.DurCh then
+			ITEM.DurCh = dat.DurCh
+		end
 
-			ITEM.name = dat.Name or orig_wep.PrintName
-			ITEM.price = dat.Price or 4000
-			ITEM.exRender = dat.exRender or false
-			ITEM.class = class
-			ITEM.IsTFA = true
-			ITEM.DoEquipSnd = true
+		ITEM:Hook( "drop", function( item )
+			item.player:EmitSound( "physics/metal/metal_box_footstep1.wav" ) 
+		end )
 
-			local atts = {}
-			if v.Attachments then
-				for k, v in next, v.Attachments do
-					if v.atts then
-						for k2, v2 in next, v.atts do
-							table.Merge( atts, { [ v2 ] = true } )
-						end
-					end
-				end
-			end
-			ITEM.Attachments = atts
+		ITEM.model = dat.Model or v.WorldModel
 
-			if dat.Weight then
-				ITEM.Weight = dat.Weight
-			end
+		ITEM.width = dat.Width or 1
+		ITEM.height = dat.Height or 1
+		ITEM.weaponCategory = dat.Slot or "primary"
 
-			if dat.DurCh then
-				ITEM.DurCh = dat.DurCh
-			end
+		function ITEM:OnEquipWeapon( ply, wep )
+			local data = self:GetData( "mods", {} )
 
-			ITEM:Hook( "drop", function( item )
-				item.player:EmitSound( "volmos/mzone/interface/inv_drop.ogg" ) 
-			end )
-
-			ITEM.model = v.WorldModel
-
-			ITEM.width = dat.Width or 1
-			ITEM.height = dat.Height or 1
-			ITEM.weaponCategory = dat.Slot or "primary"
-
-			function ITEM:OnEquipWeapon( ply, wep )
-				local data = self:GetData( "mods", {} )
-
-				if not table.IsEmpty( data ) then
-					timer.Simple( 0.2, function()
-						if IsValid( wep ) then
-							for k, v in next, data do
-								if self.Attachments[ v ] then
-									wep:Attach( v )
-								end
+			if not table.IsEmpty( data ) then
+				timer.Simple( 0.2, function()
+					if IsValid( wep ) then
+						for k, v in next, data do
+							if self.Attachments[ v ] then
+								wep:Attach( v )
 							end
 						end
-					end )
-				end
+					end
+				end )
+			end
+		end
+
+		function ITEM:PaintOver(item, w, h)
+			local x, y = w - 14, h - 14
+
+			if item:GetData( "equip" ) then
+				surface.SetDrawColor( 110, 255, 110, 100 )
+				surface.DrawRect( x, y, 8, 8 )
+
+				x = x - 8 * 1.6
 			end
 
-			function ITEM:PaintOver(item, w, h)
-				local x, y = w - 14, h - 14
+			if not table.IsEmpty( item:GetData( "mods", {} ) ) then
+				surface.SetDrawColor( 255, 255, 110, 100 )
+				surface.DrawRect( x, y, 8, 8 )
 
-				if item:GetData( "equip" ) then
-					surface.SetDrawColor( 110, 255, 110, 100 )
-					surface.DrawRect( x, y, 8, 8 )
+				x = x - 8 * 1.6
+			end
+		end
 
-					x = x - 8 * 1.6
-				end
+		function ITEM:GetDescription()
+			local text = ""
 
-				if not table.IsEmpty( item:GetData( "mods", {} ) ) then
-					surface.SetDrawColor( 255, 255, 110, 100 )
-					surface.DrawRect( x, y, 8, 8 )
-
-					x = x - 8 * 1.6
-				end
+			if v.Primary.Ammo and v.Primary.ClipSize then
+				local ammo_itm = ix.item.list[ "ammo_" .. v.Primary.Ammo ]
+				text = text .. "Using ammo: " .. ( ( ammo_itm and ammo_itm.name ) or v.Primary.Ammo ) .. ".\nMagazine capacity: " .. v.Primary.ClipSize .. "."
 			end
 
-			function ITEM:GetDescription()
-				local text = ""
+			return text
+		end
 
-				if v.Primary.Ammo and v.Primary.ClipSize then
-					local ammo_itm = ix.item.list[ "ammo_" .. v.Primary.Ammo ]
-					text = text .. "Using ammo: " .. ( ( ammo_itm and ammo_itm.name ) or v.Primary.Ammo ) .. ".\nMagazine capacity: " .. v.Primary.ClipSize .. "."
-				end
-
-				return text
+		function ITEM:OnInstanced()
+			if self:GetData( "mods" ) == nil then
+				self:SetData( "mods", {} )
 			end
+		end
+		
+		ITEM.functions.detach = {
+			name = "Dequip",
+			tip = "useTip",
+			icon = "icon16/wrench.png",
+            isMulti = true,
+            multiOptions = function( item, client )
+                local targets = {}
 
-			function ITEM:OnInstanced()
-				if self:GetData( "mods" ) == nil then
-					self:SetData( "mods", {} )
-				end
-			end
-			
-			ITEM.functions.detach = {
-				name = "Dequip",
-				tip = "useTip",
-				icon = "icon16/wrench.png",
-	            isMulti = true,
-	            multiOptions = function( item, client )
-	                local targets = {}
+                for k, v in next, item:GetData( "mods", {} ) do
+                    table.insert( targets, {
+                        name = ( ix.item.list[ v ] and ix.item.list[ v ].name ) or v,
+                        data = { k, v },
+                    } )
+                end
 
-	                for k, v in next, item:GetData( "mods", {} ) do
-	                    table.insert( targets, {
-	                        name = ( ix.item.list[ v ] and ix.item.list[ v ].name ) or v,
-	                        data = { k, v },
-	                    } )
-	                end
+                return targets
+            end,
+			OnCanRun = function( item )			
+                return not IsValid( item.entity ) and IsValid( item.player ) and item.invID == item.player:GetCharacter():GetInventory():GetID() and not table.IsEmpty( item:GetData( "mods", {} ) )
+			end,
+			OnRun = function( item, data )
+				if data and data[1] and data[2] then
+					local mods = item:GetData( "mods", {} )
+					if not mods[ data[1] ] then return false end
 
-	                return targets
-	            end,
-				OnCanRun = function( item )			
-	                return not IsValid( item.entity ) and IsValid( item.player ) and item.invID == item.player:GetCharacter():GetInventory():GetID() and not table.IsEmpty( item:GetData( "mods", {} ) )
-				end,
-				OnRun = function( item, data )
-					if data and data[1] and data[2] then
-						local mods = item:GetData( "mods", {} )
-						if not mods[ data[1] ] then return false end
-
-						local x, y, id = item.player:GetCharacter():GetInventory():Add( data[2] )
-						if not id then
-							item.player:NotifyLocalized( "noFit" )
-							return false
-						end
-
-						mods[ data[1] ] = nil
-						item:SetData( "mods", mods )
-
-						item.player:EmitSound( "volmos/mzone/interface/inv_detach_addon.ogg" )
-
-						local wep = item.player:GetWeapon( item.class )
-						if IsValid( wep ) then
-							wep:Detach( data[2] )
-						end
+					local x, y, id = item.player:GetCharacter():GetInventory():Add( data[2] )
+					if not id then
+						item.player:NotifyLocalized( "noFit" )
+						return false
 					end
 
-					return false
-				end,
-			}
-		end
+					mods[ data[1] ] = nil
+					item:SetData( "mods", mods )
+
+					item.player:EmitSound( "weapons/crossbow/reload1.wav" )
+
+					local wep = item.player:GetWeapon( item.class )
+					if IsValid( wep ) then
+						wep:Detach( data[2] )
+					end
+				end
+
+				return false
+			end,
+		}
 	end
 
 	for k, v in next, self.AttachData do
@@ -245,6 +251,9 @@ function PLUGIN:InitializedPlugins()
 		ITEM.name = v.Name
 		ITEM.price = v.Price or 300
 		ITEM.model = v.Model or "models/Items/BoxSRounds.mdl"
+		if v.iconCam then
+			ITEM.iconCam = v.iconCam
+		end
 		ITEM.width = v.Width or 1
 		ITEM.height = v.Height or 1
 		ITEM.isAttachment = true
@@ -294,7 +303,7 @@ function PLUGIN:InitializedPlugins()
 						mods[ item.slot ] = item.uniqueID
 						wep_itm:SetData( "mods", mods )
 
-						item.player:EmitSound( "volmos/mzone/interface/inv_detach_addon.ogg" )
+						item.player:EmitSound( "weapons/crossbow/reload1.wav" )
 
 						local wep = item.player:GetWeapon( wep_itm.class )
 						if IsValid( wep ) then
@@ -330,6 +339,9 @@ function PLUGIN:InitializedPlugins()
 		ITEM.ammoAmount = v.Amount or 30
 		ITEM.price = v.Price or 200
 		ITEM.model = v.Model or "models/Items/BoxSRounds.mdl"
+		if v.iconCam then
+			ITEM.iconCam = v.iconCam
+		end
 		ITEM.width = v.Width or 1
 		ITEM.height = v.Height or 1
 		ITEM.isAmmo = true
@@ -339,7 +351,7 @@ function PLUGIN:InitializedPlugins()
 		end
 
 		ITEM:Hook( "drop", function(item)
-			item.player:EmitSound( "volmos/mzone/interface/inv_drop.ogg", 80 ) 
+			item.player:EmitSound( "physics/metal/metal_box_footstep1.wav" ) 
 		end )
 	end
 end
