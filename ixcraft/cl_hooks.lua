@@ -97,7 +97,7 @@ function PLUGIN:PopulateRecipeTooltip(tooltip, recipe)
 		    itemName = itemTable.name
 		end
 
-		if (type(v) == "table") then
+		if (istable(v)) then
 			if (v["min"] and v["max"]) then
 				amount = v["min"].."-"..v["max"]
 			else
