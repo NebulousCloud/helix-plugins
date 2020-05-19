@@ -176,7 +176,7 @@ if (SERVER) then
 		end
 
 		for uniqueID, amount in pairs(self.results or {}) do
-			if (type(amount) == "table") then
+			if (istable(amount)) then
 				if (amount["min"] and amount["max"]) then
 					amount = math.random(amount["min"], amount["max"])
 				else
