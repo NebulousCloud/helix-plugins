@@ -27,10 +27,8 @@ if (CLIENT) then
 		end
 
 		if (ix.chat.currentCommand == "localevent") then
-			local range = tonumber(ix.chat.currentArguments[2]) or 500
-
 			render.SetColorMaterial()
-			render.DrawSphere(LocalPlayer():GetPos(), -range, 30, 30, Color(255, 150, 0, 100))
+			render.DrawSphere(LocalPlayer():GetPos(), -(tonumber(ix.chat.currentArguments[2]) or 500), 30, 30, Color(255, 150, 0, 100))
 		end
 	end
 end
