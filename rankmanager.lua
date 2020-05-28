@@ -1,12 +1,3 @@
---[[
-
-	Overwatch Rank Manager for Helix
-
-	Installation:
-		1. Edit the self.rankTable variable within PLUGIN:OnLoaded() to fit your rank needs.
-		2. Place this Lua file into your schema plugin directory.
-
-]]
 
 local PLUGIN = PLUGIN
 
@@ -14,6 +5,15 @@ PLUGIN.name = "Overwatch Rank Manager"
 PLUGIN.author = "Gary Tate, wowm0d"
 PLUGIN.description = "Allows Overwatch to manage ranks."
 PLUGIN.schema = "HL2 RP"
+PLUGIN.readme = [[
+Overwatch Rank Manager for Helix
+---
+Installation:
+- Edit the self.rankTable variable within PLUGIN:OnLoaded() to fit your rank needs.
+- Place rankmanager.Lua file into your Schema's Plugin directory.
+
+Support for this plugin can be found here: https://discord.gg/mntpDMU
+]]
 PLUGIN.license = [[
 The MIT License (MIT)
 Copyright (c) 2019 Gary Tate
@@ -89,7 +89,7 @@ ix.command.Add("RankPromote", {
 
 				for k, v in ipairs(ranks) do
 					if (string.find(name, v)) then
-						newRank = next(ranks, k)
+						newRank = math.min(k + 1, #ranks)
 
 						break
 					end
@@ -149,7 +149,7 @@ ix.command.Add("RankDemote", {
 
 				for k, v in ipairs(ranks) do
 					if (string.find(name, v)) then
-						newRank = math.Clamp(k - 1, 1, #ranks)
+						newRank = math.max(k - 1, 1)
 
 						break
 					end

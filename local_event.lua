@@ -3,7 +3,12 @@ local PLUGIN = PLUGIN
 
 PLUGIN.name = "Better Local Event"
 PLUGIN.author = "wowm0d"
-PLUGIN.description = "Adds a better /localevent command for events in a specfic radius."
+PLUGIN.description = "Adds a local event command for events in a specified radius."
+PLUGIN.readme = [[
+Adds a local event command for events in a specified radius.
+
+Support for this plugin can be found here: https://discord.gg/mntpDMU
+]]
 PLUGIN.license = [[
 Copyright 2020 wowm0d
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -12,7 +17,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 ]]
 
 ix.lang.AddTable("english", {
-   cmdLocalEvent = "Make something perform an action that can be seen at a specified radius."
+	cmdLocalEvent = "Make something perform an action that can be seen at a specified radius."
 })
 
 if (CLIENT) then
@@ -22,18 +27,10 @@ if (CLIENT) then
 		end
 
 		if (ix.chat.currentCommand == "localevent") then
-			local arguments = ix.chat.currentArguments
-			local range = tonumber(arguments[2])
-			local pos = LocalPlayer():GetPos()
-
-			if (range) then
-				range = -range
-			else
-			    range = -500
-			end
+			local range = tonumber(ix.chat.currentArguments[2]) or 500
 
 			render.SetColorMaterial()
-			render.DrawSphere(pos, range, 30, 30, Color(255, 150, 0, 100))
+			render.DrawSphere(LocalPlayer():GetPos(), -range, 30, 30, Color(255, 150, 0, 100))
 		end
 	end
 end
@@ -58,7 +55,7 @@ do
 	CLASS.indicator = "chatPerforming"
 
 	function CLASS:CanHear(speaker, listener, data)
-		return (speaker:GetPos() - listener:GetPos()):LengthSqr() <= (data.range and data.range^2 or 250000)
+		return (speaker:GetPos() - listener:GetPos()):LengthSqr() <= (data.range and data.range ^ 2 or 250000)
 	end
 
 	function CLASS:OnChatAdd(speaker, text)

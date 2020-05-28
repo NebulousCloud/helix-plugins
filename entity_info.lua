@@ -12,6 +12,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 ]]
 PLUGIN.readme = [[
 Makes entity hover info a physical point in the world to draw from.
+
+Support for this plugin can be found here: https://discord.gg/mntpDMU
 ]]
 
 if (CLIENT) then
