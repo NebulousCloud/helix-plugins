@@ -14,8 +14,6 @@ PLUGIN.readme = [[
 	# Debug # Drug Plugin line 24 # This is a debug print where you see your info string thing
 ]]
 
-ix.util.Include("sv_plugin.lua")
-
 ix.config.Add("Debug Mode",false, "Toggle debug mode.", nil, {
 	category = "Debug"
 })
