@@ -24,6 +24,8 @@ A small plugin that allow some factions to use waypoints. To just list the featu
 - Waypoints will visually change a bit when a player can see the actual location.
 - Players joining will see waypoints created before they joined if they should see them. Everything updates quite nicely.
 - No texture download needed, waypoint is just drawn with lines and rectangles.
+
+Support for this plugin can be found here: https://discord.gg/mntpDMU
 ]]
 
 ix.util.Include("cl_hooks.lua")

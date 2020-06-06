@@ -1,3 +1,4 @@
+
 local PLUGIN = PLUGIN
 
 PLUGIN.name = "Class Whitelists"
@@ -13,9 +14,13 @@ PLUGIN.readme = [[
 Allows classes to be obtainable with whitelists.
 Add the below funtion to any class you wish to restrict to whitelists.
 
+```lua
 function CLASS:CanSwitchTo(client)
     return client:HasClassWhitelist(self.index)
 end
+```
+
+Support for this plugin can be found here: https://discord.gg/mntpDMU
 ]]
 
 ix.lang.AddTable("english", {

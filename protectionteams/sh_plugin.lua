@@ -34,6 +34,8 @@ There are also player variables set on client & server:
 ![Menu](https://i.imgur.com/YkPh2zr.png)
 
 If you like this plugin and want to see more consider getting me a coffee. https://ko-fi.com/wowm0d
+
+Support for this plugin can be found here: https://discord.gg/mntpDMU
 ]]
 
 PLUGIN.teams = {}
