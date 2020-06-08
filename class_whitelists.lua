@@ -32,9 +32,25 @@ ix.lang.AddTable("english", {
 
 local playerMeta = FindMetaTable("Player")
 
+function playerMeta:HasClassWhitelist(class)
+	local data = ix.class.list[class]
+
+	if (data) then
+		if (data.isDefault) then
+			return true
+		end
+
+		local clientData = self:GetData("classWhitelists", {})
+
+		return clientData[Schema.folder] and clientData[Schema.folder][data.uniqueID]
+	end
+
+	return false
+end
+
 if (SERVER) then
 	function playerMeta:SetClassWhitelisted(class, whitelisted)
-		if (!whitelisted) then
+		if (whitelisted != true) then
 			whitelisted = nil
 		end
 
@@ -43,7 +59,7 @@ if (SERVER) then
 		if (data) then
 			local classWhitelists = self:GetData("classWhitelists", {})
 			classWhitelists[Schema.folder] = classWhitelists[Schema.folder] or {}
-			classWhitelists[Schema.folder][data.uniqueID] = whitelisted and true or nil
+			classWhitelists[Schema.folder][data.uniqueID] = whitelisted
 
 			self:SetData("classWhitelists", classWhitelists)
 			self:SaveData()
@@ -53,22 +69,6 @@ if (SERVER) then
 
 		return false
 	end
-end
-
-function playerMeta:HasClassWhitelist(class)
-	local data = ix.class.list[class]
-
-	if (data) then
-		if (data.isDefault) then
-			return true
-		end
-
-		local ixData = self:GetData("classWhitelists", {})
-
-		return ixData[Schema.folder] and ixData[Schema.folder][data.uniqueID] == true or false
-	end
-
-	return false
 end
 
 do
@@ -149,21 +149,20 @@ do
 					query:Callback(function(result)
 						if (istable(result) and #result > 0) then
 							local data = util.JSONToTable(result[1].data or "[]")
-							local whitelists = data.whitelists and data.whitelists[Schema.folder]
+							local whitelists = data.classWhitelists and data["classWhitelists"][Schema.folder]
 
-							if (!whitelists or !whitelists[class.uniqueID]) then
-								return
-							end
+							if (whitelists and whitelists[class.uniqueID]) then
+								whitelists[class.uniqueID] = nil
+								data["classWhitelists"][Schema.folder] = whitelists
 
-							whitelists[class.uniqueID] = nil
+								local updateQuery = mysql:Update("ix_players")
+									updateQuery:Update("data", util.TableToJSON(data))
+									updateQuery:Where("steamid", steamID64)
+								updateQuery:Execute()
 
-							local updateQuery = mysql:Update("ix_players")
-								updateQuery:Update("data", util.TableToJSON(data))
-								updateQuery:Where("steamid", steamID64)
-							updateQuery:Execute()
-
-							for _, v in ipairs(player.GetAll()) do
-								v:NotifyLocalized("unclasswhitelist", client:GetName(), target, L(class.name, v))
+								for _, v in ipairs(player.GetAll()) do
+									v:NotifyLocalized("unclasswhitelist", client:GetName(), target, L(class.name, v))
+								end
 							end
 						end
 					end)
