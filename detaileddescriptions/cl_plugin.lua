@@ -26,8 +26,6 @@ net.Receive("OpenDetailedDescriptions", function(toSet)
 		textEntry:SetText(textEntryData)
 	end
 	
-	print(textEntryDataURL)
-	
 	local DButton = vgui.Create("DButton", List)
 	if (textEntryDataURL == "No detailed description found") then
 		DButton:SetDisabled(true)
