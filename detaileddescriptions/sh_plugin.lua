@@ -25,7 +25,7 @@ ix.lang.AddTable("dutch", {
 })
 
 ix.command.Add("SelfExamine", {
-	description = "@cmdCharDetDesc",
+	description = "@cmdSelfExamine",
 	adminOnly = true,
 	OnRun = function(self, client, text, scale)
 		local textEntryData = tostring(client:GetCharacter():GetData("textDetDescData"))
