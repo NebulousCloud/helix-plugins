@@ -33,8 +33,14 @@ function ix.weight.WeightString(weight, imperial)
 	end
 end
 
-function ix.weight.CanCarry(weight, carry) -- Calculate if you are able to carry something.
-	local max = ix.config.Get("maxWeight", 30) + ix.config.Get("maxOverWeight", 20)
+function ix.weight.BaseWeight(character)
+	local base = ix.config.Get("maxWeight", 30)
+
+	return base
+end
+
+function ix.weight.CanCarry(weight, carry, character) -- Calculate if you are able to carry something.
+	local max = ix.weight.BaseWeight(character) + ix.config.Get("maxOverWeight", 20)
 
 	return (weight + carry) <= max
 end
@@ -106,7 +112,7 @@ if (CLIENT) then
 
 				local w, h = panel:GetSize()
 
-				panel:SetTall(h + 25)
+				panel:SetTall(h + 24)
 
 				w = w - 10
 
