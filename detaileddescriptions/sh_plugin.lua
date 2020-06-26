@@ -54,21 +54,3 @@ ix.command.Add("CharDetDesc", {
 		net.Send(client)
 	end
 })
-
-function PLUGIN:KeyPress(client, key)
-	local entity = client:GetEyeTrace().Entity
-
-	if (key == IN_USE and IsValid(entity) and entity:IsPlayer()) then
-	if !(client:GetPos():Distance(entity:GetPos()) <= 100) then return end
-		if (CLIENT) then
-			ix.menu.Open({Examine = function()
-				local entity = client:GetEyeTrace().Entity
-				
-				net.Start("ExamineDetailedDescriptions")
-					net.WriteEntity(entity)
-					net.WriteEntity(client)
-				net.SendToServer()
-			end}, entity)
-		end
-	end
-end

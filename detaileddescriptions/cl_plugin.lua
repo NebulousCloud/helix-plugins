@@ -91,3 +91,7 @@ net.Receive("SetDetailedDescriptions", function(toSet)
 		Frame:Remove()
 	end
 end)
+
+function PLUGIN:GetPlayerEntityMenu(client, options)
+	options["Examine"] = true
+end
