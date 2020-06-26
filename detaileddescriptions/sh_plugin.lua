@@ -28,19 +28,13 @@ ix.command.Add("SelfExamine", {
 	description = "@cmdSelfExamine",
 	adminOnly = true,
 	OnRun = function(self, client, text, scale)
-		local textEntryData = tostring(client:GetCharacter():GetData("textDetDescData"))
-		local textEntryDataURL = tostring(client:GetCharacter():GetData("textDetDescDataURL"))
-	
-		net.Start("OpenDetailedDescriptions")
-		net.WriteString(client:SteamName())
-		net.WriteString(client:Name())
-		if (textEntryData == "nil") then
-			net.WriteString("No detailed description found")
-			net.WriteString("No detailed description found")
-		else
+		local textEntryData = client:GetCharacter():GetData("textDetDescData", nil) or "No detailed description found."
+		local textEntryDataURL = client:GetCharacter():GetData("textDetDescDataURL", nil) or "No detailed description found."
+
+		net.Start("ixOpenDetailedDescriptions")
+			net.WriteEntity(client)
 			net.WriteString(textEntryData)
 			net.WriteString(textEntryDataURL)
-		end
 		net.Send(client)
 	end
 })
@@ -49,7 +43,7 @@ ix.command.Add("CharDetDesc", {
 	description = "@cmdCharDetDesc",
 	adminOnly = true,
 	OnRun = function(self, client, text, scale)
-		net.Start("SetDetailedDescriptions")
+		net.Start("ixSetDetailedDescriptions")
 			net.WriteString(client:SteamName())
 		net.Send(client)
 	end

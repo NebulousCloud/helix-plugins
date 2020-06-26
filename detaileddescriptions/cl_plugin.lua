@@ -1,6 +1,5 @@
-net.Receive("OpenDetailedDescriptions", function(toSet)
-	local toSet = net.ReadString()
-	local toSetDisplay = net.ReadString()
+net.Receive("ixOpenDetailedDescriptions", function()
+	local client = net.ReadEntity()
 	local textEntryData = net.ReadString()
 	local textEntryDataURL = net.ReadString()
 	
@@ -8,7 +7,7 @@ net.Receive("OpenDetailedDescriptions", function(toSet)
 	Frame:Center()
 	Frame:SetPos(Frame:GetPos() - 150, 250, 0)
 	Frame:SetSize(350, 500)
-	Frame:SetTitle("Detailed Description - " .. toSetDisplay)
+	Frame:SetTitle("Detailed Description - " .. client:Name())
 	Frame:MakePopup()
 
 	local List = vgui.Create("DListView", Frame)
@@ -21,13 +20,11 @@ net.Receive("OpenDetailedDescriptions", function(toSet)
 	textEntry:DockMargin( 0, 0, 0, 0 )
 	textEntry:SetMultiline(true)
 	textEntry:SetVerticalScrollbarEnabled(true)
-	
-	if (textEntryData) then
-		textEntry:SetText(textEntryData)
-	end
+
+	textEntry:SetText(textEntryData)
 	
 	local DButton = vgui.Create("DButton", List)
-	if (textEntryDataURL == "No detailed description found") then
+	if (textEntryDataURL == "No detailed description found.") then
 		DButton:SetDisabled(true)
 	else
 		DButton:SetTextColor(Color(0, 0, 0, 255))
@@ -41,8 +38,8 @@ net.Receive("OpenDetailedDescriptions", function(toSet)
 	end
 end)
 
-net.Receive("SetDetailedDescriptions", function(toSet)
-	local toSet = net.ReadString()
+net.Receive("ixSetDetailedDescriptions", function()
+	local callingClientSteamName = net.ReadString()
 	
 	local Frame = vgui.Create("DFrame")
 	Frame:Center()
@@ -83,10 +80,10 @@ net.Receive("SetDetailedDescriptions", function(toSet)
 	end
 	
 	DButton.DoClick = function()
-		net.Start("EditDetailedDescriptions")
+		net.Start("ixEditDetailedDescriptions")
 			net.WriteString(textEntryURL:GetValue())
 			net.WriteString(textEntry:GetValue())
-			net.WriteString(toSet)
+			net.WriteString(callingClientSteamName)
 		net.SendToServer()
 		Frame:Remove()
 	end

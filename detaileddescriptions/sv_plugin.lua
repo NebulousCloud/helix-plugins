@@ -1,37 +1,29 @@
-util.AddNetworkString("OpenDetailedDescriptions")
-util.AddNetworkString("SetDetailedDescriptions")
-util.AddNetworkString("EditDetailedDescriptions")
+util.AddNetworkString("ixOpenDetailedDescriptions")
+util.AddNetworkString("ixSetDetailedDescriptions")
+util.AddNetworkString("ixEditDetailedDescriptions")
 
-net.Receive("EditDetailedDescriptions", function()
+net.Receive("ixEditDetailedDescriptions", function()
 	local textEntryURL = net.ReadString()
 	local text = net.ReadString()
-	local toUse = net.ReadString()
+	local callingClientSteamName = net.ReadString()
 	
-	for key, toEdit in pairs(player.GetAll()) do
-		if toEdit:SteamName() == toUse then
-			toEdit:GetCharacter():SetData("textDetDescData", text)
-			toEdit:GetCharacter():SetData("textDetDescDataURL", textEntryURL)
+	for key, client in pairs(player.GetAll()) do
+		if client:SteamName() == callingClientSteamName then
+			client:GetCharacter():SetData("textDetDescData", text)
+			client:GetCharacter():SetData("textDetDescDataURL", textEntryURL)
 		end
 	end
 end)
 
 function PLUGIN:OnPlayerOptionSelected(client, callingClient, option)
 	if (option == "Examine") then
-		local toSet = client:SteamName()
-		local toSetDisplay = client:Name()
-		local textEntryData = tostring(client:GetCharacter():GetData("textDetDescData"))
-		local textEntryDataURL = tostring(client:GetCharacter():GetData("textDetDescDataURL"))
+		local textEntryData = client:GetCharacter():GetData("textDetDescData", nil) or "No detailed description found."
+		local textEntryDataURL = client:GetCharacter():GetData("textDetDescDataURL", nil) or "No detailed description found."
 
-		net.Start("OpenDetailedDescriptions")
-		net.WriteString(toSet)
-		net.WriteString(toSetDisplay)
-		if (textEntryData == "nil") then
-			net.WriteString("No detailed description found")
-			net.WriteString("No detailed description found")
-		else
+		net.Start("ixOpenDetailedDescriptions")
+			net.WriteEntity(client)
 			net.WriteString(textEntryData)
 			net.WriteString(textEntryDataURL)
-		end
 		net.Send(callingClient)
 	end
 end
