@@ -144,7 +144,7 @@ ix.command.Add("DoorSetHiddenAll", {
 			end
 		end
 
-		-- Tell the player they have made the doors (un)disabled.
+		-- Tell the player they have made the doors (un)hidden.
 		if (bHidden) then
 			return ix.util.Notify("You have made every door hidden.", client)
 		else
