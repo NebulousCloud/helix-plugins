@@ -9,6 +9,20 @@ Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
 This plugin is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
 To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/]]
 
+ix.lang.AddTable("english", {
+	cmdDoorsSetUnownable = "Makes every door unownable.",
+	cmdDoorsSetOwnable = "Makes every door ownable.",
+	cmdDoorsSetDisabled = "Disallows any commands to be ran on every door.",
+	cmdDoorsSetHidden = "Hides the description of every door, but still allows it to be ownable.",
+})
+
+ix.lang.AddTable("dutch", {
+	cmdDoorsSetUnownable = "Maakt elke deur onkoopbaar.",
+	cmdDoorsSetOwnable = "Maakt elke deur koopbaar.",
+	cmdDoorsSetDisabled = "Staat niet toe dat opdrachten op elke deur worden uitgevoerd.",
+	cmdDoorsSetHidden = "Verbergt de beschrijving van elke deur, maar laat deze toch koopbaar zijn.",
+})
+
 local PLUGIN = PLUGIN
 
 -- Variables for the door data.
@@ -41,7 +55,7 @@ function PLUGIN:CallOnDoorChildren(entity, callback)
 end
 
 ix.command.Add("DoorSetUnownableAll", {
-	description = "@cmdDoorSetUnownable",
+	description = "@cmdDoorsSetUnownable",
 	privilege = "Manage Doors",
 	adminOnly = true,
 	arguments = ix.type.text,
@@ -67,7 +81,7 @@ ix.command.Add("DoorSetUnownableAll", {
 })
 
 ix.command.Add("DoorSetOwnableAll", {
-	description = "@cmdDoorSetOwnable",
+	description = "@cmdDoorsSetOwnable",
 	privilege = "Manage Doors",
 	adminOnly = true,
 	arguments = ix.type.text,
@@ -93,7 +107,7 @@ ix.command.Add("DoorSetOwnableAll", {
 })
 
 ix.command.Add("DoorSetDisabledAll", {
-	description = "@cmdDoorSetDisabled",
+	description = "@cmdDoorsSetDisabled",
 	privilege = "Manage Doors",
 	adminOnly = true,
 	arguments = ix.type.bool,
@@ -124,7 +138,7 @@ ix.command.Add("DoorSetDisabledAll", {
 })
 
 ix.command.Add("DoorSetHiddenAll", {
-	description = "@cmdDoorSetHidden",
+	description = "@cmdDoorsSetHidden",
 	privilege = "Manage Doors",
 	adminOnly = true,
 	arguments = ix.type.bool,
