@@ -43,7 +43,7 @@ function PLUGIN:InitializedPlugins()
 					-- Set it so it is unownable.
 					entity:SetNetVar("ownable", nil)
 
-					PLUGIN:CallOnDoorChildren(entity, function(child)
+					doorPlugin:CallOnDoorChildren(entity, function(child)
 						child:SetNetVar("ownable", nil)
 			end)
 
@@ -69,7 +69,7 @@ function PLUGIN:InitializedPlugins()
 					-- Set it so it is ownable.
 					entity:SetNetVar("ownable", true)
 
-					PLUGIN:CallOnDoorChildren(entity, function(child)
+					doorPlugin:CallOnDoorChildren(entity, function(child)
 						child:SetNetVar("ownable", true)
 			end)
 
@@ -96,7 +96,7 @@ function PLUGIN:InitializedPlugins()
 					-- Set it so it is ownable.
 					entity:SetNetVar("disabled", bDisabled)
 
-					PLUGIN:CallOnDoorChildren(entity, function(child)
+					doorPlugin:CallOnDoorChildren(entity, function(child)
 						child:SetNetVar("disabled", bDisabled)
 			end)
 
@@ -126,7 +126,7 @@ function PLUGIN:InitializedPlugins()
 
 					entity:SetNetVar("visible", !bHidden)
 
-					PLUGIN:CallOnDoorChildren(entity, function(child)
+					doorPlugin:CallOnDoorChildren(entity, function(child)
 						child:SetNetVar("visible", !bHidden)
 			end)
 
