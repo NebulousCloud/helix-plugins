@@ -13,10 +13,3 @@ net.Receive("helix_setcrowinventorysize", function()
         LocalPlayer():SetHullDuck(-Vector(hull.x / 2, hull.y / 2, 0), Vector(hull.x / 2, hull.y / 2, hull.z))
     end
 end)
-
-net.Receive("helix_resetsizecrow", function()
-    if LocalPlayer():Team() == FACTION_BIRD then
-        local hull = Vector(10, 10, 10)
-        LocalPlayer():ResetHull()
-    end
-end)
