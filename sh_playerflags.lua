@@ -174,7 +174,7 @@ ix.command.Add("PlyGiveFlag", {
 		PLUGIN:GivePlayerFlags(target, flags)
 
 		for _, v in ipairs(player.GetAll()) do
-			if (self:OnCheckAccess(v) or v == target:GetPlayer()) then
+			if (self:OnCheckAccess(v) or v == target) then
 				v:NotifyLocalized("flagGive", client:SteamName(), target:SteamName(), flags)
 			end
 		end
@@ -200,7 +200,7 @@ ix.command.Add("PlyTakeFlag", {
 		PLUGIN:TakePlayerFlags(target, flags)
 
 		for _, v in ipairs(player.GetAll()) do
-			if (self:OnCheckAccess(v) or v == target:GetPlayer()) then
+			if (self:OnCheckAccess(v) or v == target) then
 				v:NotifyLocalized("flagTake", client:SteamName(), flags, target:SteamName())
 			end
 		end
@@ -220,7 +220,7 @@ ix.command.Add("PlyGiveAllFlags", {
 		end
 
 		for _, v in ipairs(player.GetAll()) do
-			if (self:OnCheckAccess(v) or v == target:GetPlayer()) then
+			if (self:OnCheckAccess(v) or v == target) then
 				v:Notify(client:SteamName() .. " has given " .. target:SteamName() .. " all available flags!")
 			end
 		end
@@ -238,7 +238,7 @@ ix.command.Add("PlyClearFlags", {
 		PLUGIN:ClearPlayerFlags(target)
 
 		for _, v in ipairs(player.GetAll()) do
-			if (self:OnCheckAccess(v) or v == target:GetPlayer()) then
+			if (self:OnCheckAccess(v) or v == target) then
 				v:Notify(client:SteamName() .. " has cleared all flags of " .. target:SteamName() .. "!")
 			end
 		end
