@@ -1,6 +1,7 @@
 PLUGIN.name = "Vocoder"
 PLUGIN.description = "Adds vocoder sounds for Overwatch soldiers."
 PLUGIN.author = "sanny"
+PLUGIN.schema = "HL2 RP"
 
 if (SERVER) then
     resource.AddWorkshop("2291046370")
