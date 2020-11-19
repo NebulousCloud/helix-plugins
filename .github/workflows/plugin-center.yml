@@ -28,12 +28,14 @@ jobs:
         ref: master
         path: scraper
         token: ${{ secrets.PLUGIN_CENTER_TOKEN }}
-    
+
     - name: Build Lua
-      uses: leafo/gh-actions-lua@v5
-    
+      uses: leafo/gh-actions-lua@v8.0.0
+      with:
+        luaVersion: "5.2"
+
     - name: Build Luarocks
-      uses: leafo/gh-actions-luarocks@v2
+      uses: leafo/gh-actions-luarocks@v4.0.0
 
     - name: Build Hugo
       uses: peaceiris/actions-hugo@v2
@@ -48,11 +50,11 @@ jobs:
     - name: Process plugins
       working-directory: scraper
       run: lua main.lua ../plugins --batch --output ../plugin-center/content/plugins
-      
+
     - name: Build plugin center
       working-directory: plugin-center
       run: hugo --minify
-    
+
     - name: Deploy plugin center
       if: success()
       uses: peaceiris/actions-gh-pages@v2
@@ -60,4 +62,4 @@ jobs:
         ACTIONS_DEPLOY_KEY: ${{ secrets.PLUGIN_CENTER_DEPLOY }}
         PUBLISH_BRANCH: gh-pages
         PUBLISH_DIR: ./plugin-center/public
-    
+
