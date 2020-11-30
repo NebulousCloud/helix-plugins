@@ -74,13 +74,21 @@ ix.command.Add("RankPromote", {
 		-- Checks if player is in a valid faction from rankTable
 		if (istable(ranks)) then
 			local name = target:GetName()
-			local newRank
+			local curRank, newRank
 
 			if (rank) then
 				newRank = table.KeyFromValue(tbl_upper(ranks), string.upper(rank))
 
 				if (!newRank) then
 					return "@cRankInvalidInput", rank
+				end
+
+				for _, v in ipairs(ranks) do
+					if (string.find(name, v)) then
+						curRank = v
+
+						break
+					end
 				end
 			else
 				if (string.find(name, ranks[#ranks])) then
@@ -90,18 +98,17 @@ ix.command.Add("RankPromote", {
 				for k, v in ipairs(ranks) do
 					if (string.find(name, v)) then
 						newRank = math.min(k + 1, #ranks)
+						curRank = v
 
 						break
 					end
 				end
 			end
 
-			if (newRank) then
+			if (curRank and newRank) then
 				newRank = ranks[newRank]
 
-				local newName = name:gsub("%:([%w]+)%.",
-					string.format(":%s.", newRank)
-				)
+				local newName = name:gsub("([%D+])"..curRank.."([%D+])", "%1"..newRank.."%2")
 
 				target:SetName(newName)
 
@@ -134,13 +141,21 @@ ix.command.Add("RankDemote", {
 		-- Checks if player is in a valid faction from rankTable
 		if (istable(ranks)) then
 			local name = target:GetName()
-			local newRank
+			local curRank, newRank
 
 			if (rank) then
 				newRank = table.KeyFromValue(tbl_upper(ranks), string.upper(rank))
 
 				if (!newRank) then
 					return "@cRankInvalidInput", rank
+				end
+
+				for _, v in ipairs(ranks) do
+					if (string.find(name, v)) then
+						curRank = v
+
+						break
+					end
 				end
 			else
 				if (string.find(name, ranks[1])) then
@@ -150,18 +165,17 @@ ix.command.Add("RankDemote", {
 				for k, v in ipairs(ranks) do
 					if (string.find(name, v)) then
 						newRank = math.max(k - 1, 1)
+						curRank = v
 
 						break
 					end
 				end
 			end
 
-			if (newRank) then
+			if (curRank and newRank) then
 				newRank = ranks[newRank]
 
-				local newName = name:gsub("%:([%w]+)%.",
-					string.format(":%s.", newRank)
-				)
+				local newName = name:gsub("([%D+])"..curRank.."([%D+])", "%1"..newRank.."%2")
 
 				target:SetName(newName)
 
