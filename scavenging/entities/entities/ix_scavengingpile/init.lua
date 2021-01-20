@@ -62,8 +62,7 @@ function ENT:SpawnFunction( client, trace )
 end
 
 function ENT:OnRemove()
-	-- Checks:
-	if( !PLUGIN:ShouldRemoveInventory( self:GetInventoryID() ) ) then return end;
+	-- Check is done in the function:
 	-- Inventory:
 	PLUGIN:RemoveInventory( self:GetInventoryID() );
 	-- Saving:

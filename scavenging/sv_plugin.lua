@@ -58,7 +58,7 @@ end
 
 function PLUGIN:RemoveInventory( id )
 	-- Checks:
-	if( !self:ShouldRemoveInventory() ) then return end;
+	if( !self:ShouldRemoveInventory( id ) ) then return end;
 	-- Main:
 	ix.item.inventories[id] = nil;
 	local query = mysql:Delete( "ix_items" );
@@ -81,7 +81,7 @@ function PLUGIN:IsEntityOffCooldown( entity )
 	return false;
 end
 
-function PLUGIN:ShouldSetup( entity )
+function PLUGIN:ShouldSetup( client, entity )
 	-- Checks:
 	if( !entity or !entity.Vars ) then return end;
 	if( entity.Vars.Configured ) then return end;
@@ -90,9 +90,9 @@ function PLUGIN:ShouldSetup( entity )
 	return true;
 end
 
-function PLUGIN:Setup( entity, client )
+function PLUGIN:Setup( client, entity )
 	-- Checks:
-	if( !self:ShouldSetup( entity ) ) then return end;
+	if( self:ShouldSetup( client, entity ) != true ) then return end;
 	-- Variables:
 	local tabl = {};
 	for name, _ in pairs( PLUGIN.Loot ) do
@@ -111,9 +111,9 @@ net.Receive( "ixScavengingSetupFinalize", function( len, client )
 	local name = net.ReadString();
 	-- Checks:
 	if( !IsValid( entity ) ) then return end;
-	if( !PLUGIN.Loot[name] ) then return end;
 	if( entity:GetClass() != "ix_scavengingpile" ) then return end;
-	if( PLUGIN:ShouldSetup( entity ) != true ) then return end; -- It'll return nil, text, or true. We don't want true.
+	if( !PLUGIN.Loot[name] ) then return end;
+	if( PLUGIN:ShouldSetup( client, entity ) != true ) then return end; -- It'll return nil, text, or true. We don't want true.
 	-- Variables:
 	local model = PLUGIN.Loot[name]["StartingModel"];
 	-- Main:
