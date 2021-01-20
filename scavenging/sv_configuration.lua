@@ -2,8 +2,7 @@ local PLUGIN = PLUGIN;
 
 --[[
     Most functions are generally done in top-down order:
-    OnCharacterUse -> OnPlayerUse
-    ShouldScavenge -> OnCharacterScavenge -> OnPlayerScavenge -> PerformScavenge
+    CanUse -> CanScavenge -> PerformScavenge
 
     Templates have been added to give a summary of what functions do.
 ]]
