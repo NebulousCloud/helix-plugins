@@ -62,7 +62,8 @@ function ENT:SpawnFunction( client, trace )
 end
 
 function ENT:OnRemove()
-	-- Check is done in the function:
+	-- Check:
+	if( !PLUGIN:ShouldRemoveInventory( self:GetInventoryID() ) ) then return end;
 	-- Inventory:
 	PLUGIN:RemoveInventory( self:GetInventoryID() );
 	-- Saving:
@@ -95,13 +96,13 @@ end
 -- Main:
 function ENT:Use( client )
 	-- Setup:
-	local ret = PLUGIN:ShouldSetup( self );
+	local ret = PLUGIN:ShouldSetup( client, self );
 	if( ret ) then 
 		if( ix.util.GetTypeFromValue( ret ) == ix.type.string ) then
 			client:Notify( ret );
 			return;
 		end
-		PLUGIN:Setup( self, client );
+		PLUGIN:Setup( client, self );
 		return;
 	end
 	if( self.FirstTime ) then

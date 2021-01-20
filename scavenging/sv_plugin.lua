@@ -83,9 +83,13 @@ end
 
 function PLUGIN:ShouldSetup( client, entity )
 	-- Checks:
-	if( !entity or !entity.Vars ) then return end;
+	if( !entity or !entity.Vars ) then 
+		return "This entity has invalid variables. This is actually bad.";
+	end
+	if( !CAMI.PlayerHasAccess( client, "Scavenging: Setup", nil ) ) then 
+		return "You don't have permission to perform setup.";
+	end
 	if( entity.Vars.Configured ) then return end;
-	if( !CAMI.PlayerHasAccess( client, "Scavenging: Setup", nil ) ) then return end;
 	-- Return:
 	return true;
 end
