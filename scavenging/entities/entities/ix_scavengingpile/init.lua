@@ -16,66 +16,87 @@ function ENT:Initialize()
 	physics:EnableMotion( false );
 	physics:Sleep();
 	-- Variables:
-	self.FirstTime = true;
 	self.Vars = {};
-	self.Vars.LastUsedTime = CurTime() - PLUGIN:GetScavengingCooldown();
+	self.Vars.Configured = false;
+	self.Vars.RemainingCooldown = 0;
+	self.Vars.TableName = nil; -- 
 	self.Vars.Money = 0;
 	self.Vars.InventoryID = 0;
-	self.Vars.TableName = "error";
 	self:SetDisplayName( "Default Display Name" );
 	self:SetDisplayDescription( "Default Display Description" );
-	self.Vars.Configured = false;
 end
 
--- Variables:
-function ENT:GetInventoryID()
-	return self.Vars.InventoryID;
+-- Information:
+function ENT:GetVars()
+	return self.Vars;
 end
 
-function ENT:SetInventoryID( number )
-	self.Vars.InventoryID = number;
+function ENT:SetVars( tabl )
+	self.Vars = tabl;
 end
 
-function ENT:GetMoney()
-	return self.Vars.Money;
+function ENT:GetConfigured()
+	return self.Vars.Configured;
 end
 
-function ENT:SetMoney( number )
-	self.Vars.Money = number;
+function ENT:SetConfigured( bool )
+	self.Vars.Configured = bool;
+end
+
+function ENT:GetRemainingCooldown()
+	return self.Vars.RemainingCooldown;
+end
+
+function ENT:SetRemainingCooldown( num )
+	self.Vars.RemainingCooldown = num;
 end
 
 function ENT:GetTableName()
 	return self.Vars.TableName;
 end
 
--- Spawning/Removal:
-function ENT:SpawnFunction( client, trace )
-	-- Positioning:
-	local ent = ents.Create( "ix_scavengingpile" );
-	ent:SetPos( trace.HitPos + Vector( 0, 0, 0 ) );
-	ent:SetAngles( Angle( 0, ( ent:GetPos() - client:GetPos() ):Angle().y, 0 ) );
-	ent:Spawn();
-	ent:Activate();
-	-- Saving:
-	PLUGIN:SaveData();
-	return ent;
+function ENT:SetTableName( str )
+	self.Vars.TableName = str;
 end
 
-function ENT:OnRemove()
-	-- Check:
-	if( !PLUGIN:ShouldRemoveInventory( self:GetInventoryID() ) ) then return end;
-	-- Inventory:
-	PLUGIN:RemoveInventory( self:GetInventoryID() );
-	-- Saving:
-	PLUGIN:SaveData();
+function ENT:GetMoney()
+	return self.Vars.Money;
+end
+
+function ENT:SetMoney( num )
+	self.Vars.Money = num;
+end
+
+function ENT:GetInventoryID()
+	return self.Vars.InventoryID;
+end
+
+function ENT:SetInventoryID( num )
+	self.Vars.InventoryID = num;
 end
 
 -- Inventory:
 function ENT:GetInventory()
-	-- Checks:
-	if( !self:GetInventoryID() or self:GetInventoryID() == 0 ) then return end;
-	-- Return:
 	return ix.item.inventories[self:GetInventoryID()];
+end
+
+function ENT:CreateInventory()
+	ix.inventory.New( 0, "ix_scavengingpile_" .. self.Vars.TableName, function( inventory )
+		inventory.vars.isBag = true;
+		inventory.vars.isContainer = true;
+		self:SetInventoryID( inventory:GetID() ); -- Can we even use "self"?
+	end);
+end
+
+function ENT:RemoveInventory()
+	ix.item.inventories[self:GetInventoryID()] = nil;
+	local query = mysql:Delete( "ix_items" );
+		query:Where( "inventory_id", self:GetInventoryID() );
+	query:Execute();
+	query = mysql:Delete( "ix_inventories" );
+		query:Where( "inventory_id", self:GetInventoryID() );
+	query:Execute();
+	self:SetInventoryID( 0 );
 end
 
 function ENT:OpenInventory( client )
@@ -93,31 +114,104 @@ function ENT:OpenInventory( client )
 	});
 end
 
+-- Spawning/Removal:
+function ENT:SpawnFunction( client, trace )
+	local ent = ents.Create( "ix_scavengingpile" );
+	ent:SetPos( trace.HitPos + Vector( 0, 0, 0 ) );
+	ent:SetAngles( Angle( 0, ( ent:GetPos() - client:GetPos() ):Angle().y, 0 ) );
+	ent:Spawn();
+	ent:Activate();
+	return ent;
+end
+
+function ENT:OnRemove()
+	--[[
+		The entity is only properly removed if done by any method that isn't shutting down the server.
+	]]
+	-- Checks:
+	if( ix.shuttingDown ) then return end;
+	-- Main:
+	self:RemoveInventory();
+	-- Saving:
+	PLUGIN:SaveData();
+end
+
+-- Setup:
+function ENT:Setup( client )
+	--[[
+		nil		return;
+		false 	return;
+		string 	return & client:Notify();
+		true	return true;
+	]]
+	-- Checks:
+	if( !self:GetVars() ) then
+		return "This entity does not have any variables.";
+	elseif( !CAMI.PlayerHasAccess( client, "Scavenging: Setup", nil ) ) then 
+		return "You don't have permission to perform setup.";
+	end
+	if( !self:GetConfigured() ) then
+		-- Getting Names:
+		local tabl = {};
+		for name, _ in pairs( ix.Scavenging.InformationTables ) do
+			tabl[name] = true;
+		end
+		-- Sending to Client:
+		net.Start( "ixScavengingSetup" );
+			net.WriteEntity( self );
+			net.WriteTable( tabl );
+		net.Send( client );
+		return false;
+	end
+	return true;
+end
+
+-- CanUse/CanScavenge:
+function ENT:CanUse( client, character )
+	return true;
+end
+
+function ENT:CanScavenge( client, character )
+	if( !PLUGIN:GetScavengingEnabled() ) then
+		return "Scavenging is currently disabled.";
+	end
+	if( table.Count( player.GetAll() ) < PLUGIN:GetScavengingPlayerMinimum() ) then
+		return "There is not enough players on.";
+	end
+	if( self:GetRemainingCooldown() != 0 ) then
+		return "Try again in " .. tostring( self:GetRemainingCooldown() ) .. " seconds.";
+	end
+	if( !character:GetInventory():HasItem( "scavengingkit" ) ) then
+		return "You don't have a scavenging kit.";
+	end
+	return true;
+end
+
 -- Main:
 function ENT:Use( client )
+	-- Checks:
+	local character = client:GetCharacter();
+	if( !character ) then return end;
+	local stabl = ix.Scavenging.InformationTables;
+	if( !stabl ) then
+		client:Notify( "Unable to find main Information Table." );
+	end
 	-- Setup:
-	local ret = PLUGIN:ShouldSetup( client, self );
-	if( ret ) then 
-		if( ix.util.GetTypeFromValue( ret ) == ix.type.string ) then
-			client:Notify( ret );
-			return;
-		end
-		PLUGIN:Setup( client, self );
+	local ret = self:Setup( client );
+	if( !ret ) then
+		return;
+	elseif( ix.util.GetTypeFromValue( ret ) == ix.type.string ) then
+		client:Notify( ret );
 		return;
 	end
-	if( self.FirstTime ) then
-		self.FirstTime = false;
-		self.Vars.LastUsedTime = CurTime() - PLUGIN:GetScavengingCooldown();
+	-- Checks 2:
+	local tabl = stabl[self:GetTableName()];
+	if( !tabl ) then
+		client:Notify( "Unable to find specific Information Table: '" .. self:GetTableName() .. "'." );
 	end
-	-- Variables:
-	local character = client:GetCharacter();
-	local tabl = PLUGIN.Loot[self:GetTableName()];
-	-- Checks:
-	if( !character ) then return end;
-	if( !tabl ) then return end;
 	-- CanUse:
 	if( !tabl["CanUse"] or tabl["CanUse"]( client, character, self ) == nil ) then
-		local ret = PLUGIN:CanUse( client, character, self );
+		local ret = self:CanUse( client, character );
 		if( !ret ) then return;
 		elseif( ix.util.GetTypeFromValue( ret ) == ix.type.string ) then
 			client:Notify( ret );
@@ -134,7 +228,7 @@ function ENT:Use( client )
 	-- CanScavenge:
 	local ShouldScavenge = true;
 	if( !tabl["CanScavenge"] or tabl["CanScavenge"]( client, character, self ) == nil ) then
-		ShouldScavenge = PLUGIN:CanScavenge( client, character, self );
+		ShouldScavenge = self:CanScavenge( client, character );
 	else
 		ShouldScavenge = tabl["CanScavenge"]( client, character, self );
 	end
@@ -149,35 +243,34 @@ function ENT:Use( client )
 		ShouldScavenge = false;
 	end
 	-- Vars:
-	local message = tabl["Usage Message"]( client, character, self, ShouldScavenge );
-	local amount = tabl["Amount of Spawned Items"]( client, character, self );
-	local credit = tabl["Amount of Spawned Credits"]( character, character, entity );
-	local items = tabl["Possible Items"]( character, character, self );
+	local UsageMessage = tabl["Usage Message"]( client, character, self, ShouldScavenge );
+	local SItems = tabl["Amount of Spawned Items"]( client, character, self );
+	local SCredits = tabl["Amount of Spawned Credits"]( character, character, self );
+	local PItems = tabl["Possible Items"]( character, character, self );
 	-- Main:
-	client:SetAction( message, PLUGIN:GetScavengingDelay() );
+	client:SetAction( UsageMessage, PLUGIN:GetScavengingDelay() );
 	client:DoStaredAction( self, function()
 		if( ShouldScavenge ) then
 			if( tabl["PerformScavenge"] ) then
-				local ret = tabl["PerformScavenge"]( client, character, self, ShouldScavenge );
+				tabl["PerformScavenge"]( client, character, self, ShouldScavenge );
 			else
 				local ItemsToSpawn = {};
 				local PossibleItems = {};
 				-- Compiling:
-				for _, info in pairs( items ) do
+				for _, info in pairs( PItems ) do
 					local ItemID = info["ItemID"];
 					local Data = info["Data"] or {};
 					local Chance = info["Chance"] or 1;
-					for i = 1, amount do
+					for i = 1, Chance do
 						local Next = table.Count( PossibleItems ) + 1;
 						PossibleItems[Next] = {
 							["ItemID"] = ItemID,
 							["Data"] = Data,
-							["Chance"] = Chance
 						};
 					end
 				end
 				-- Randomly Selecting:
-				for i = 1, amount do
+				for i = 1, SItems do
 					local Next = table.Count( ItemsToSpawn ) + 1;
 					local Selected = table.Random( PossibleItems );
 					ItemsToSpawn[Next] = Selected;
@@ -188,11 +281,10 @@ function ENT:Use( client )
 						local item = ix.item.Spawn( info["ItemID"], self:GetPos(), nil, nil, info["Data"] );
 					end
 				end
-				-- Variables:
-				self.Vars.LastUsedTime = CurTime();
-			end
-			if( credit and ix.util.GetTypeFromValue( credit ) == ix.type.number and math.max( 0, self:GetMoney() + credit ) != 0 ) then
-				self:SetMoney( self:GetMoney() + credit );
+				if( SCredits and ix.util.GetTypeFromValue( SCredits ) == ix.type.number and math.max( 0, self:GetMoney() + SCredits ) != 0 ) then
+					self:SetMoney( self:GetMoney() + SCredits );
+				end
+				self:SetRemainingCooldown( PLUGIN:GetScavengingCooldown() );
 			end
 			-- Logging:
 			ix.log.Add( client, "scavengingScavenging", self:GetInventoryID(), self:GetDisplayName() );
@@ -201,4 +293,10 @@ function ENT:Use( client )
 	end, PLUGIN:GetScavengingDelay(), function()
 		client:SetAction();
 	end, 96 );
+end
+
+function ENT:Think()
+	self:SetRemainingCooldown( math.max( 0, self:GetRemainingCooldown() - 1 ) );
+	self:NextThink( CurTime() + 1 );
+	return true;
 end

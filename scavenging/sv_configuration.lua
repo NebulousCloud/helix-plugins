@@ -1,4 +1,8 @@
 local PLUGIN = PLUGIN;
+-- I think this is okay.
+ix = ix or {};
+ix.Scavenging = ix.Scavenging or {};
+ix.Scavenging.InformationTables = ix.Scavenging.InformationTables or {};
 
 --[[
     Most functions are generally done in top-down order:
@@ -16,8 +20,7 @@ local PLUGIN = PLUGIN;
     Item 2 would have a 20% chance or "1/5" chance.
 ]]
 
-PLUGIN.Loot = {};
-PLUGIN.Loot["Blank Template"] = { -- Example #1: Blank Template.
+ix.Scavenging.InformationTables["Blank Template"] = { -- Example #1: Blank Template.
     ["Display Name"] = "Blank Template",
     ["Display Description"] = "A template with the barest bones of functions and returns.",
     ["StartingModel"] = "models/hunter/blocks/cube025x025x025.mdl",
@@ -25,8 +28,7 @@ PLUGIN.Loot["Blank Template"] = { -- Example #1: Blank Template.
     ["Inventory Height"] = 2,
     ["CanUse"] = function( client, character, entity )
         --[[
-            Returns:
-            nil     return PLUGIN:CanUse();
+            nil     return entity:CanUse();
             false   return;
             string  return & client:Notify();
             true    return true;
@@ -35,8 +37,7 @@ PLUGIN.Loot["Blank Template"] = { -- Example #1: Blank Template.
     end,
     ["CanScavenge"] = function( client, character, entity )
         --[[
-            Returns:
-            nil     ShouldScavenge = PLUGIN:CanScavenge();
+            nil     ShouldScavenge = entity:CanScavenge();
             false   ShouldScavenge = false;
             string  ShouldScavenge = false & client:Notify();
             true    ShouldScavenge = true;
@@ -54,7 +55,6 @@ PLUGIN.Loot["Blank Template"] = { -- Example #1: Blank Template.
     end,
     ["Usage Message"] = function( client, character, entity, ShouldScavenge )
         --[[
-            Returns:
             string  Name for ix.storage.Open().
         ]]
         if( ShouldScavenge ) then
@@ -64,21 +64,18 @@ PLUGIN.Loot["Blank Template"] = { -- Example #1: Blank Template.
     end,
     ["Amount of Spawned Items"] = function( client, character, entity )
         --[[
-            Returns:
             number  Spawns this many items.
         ]]
         return 1;
     end,
     ["Amount of Spawned Credits"] = function( client, character, entity )
         --[[
-            Returns:
             number  Adds this amount of credits.
         ]]
         return 0;
     end,
     ["Possible Items"] = function( client, character, entity )
         --[[
-            Returns:
             table  Information about Possible Items.
         ]]
         local Items = { 
@@ -96,9 +93,8 @@ PLUGIN.Loot["Blank Template"] = { -- Example #1: Blank Template.
         return Items;
     end
 };
-PLUGIN.Loot["Blank Template"] = nil;
 
-PLUGIN.Loot["Default Template"] = { -- Example #2: Default Template.
+ix.Scavenging.InformationTables["Default Template"] = { -- Example #2: Default Template.
     ["Display Name"] = "Template With Default/Expected Results",
     ["Display Description"] = "A template that returns results that would typically occur by default.",
     ["StartingModel"] = "models/hunter/blocks/cube025x025x025.mdl",
@@ -114,8 +110,8 @@ PLUGIN.Loot["Default Template"] = { -- Example #2: Default Template.
         if( table.Count( player.GetAll() ) < PLUGIN:GetScavengingPlayerMinimum() ) then
             return "There is not enough players on.";
         end
-        if( !PLUGIN:IsEntityOffCooldown( entity ) ) then
-            return "Try again in " .. tostring( PLUGIN:GetRemainingCooldown( entity ) ) .. " seconds.";
+        if( entity:GetRemainingCooldown() != 0 ) then
+            return "Try again in " .. tostring( entity:GetRemainingCooldown() ) .. " seconds.";
         end
         if( !character:GetInventory():HasItem( "scavengingkit" ) ) then
             return "You don't have a scavenging kit.";
@@ -124,44 +120,41 @@ PLUGIN.Loot["Default Template"] = { -- Example #2: Default Template.
     end,
     ["PerformScavenge"] = function( client, character, entity, ShouldScavenge )
         -- Variables:
-        local tabl = PLUGIN.Loot[entity:GetTableName()];
-        local message = tabl["Usage Message"]( client, character, entity, ShouldScavenge );
-        local amount = tabl["Amount of Spawned Items"]( client, character, entity );
-        local credits = tabl["Amount of Spawned Credits"]( character, character, entity );
-        local items = tabl["Possible Items"]( character, character, entity );
+        local tabl = ix.Scavenging.InformationTables[entity:GetTableName()];
+        local SItems = tabl["Amount of Spawned Items"]( client, character, entity );
+        local SCredits = tabl["Amount of Spawned Credits"]( character, character, entity );
+        local PItems = tabl["Possible Items"]( character, character, entity );
         local ItemsToSpawn = {};
         local PossibleItems = {};
         -- Compiling:
-        for _, info in pairs( items ) do
+        for _, info in pairs( PItems ) do
             local ItemID = info["ItemID"];
             local Data = info["Data"] or {};
             local Chance = info["Chance"] or 1;
-            for i = 1, amount do
+            for i = 1, Chance do
                 local Next = table.Count( PossibleItems ) + 1;
                 PossibleItems[Next] = {
                     ["ItemID"] = ItemID,
                     ["Data"] = Data,
-                    ["Chance"] = Chance
                 };
             end
         end
         -- Randomly Selecting:
-        for i = 1, amount do
+        for i = 1, SItems do
             local Next = table.Count( ItemsToSpawn ) + 1;
             local Selected = table.Random( PossibleItems );
             ItemsToSpawn[Next] = Selected;
         end
         -- Spawning:
         for _, info in pairs( ItemsToSpawn ) do
-            if( !entity:GetInventory():Add( info["ItemID"], 1, info["Data"] ) ) then
-                local item = ix.item.Spawn( info["ItemID"], entity:GetPos(), nil, nil, info["Data"] );
+            if( !self:GetInventory():Add( info["ItemID"], 1, info["Data"] ) ) then
+                local item = ix.item.Spawn( info["ItemID"], self:GetPos(), nil, nil, info["Data"] );
             end
         end
-        if( credit and ix.util.GetTypeFromValue( credit ) == ix.type.number ) then
-            entity:SetMoney( entity:GetMoney() + credit );
+        if( SCredits and ix.util.GetTypeFromValue( SCredits ) == ix.type.number and math.max( 0, self:GetMoney() + SCredits ) != 0 ) then
+            self:SetMoney( self:GetMoney() + SCredits );
         end
-        -- Variables:
-        entity.Vars.LastUsedTime = CurTime();
+        self:SetRemainingCooldown( PLUGIN:GetScavengingCooldown() );
         return;
     end,
     ["Usage Message"] = function( client, character, entity, ShouldScavenge )
@@ -192,21 +185,32 @@ PLUGIN.Loot["Default Template"] = { -- Example #2: Default Template.
         return Items;
     end
 };
-PLUGIN.Loot["Default Template"] = nil;
+
+ix.Scavenging.InformationTables["Blank Template"] = nil;
+ix.Scavenging.InformationTables["Default Template"] = nil;
 
 --[[
     Examples have been added to give a general understanding of what can be done.
     Though, they may be a little lackluster due to the low variety of items in the default helix/hl2rp schema.
 ]]
 
-PLUGIN.Loot["Trash Pile"] = {
+ix.Scavenging.InformationTables["Trash Pile"] = {
     ["Display Name"] = "Trash Pile",
     ["Display Description"] = "A pile of rubbish and garbage.",
     ["StartingModel"] = "models/props_junk/garbage128_composite001a.mdl",
     ["Inventory Width"] = 4,
     ["Inventory Height"] = 2,
+    ["Usage Message"] = function( client, character, entity, ShouldScavenge )
+        if( ShouldScavenge ) then
+            return "Scavenging...";
+        end
+        return "Checking...";
+    end,
     ["Amount of Spawned Items"] = function( client, character, entity )
         return 2;
+    end,
+    ["Amount of Spawned Credits"] = function( client, character, entity )
+        return 0;
     end,
     ["Possible Items"] = function( client, character, entity )
         local Items = { 
@@ -225,12 +229,21 @@ PLUGIN.Loot["Trash Pile"] = {
     end
 };
 
-PLUGIN.Loot["Broken Vending Machine"] = {
+ix.Scavenging.InformationTables["Broken Vending Machine"] = {
     ["Display Name"] = "Broken Vending Machine",
     ["Display Description"] = "A machine that once distributed cans of water. It doesn't seem to vend anymore.",
     ["StartingModel"] = "models/props_interiors/vendingmachinesoda01a.mdl",
     ["Inventory Width"] = 4,
     ["Inventory Height"] = 2,
+    ["Usage Message"] = function( client, character, entity, ShouldScavenge )
+        if( ShouldScavenge ) then
+            return "Scavenging...";
+        end
+        return "Checking...";
+    end,
+    ["Amount of Spawned Items"] = function( client, character, entity )
+        return 1;
+    end,
     ["Amount of Spawned Credits"] = function( client, character, entity )
         return math.random( 5, 8 );
     end,
@@ -256,16 +269,28 @@ PLUGIN.Loot["Broken Vending Machine"] = {
     end
 };
 
-PLUGIN.Loot["Abandoned Crate"] = {
+ix.Scavenging.InformationTables["Abandoned Crate"] = {
     ["Display Name"] = "Abandoned Crate",
     ["Display Description"] = "A mysterious crate. It's content is entirely unknown until seen with one's eyes.",
     ["StartingModel"] = "models/props_junk/wood_crate001a.mdl",
     ["Inventory Width"] = 4,
     ["Inventory Height"] = 2,
+    ["Usage Message"] = function( client, character, entity, ShouldScavenge )
+        if( ShouldScavenge ) then
+            return "Scavenging...";
+        end
+        return "Checking...";
+    end,
+    ["Amount of Spawned Items"] = function( client, character, entity )
+        return 1;
+    end,
+    ["Amount of Spawned Credits"] = function( client, character, entity )
+        return 0;
+    end,
     ["Possible Items"] = function( client, character, entity )
         local Items = { 
             [1] = {
-                ["ItemID"] = "bandages",
+                ["ItemID"] = "bandage",
                 ["Data"] = {},
                 ["Chance"] = 1
             },

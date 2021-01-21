@@ -1,113 +1,11 @@
 local PLUGIN = PLUGIN;
+ix = ix or {};
+ix.Scavenging = ix.Scavenging or {};
+ix.Scavenging.InformationTables = ix.Scavenging.InformationTables or {};
 
 -- Network:
 util.AddNetworkString( "ixScavengingSetup" );
 util.AddNetworkString( "ixScavengingSetupFinalize" );
-
--- Utility:
-function PLUGIN:CanUse( client, character, entity )
-	return true;
-end
-
-function PLUGIN:CanScavenge( client, character, entity )
-	if( !self:GetScavengingEnabled() ) then
-		return "Scavenging is currently disabled.";
-	end
-	if( table.Count( player.GetAll() ) < self:GetScavengingPlayerMinimum() ) then
-		return "There is not enough players on.";
-	end
-	if( !self:IsEntityOffCooldown( entity ) ) then
-		return "Try again in " .. tostring( self:GetRemainingCooldown( entity ) ) .. " seconds.";
-	end
-	if( !character:GetInventory():HasItem( "scavengingkit" ) ) then
-		return "You don't have a scavenging kit.";
-	end
-	return true;
-end
-
--- Inventories:
-function PLUGIN:ShouldCreateInventory( name, fullpath )
-	if( !name and !fullpath ) then return end;
-	return true;
-end
-
-function PLUGIN:CreateInventory( name, fullpath )
-	-- Checks:
-	if( !self:ShouldCreateInventory( name, fullpath ) ) then return end;
-	-- Vars:
-	local preset = fullpath or "ix_scavengingpile_" .. name;
-	local tabl = {};
-	-- Inventory:
-	ix.inventory.New( 0, preset, function( inventory )
-		inventory.vars.isBag = true;
-		inventory.vars.isContainer = true;
-		tabl["Inventory"] = inventory;
-		tabl["InventoryID"] = inventory:GetID();
-	end);
-	-- Returns:
-	return tabl;
-end
-
-function PLUGIN:ShouldRemoveInventory( id )
-	-- Checks:
-	if( !id or id == 0 or !ix.item.inventories[id] ) then return end;
-	if( ix.shuttingDown ) then return end;
-	-- Return:
-	return true;
-end
-
-function PLUGIN:RemoveInventory( id )
-	-- Checks:
-	if( !self:ShouldRemoveInventory( id ) ) then return end;
-	-- Main:
-	ix.item.inventories[id] = nil;
-	local query = mysql:Delete( "ix_items" );
-		query:Where( "inventory_id", id );
-	query:Execute();
-	query = mysql:Delete( "ix_inventories" );
-		query:Where( "inventory_id", id );
-	query:Execute();
-end
-
--- Entities:
-function PLUGIN:GetRemainingCooldown( entity )
-	return math.Round( math.Clamp( ( entity.Vars.LastUsedTime + self:GetScavengingCooldown() ) - CurTime(), 0, self:GetScavengingCooldown() ) );
-end
-
-function PLUGIN:IsEntityOffCooldown( entity )
-	if( self:GetRemainingCooldown( entity ) == 0 ) then
-		return true;
-	end
-	return false;
-end
-
-function PLUGIN:ShouldSetup( client, entity )
-	-- Checks:
-	if( !entity or !entity.Vars ) then 
-		return "This entity has invalid variables. This is actually bad.";
-	end
-	if( !CAMI.PlayerHasAccess( client, "Scavenging: Setup", nil ) ) then 
-		return "You don't have permission to perform setup.";
-	end
-	if( entity.Vars.Configured ) then return end;
-	-- Return:
-	return true;
-end
-
-function PLUGIN:Setup( client, entity )
-	-- Checks:
-	if( self:ShouldSetup( client, entity ) != true ) then return end;
-	-- Variables:
-	local tabl = {};
-	for name, _ in pairs( PLUGIN.Loot ) do
-		tabl[name] = true;
-	end
-	-- Main:
-	net.Start( "ixScavengingSetup" );
-		net.WriteEntity( entity );
-		net.WriteTable( tabl );
-	net.Send( client );
-end
 
 net.Receive( "ixScavengingSetupFinalize", function( len, client )
 	-- Variables:
@@ -116,10 +14,13 @@ net.Receive( "ixScavengingSetupFinalize", function( len, client )
 	-- Checks:
 	if( !IsValid( entity ) ) then return end;
 	if( entity:GetClass() != "ix_scavengingpile" ) then return end;
-	if( !PLUGIN.Loot[name] ) then return end;
-	if( PLUGIN:ShouldSetup( client, entity ) != true ) then return end; -- It'll return nil, text, or true. We don't want true.
+	if( !ix.Scavenging.InformationTables[name] ) then return end;
+	if( !entity:GetVars() ) then return end;
+	if( !CAMI.PlayerHasAccess( client, "Scavenging: Setup", nil ) ) then return end;
+	if( entity:GetConfigured() ) then return end;
+
 	-- Variables:
-	local model = PLUGIN.Loot[name]["StartingModel"];
+	local model = ix.Scavenging.InformationTables[name]["StartingModel"];
 	-- Main:
 	entity:SetModel( model );
 	entity:SetSolid( SOLID_VPHYSICS );
@@ -129,12 +30,11 @@ net.Receive( "ixScavengingSetupFinalize", function( len, client )
 	physics:EnableMotion( false );
 	physics:Sleep();
 	-- Main:
-	entity.Vars.TableName = name;
-	entity:SetDisplayName( PLUGIN.Loot[name]["Display Name"] );
-	entity:SetDisplayDescription( PLUGIN.Loot[name]["Display Description"] );
-	entity.Vars.Configured = true;
-	local tabl = PLUGIN:CreateInventory( name );
-	entity:SetInventoryID( tabl["InventoryID"] );
+	entity:SetConfigured( true );
+	entity:SetTableName( name );
+	local tabl = entity:CreateInventory( name );
+	entity:SetDisplayName( ix.Scavenging.InformationTables[name]["Display Name"] );
+	entity:SetDisplayDescription( ix.Scavenging.InformationTables[name]["Display Description"] );
 	-- Logging:
 	ix.log.Add( client, "scavengingSetup", entity:GetInventoryID(), entity:GetDisplayName() );
 	-- Saving:
@@ -191,13 +91,7 @@ function PLUGIN:LoadData()
 	PLUGIN:SaveData();
 end
 
--- Registering Inventories:
-do
-    for name, info in pairs( PLUGIN.Loot ) do
-        ix.inventory.Register( "ix_scavengingpile_" .. name, info["Inventory Width"], info["Inventory Height"], true );
-    end
-end
-
+-- Logging:
 ix.log.AddType( "scavengingOpen", function( client, ... )
 	local arg = { ... };
 	return string.format( "%s opened scavenging container #%d, '%s'.", client:Name(), arg[1], arg[2] );
@@ -224,66 +118,20 @@ ix.log.AddType( "scavengingChangeVariable", function( client, ... )
 end)
 
 --[[
-   This is an precaution for any fuck-ups in the configuration.
+	This is for compatibility with other plugins.
 ]]
-for name, content in pairs( PLUGIN.Loot ) do
-    -- Display Name:
-    if( !content["Display Name"] ) then
-        PLUGIN.Loot[name]["Display Name"] = "No Display Name Found";
-    end
-    -- Display Description:
-    if( !content["Display Description"] ) then
-        PLUGIN.Loot[name]["Display Description"] = "No Display Description Found";
-    end
-    -- StartingModel:
-    if( !content["StartingModel"] ) then
-        PLUGIN.Loot[name]["StartingModel"] = "models/hunter/blocks/cube025x025x025.mdl";
-    end
-    -- Inventory Width:
-    if( !content["Inventory Width"] ) then
-        PLUGIN.Loot[name]["Inventory Width"] = 1;
-    end
-    -- Inventory Height:
-    if( !content["Inventory Height"] ) then
-        PLUGIN.Loot[name]["Inventory Height"] = 1;
-    end
-    -- Usage Message:
-    if( !content["Usage Message"] ) then
-        PLUGIN.Loot[name]["Usage Message"] = function( client, character, entity, ShouldScavenge )
-            if( ShouldScavenge ) then
-                return "Scavenging...";
-            end
-            return "Checking...";
-        end
-    end
-    -- Amount of Spawned Items:
-    if( !content["Amount of Spawned Items"] ) then
-        PLUGIN.Loot[name]["Amount of Spawned Items"] = function( client, character, entity )
-            return 1;
-        end
-    end
-    -- Amount of Spawned Credits:
-    if( !content["Amount of Spawned Credits"] ) then
-        PLUGIN.Loot[name]["Amount of Spawned Credits"] = function( client, character, entity )
-            return 0;
-        end
-    end
-    -- Possible Items:
-    if( !content["Possible Items"] ) then
-        PLUGIN.Loot[name]["Possible Items"] = function( client, character, entity )
-            local Items = { 
-                [1] = {
-                    ["ItemID"] = "water",
-                    ["Data"] = {},
-                    ["Chance"] = 1
-                },
-                [2] = {
-                    ["ItemID"] = "request_device",
-                    ["Data"] = {},
-                    ["Chance"] = 1
-                }
-            };
-            return Items;
-        end
+function PLUGIN:SetInventoryTable( name, content )
+	ix.Scavenging.InformationTables[name] = content;
+end
+ix.Scavenging.SetInventoryTable = PLUGIN.SetInventoryTable;
+
+
+PLUGIN.AddInformationTable = PLUGIN.SetInventoryTable;
+ix.Scavenging.AddInformationTable = PLUGIN.AddInformationTable;
+
+-- Registering Inventories:
+do
+    for name, info in pairs( ix.Scavenging.InformationTables ) do
+        ix.inventory.Register( "ix_scavengingpile_" .. name, info["Inventory Width"], info["Inventory Height"], true );
     end
 end
