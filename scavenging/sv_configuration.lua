@@ -147,14 +147,14 @@ ix.Scavenging.InformationTables["Default Template"] = { -- Example #2: Default T
         end
         -- Spawning:
         for _, info in pairs( ItemsToSpawn ) do
-            if( !self:GetInventory():Add( info["ItemID"], 1, info["Data"] ) ) then
-                local item = ix.item.Spawn( info["ItemID"], self:GetPos(), nil, nil, info["Data"] );
+            if( !entity:GetInventory():Add( info["ItemID"], 1, info["Data"] ) ) then
+                local item = ix.item.Spawn( info["ItemID"], entity:GetPos(), nil, nil, info["Data"] );
             end
         end
-        if( SCredits and ix.util.GetTypeFromValue( SCredits ) == ix.type.number and math.max( 0, self:GetMoney() + SCredits ) != 0 ) then
-            self:SetMoney( self:GetMoney() + SCredits );
+        if( SCredits and ix.util.GetTypeFromValue( SCredits ) == ix.type.number and math.max( 0, entity:GetMoney() + SCredits ) != 0 ) then
+            entity:SetMoney( entity:GetMoney() + SCredits );
         end
-        self:SetRemainingCooldown( PLUGIN:GetScavengingCooldown() );
+        entity:SetRemainingCooldown( PLUGIN:GetScavengingCooldown() );
         return;
     end,
     ["Usage Message"] = function( client, character, entity, ShouldScavenge )
