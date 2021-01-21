@@ -77,7 +77,7 @@ function PLUGIN:LoadData()
 		ent:SetDisplayDescription( v["DisplayDescription"] );
 		ent.Vars = v.Vars;
 		-- Inventories:
-		ix.item.RestoreInv( ent:GetInventoryID(), ix.Scavenging.InformationTables[ent:GetTableName()]["Inventory Width"], ix.Scavenging.InformationTables[ent:GetTableName()]["Inventory Height"], 
+		ix.inventory.Restore( ent:GetInventoryID(), ix.Scavenging.InformationTables[ent:GetTableName()]["Inventory Width"], ix.Scavenging.InformationTables[ent:GetTableName()]["Inventory Height"], 
 		function( inventory )
 			inventory.vars.isBag = true;
 			inventory.vars.isContainer = true;
