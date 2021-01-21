@@ -1,6 +1,6 @@
 PLUGIN.name = "Scavenging"; 
 PLUGIN.author = "Rune Knight";
-PLUGIN.description = "Add an usable entity which players can use to gather items and credits.";
+PLUGIN.description = "Add an usable and configurable entity which players can use for purposes such as gathering items and credits.";
 PLUGIN.license = [[Copyright 2021 Rune Knight
 
 This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/ or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.]];
