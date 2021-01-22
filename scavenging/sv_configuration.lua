@@ -58,9 +58,9 @@ ix.Scavenging.InformationTables["Blank Template"] = { -- Example #1: Blank Templ
             string  Name for ix.storage.Open().
         ]]
         if( ShouldScavenge ) then
-            return "Scavenging...";
+            return "PerformScavenge & Opening Inventory...";
         end
-        return "Checking...";
+        return "Opening Inventory...";
     end,
     ["Amount of Spawned Items"] = function( client, character, entity )
         --[[

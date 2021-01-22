@@ -82,11 +82,6 @@ function PLUGIN:LoadData()
 			inventory.vars.isBag = true;
 			inventory.vars.isContainer = true;
 		end)
-		-- Just in case.
-		if( !ix.item.inventories[ent:GetInventoryID()] ) then
-			local tabl = PLUGIN:CreateInventory( ent:GetTableName() );
-			ent:SetInventoryID( tabl["InventoryID"] );
-		end
 	end
 	PLUGIN:SaveData();
 end
