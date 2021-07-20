@@ -4,11 +4,6 @@ local PLUGIN = PLUGIN or {}
 PLUGIN.name = "Context Menu Options"
 PLUGIN.author = "Gary Tate"
 PLUGIN.description = "Adds several context options on players."
-PLUGIN.readme = [[
-Adds several context options on players.
-
-Support for this plugin can be found here: https://discord.gg/mntpDMU
-]]
 PLUGIN.license = [[
 The MIT License (MIT)
 Copyright (c) 2020 Gary Tate
