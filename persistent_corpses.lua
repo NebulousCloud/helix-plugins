@@ -165,6 +165,11 @@ if (SERVER) then
 		-- remove reference to the player so no more damage can be dealt
 		entity.ixPlayer = nil
 
+		-- remove player from netvars, we don't need to show any of the players data past death
+		entity:SetNetVar("player", nil)
+		-- we will show the characters data though
+		entity:SetNetVar("character", client:GetCharacter():GetID())
+
 		self.corpses[#self.corpses + 1] = entity
 
 		-- clean up old corpses after we've added this one
@@ -187,7 +192,7 @@ if (SERVER) then
 		local width, height = charInventory:GetSize()
 
 		-- create new inventory
-		local inventory = ix.item.CreateInv(width, height, os.time())
+		local inventory = ix.inventory.Create(width, height, os.time())
 		inventory.noSave = true
 
 		if (ix.config.Get("dropItemsOnDeath")) then
@@ -217,6 +222,50 @@ if (SERVER) then
 			})
 
 			return false
+		end
+	end
+else
+	local function GetCharacterName(character)
+		local ourCharacter = LocalPlayer():GetCharacter()
+
+		if (ourCharacter and character and !ourCharacter:DoesRecognize(character)) then
+			return L("unknown")
+		end
+	end
+
+	function PLUGIN:PopulateEntityInfo(entity, panel)
+		if (entity:GetClass() == "prop_ragdoll") then
+			local character = ix.char.loaded[entity:GetNetVar("character", nil)]
+
+			if (character) then
+				local color = team.GetColor(character:GetFaction())
+				panel:SetArrowColor(color)
+
+				-- name
+				local name = panel:AddRow("name")
+				name:SetImportant()
+				name:SetText(GetCharacterName(character) or character:GetName())
+				name:SetBackgroundColor(color)
+				name:SizeToContents()
+
+				-- injured text
+				local injure = panel:AddRow("injureText")
+
+				injure:SetText(L("injMajor"))
+				injure:SetBackgroundColor(Color(192, 57, 43))
+				injure:SizeToContents()
+
+				local descriptionText = character:GetDescription()
+				descriptionText = (descriptionText:utf8len() > 128 and
+					string.format("%s...", descriptionText:utf8sub(1, 125)) or
+					descriptionText)
+
+				if (descriptionText != "") then
+					local description = panel:AddRow("description")
+					description:SetText(descriptionText)
+					description:SizeToContents()
+				end
+			end
 		end
 	end
 end
