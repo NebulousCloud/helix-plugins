@@ -225,46 +225,25 @@ if (SERVER) then
 		end
 	end
 else
-	local function GetCharacterName(character)
-		local ourCharacter = LocalPlayer():GetCharacter()
-
-		if (ourCharacter and character and !ourCharacter:DoesRecognize(character)) then
-			return L("unknown")
-		end
-	end
-
 	function PLUGIN:PopulateEntityInfo(entity, panel)
 		if (entity:GetClass() == "prop_ragdoll") then
 			local character = ix.char.loaded[entity:GetNetVar("character", nil)]
 
 			if (character) then
-				local color = team.GetColor(character:GetFaction())
-				panel:SetArrowColor(color)
+				local client = character:GetPlayer()
 
-				-- name
-				local name = panel:AddRow("name")
-				name:SetImportant()
-				name:SetText(GetCharacterName(character) or character:GetName())
-				name:SetBackgroundColor(color)
-				name:SizeToContents()
+				hook.Run("PopulateImportantCharacterInfo", client, character, panel)
+				hook.Run("PopulateCharacterInfo", client, character, panel)
 
-				-- injured text
-				local injure = panel:AddRow("injureText")
+				local injure = panel:GetRow("injureText")
+
+				if (!injure) then
+					injure = panel:AddRowAfter("name", "injureText")
+				end
 
 				injure:SetText(L("injMajor"))
 				injure:SetBackgroundColor(Color(192, 57, 43))
 				injure:SizeToContents()
-
-				local descriptionText = character:GetDescription()
-				descriptionText = (descriptionText:utf8len() > 128 and
-					string.format("%s...", descriptionText:utf8sub(1, 125)) or
-					descriptionText)
-
-				if (descriptionText != "") then
-					local description = panel:AddRow("description")
-					description:SetText(descriptionText)
-					description:SizeToContents()
-				end
 			end
 		end
 	end
