@@ -123,4 +123,5 @@ net.Receive("ixItemSpawnerChanges", function(length, client)
 			v.rarity  = math.Clamp(changes[4], 0, 100)
 		end
 	end
+
 end)

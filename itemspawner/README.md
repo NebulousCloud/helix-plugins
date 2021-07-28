@@ -12,7 +12,5 @@ Adds automated item spawners with customizable respawn time and chances of rare 
 ![Editing](https://i.imgur.com/iuNK7jc.jpg)
 ![Spawned](https://i.imgur.com/643YU8z.jpg)
 
-### Maintained by Gary Tate & wowm0d
+### Maintained by Gary#1170
 ### Developed for Helix
-
-Support for this plugin can be found here: https://discord.gg/mntpDMU

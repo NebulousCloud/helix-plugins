@@ -1,4 +1,7 @@
+local PLUGIN = PLUGIN
 
 net.Receive("ixItemSpawnerManager", function()
-	vgui.Create("ixItemSpawnerManager"):Populate(net.ReadTable())
+	local items = net.ReadTable()
+	local panel = vgui.Create("ixItemSpawnerManager")
+	panel:Populate(items)
 end)

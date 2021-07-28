@@ -4,11 +4,6 @@ local PLUGIN = PLUGIN
 PLUGIN.name = "Offline Character Bans"
 PLUGIN.author = "Gary Tate"
 PLUGIN.description = "Allows staff to ban characters which are not actively loaded on the server."
-PLUGIN.readme = [[
-Allows staff to ban characters which are not actively loaded on the server.
-
-Support for this plugin can be found here: https://discord.gg/mntpDMU
-]]
 PLUGIN.license = [[
 The MIT License (MIT)
 Copyright (c) 2020 Gary Tate

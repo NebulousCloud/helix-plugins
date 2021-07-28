@@ -1,4 +1,6 @@
 
 net.Receive("ixBodygroupView", function()
-	vgui.Create("ixBodygroupView"):Display(net.ReadEntity())
+    local target = net.ReadEntity()
+    local panel = vgui.Create("ixBodygroupView")
+    panel:Display(target)
 end)

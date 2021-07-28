@@ -1,4 +1,3 @@
-
 local PLUGIN = PLUGIN
 
 local PANEL = {}
