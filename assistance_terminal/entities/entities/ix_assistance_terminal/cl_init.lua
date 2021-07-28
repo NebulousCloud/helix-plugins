@@ -1,8 +1,15 @@
 
 include( "shared.lua" )
 
-local noise = Material( "overlays/camcorder_noise" )
+local noise = Material( "effects/tvscreen_noise002a" )
 local overlay = Material( "effects/combine_binocoverlay" )
+
+-- This is so hacky that it is borderline not worth it.
+local noiseRT = GetRenderTargetEx( "noise_render", 128, 128, RT_SIZE_NO_CHANGE, MATERIAL_RT_DEPTH_NONE, 16, 0, IMAGE_FORMAT_RGB888 )
+local noiseRTMat = CreateMaterial( "noise_render", "UnlitGeneric", { } )
+
+noiseRTMat:SetTexture( "$basetexture", noiseRT )
+noiseRTMat:SetFloat( "$alpha", 0.02 )
 
 function ENT:Think( )
     if ( self:GetNetVar( "alarmLights" ) ) then
@@ -131,8 +138,14 @@ function ENT:Draw( )
             draw.SimpleText( "REQUEST ASSISTANCE", "terminal_infoText", 248, 405, Color( 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         end
 
-        surface.SetDrawColor( 255, 255, 255, 255 )
-        surface.SetMaterial( noise )
+        render.PushRenderTarget( noiseRT )
+        render.Clear( 0, 0, 0, 0 )
+        render.SetMaterial( noise )
+        render.DrawScreenQuad( )
+        render.PopRenderTarget( )
+
+        surface.SetDrawColor( 255, 255, 255 )
+        surface.SetMaterial( noiseRTMat )
         surface.DrawTexturedRect( 0, 0, 496, 502 )
         
         surface.SetDrawColor( 0, 0, 0, 255 )
