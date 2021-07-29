@@ -237,7 +237,7 @@ else
 				-- restore it as quickly as possible so we aren't being dangerous
 				ix.net[ragdoll:EntIndex()]["player"] = ragdoll.playerVar
 
-				local character = ix.char.loaded[entity:GetNetVar("character", nil)]
+				local character = ix.char.loaded[ragdoll:GetNetVar("character", nil)]
 
 				if (character) then
 					-- group important tooltips together for whatever reason, just copying from tooltip panel
