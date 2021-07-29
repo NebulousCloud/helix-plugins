@@ -248,6 +248,14 @@ else
 		end
 	end
 
+	local function GetCharacterName(character)
+		local ourCharacter = LocalPlayer():GetCharacter()
+
+		if (ourCharacter and character and !ourCharacter:DoesRecognize(character)) then
+			return L"unknown"
+		end
+	end
+
 	local injureTextColor = Color(231, 0, 0)
 
 	function PLUGIN:PopulateImportantCorpseTooltip(character, container)
@@ -257,7 +265,7 @@ else
 		-- name
 		local name = container:AddRow("name")
 		name:SetImportant()
-		name:SetText(hook.Run("GetCharacterName", character) or character:GetName())
+		name:SetText(GetCharacterName(character) or character:GetName())
 		name:SetBackgroundColor(color)
 		name:SizeToContents()
 
