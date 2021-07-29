@@ -237,7 +237,7 @@ else
 					-- double down on restoring the player netvar as soon as possible
 					timer.Simple(0, function()
 						if (IsValid(ragdoll)) then
-							ix.net[index]["player"] = nil
+							ix.net[index]["player"] = ragdoll.playerVar
 						end
 					end)
 				end
