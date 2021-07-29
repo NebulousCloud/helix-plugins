@@ -229,13 +229,26 @@ else
 			entity.playerVar = entity:GetNetVar("player")
 
 			entity.OnShouldPopulateEntityInfo = function(ragdoll)
+				local index = ragdoll:EntIndex()
 				-- we need to remove the player netvar while we create the tooltip, just so it doesn't create a player based tooltip
-				ix.net[ragdoll:EntIndex()]["player"] = nil
+				if (ix.net[index]) then
+					ix.net[index]["player"] = nil
+
+					-- double down on restoring the player netvar as soon as possible
+					timer.Simple(0, function()
+						if (IsValid(ragdoll)) then
+							ix.net[index]["player"] = nil
+						end
+					end)
+				end
 			end
 
 			entity.OnPopulateEntityInfo = function(ragdoll, container)
+				local index = ragdoll:EntIndex()
 				-- restore it as quickly as possible so we aren't being dangerous
-				ix.net[ragdoll:EntIndex()]["player"] = ragdoll.playerVar
+				if (ix.net[index]) then
+					ix.net[index]["player"] = ragdoll.playerVar
+				end
 
 				local character = ix.char.loaded[ragdoll:GetNetVar("character", nil)]
 
