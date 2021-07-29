@@ -25,7 +25,8 @@ and then add `ITEM.bDropOnDeath = true` to any item that you want to be placed i
 PLUGIN.hardCorpseMax = 64
 
 ix.lang.AddTable("english", {
-	searchingCorpse = "Searching corpse..."
+	searchingCorpse = "Searching corpse...",
+	injDead = "Seems distinctly lifeless"
 })
 
 ix.config.Add("persistentCorpses", true, "Whether or not corpses remain on the map after a player dies and respawns.", nil, {
@@ -165,6 +166,9 @@ if (SERVER) then
 		-- remove reference to the player so no more damage can be dealt
 		entity.ixPlayer = nil
 
+		-- we set character here so we can use the characters data on the tooltip instead of showing the clients data
+		entity:SetNetVar("character", client:GetCharacter():GetID())
+
 		self.corpses[#self.corpses + 1] = entity
 
 		-- clean up old corpses after we've added this one
@@ -187,7 +191,7 @@ if (SERVER) then
 		local width, height = charInventory:GetSize()
 
 		-- create new inventory
-		local inventory = ix.item.CreateInv(width, height, os.time())
+		local inventory = ix.inventory.Create(width, height, os.time())
 		inventory.noSave = true
 
 		if (ix.config.Get("dropItemsOnDeath")) then
@@ -217,6 +221,65 @@ if (SERVER) then
 			})
 
 			return false
+		end
+	end
+else
+	function PLUGIN:OnEntityCreated(entity)
+		if (entity:GetClass() == "prop_ragdoll" and entity:GetNetVar("character", nil)) then
+			entity.playerVar = entity:GetNetVar("player")
+
+			entity.OnShouldPopulateEntityInfo = function(ragdoll)
+				-- we need to remove the player netvar while we create the tooltip, just so it doesn't create a player based tooltip
+				ix.net[ragdoll:EntIndex()]["player"] = nil
+			end
+
+			entity.OnPopulateEntityInfo = function(ragdoll, container)
+				-- restore it as quickly as possible so we aren't being dangerous
+				ix.net[ragdoll:EntIndex()]["player"] = ragdoll.playerVar
+
+				local character = ix.char.loaded[entity:GetNetVar("character", nil)]
+
+				if (character) then
+					-- group important tooltips together for whatever reason, just copying from tooltip panel
+					hook.Run("PopulateImportantCorpseTooltip", character, container)
+					hook.Run("PopulateCorpseTooltip", character, container)
+				end
+			end
+		end
+	end
+
+	local injureTextColor = Color(231, 0, 0)
+
+	function PLUGIN:PopulateImportantCorpseTooltip(character, container)
+		local color = team.GetColor(character:GetFaction())
+		container:SetArrowColor(color)
+
+		-- name
+		local name = container:AddRow("name")
+		name:SetImportant()
+		name:SetText(hook.Run("GetCharacterName", character) or character:GetName())
+		name:SetBackgroundColor(color)
+		name:SizeToContents()
+
+		-- injured text
+		local injure = container:AddRow("injureText")
+
+		injure:SetText(L("injDead"))
+		injure:SetBackgroundColor(injureTextColor)
+		injure:SizeToContents()
+	end
+
+	function PLUGIN:PopulateCorpseTooltip(character, container)
+		-- description
+		local descriptionText = character:GetDescription()
+		descriptionText = (descriptionText:utf8len() > 128 and
+			string.format("%s...", descriptionText:utf8sub(1, 125)) or
+			descriptionText)
+
+		if (descriptionText != "") then
+			local description = container:AddRow("description")
+			description:SetText(descriptionText)
+			description:SizeToContents()
 		end
 	end
 end
