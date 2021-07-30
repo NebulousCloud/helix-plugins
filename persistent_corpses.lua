@@ -166,9 +166,6 @@ if (SERVER) then
 		-- remove reference to the player so no more damage can be dealt
 		entity.ixPlayer = nil
 
-		-- we set character here so we can use the characters data on the tooltip instead of showing the clients data
-		entity:SetNetVar("character", client:GetCharacter():GetID())
-
 		self.corpses[#self.corpses + 1] = entity
 
 		-- clean up old corpses after we've added this one
@@ -183,6 +180,9 @@ if (SERVER) then
 		if (!ix.config.Get("dropItemsOnDeath", false) or !client:GetCharacter()) then
 			return
 		end
+		
+		-- we set character here so we can use the characters data on the tooltip instead of showing the clients data
+		entity:SetNetVar("character", client:GetCharacter():GetID())
 
 		client:SetLocalVar("ragdoll", entity:EntIndex())
 
