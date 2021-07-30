@@ -177,24 +177,25 @@ if (SERVER) then
 	end
 
 	function PLUGIN:OnPlayerCorpseCreated(client, entity)
-		if (!ix.config.Get("dropItemsOnDeath", false) or !client:GetCharacter()) then
+		if (!client:GetCharacter()) then
 			return
 		end
-		
+
+		local character = client:GetCharacter()
+
 		-- we set character here so we can use the characters data on the tooltip instead of showing the clients data
-		entity:SetNetVar("character", client:GetCharacter():GetID())
+		entity:SetNetVar("character", character:GetID())
 
 		client:SetLocalVar("ragdoll", entity:EntIndex())
 
-		local character = client:GetCharacter()
-		local charInventory = character:GetInventory()
-		local width, height = charInventory:GetSize()
-
-		-- create new inventory
-		local inventory = ix.inventory.Create(width, height, os.time())
-		inventory.noSave = true
-
 		if (ix.config.Get("dropItemsOnDeath")) then
+			local charInventory = character:GetInventory()
+			local width, height = charInventory:GetSize()
+
+			-- create new inventory
+			local inventory = ix.inventory.Create(width, height, os.time())
+			inventory.noSave = true
+
 			for _, slot in pairs(charInventory.slots) do
 				for _, item in pairs(slot) do
 					if (item.bDropOnDeath) then
@@ -206,9 +207,9 @@ if (SERVER) then
 					end
 				end
 			end
-		end
 
-		entity.ixInventory = inventory
+			entity.ixInventory = inventory
+		end
 	end
 
 	function PLUGIN:PlayerUse(client, entity)
