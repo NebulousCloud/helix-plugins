@@ -44,7 +44,7 @@ function PLUGIN:OnEntityCreated(ent)
 			if ent:GetClass() != class then continue end --
 				for i, Ply in ipairs(player.GetAll()) do
 					if !Ply:GetCharacter() then continue end
-					if Ply:Team() != FACTION_ZOMBIES then Ply.VJ_NPC_Class = {nil}; continue end
+					if Ply:Team() != friendlyFaction then Ply.VJ_NPC_Class = {nil}; continue end
 						if !SERVER then continue end
 						SetRelationship(ent,Ply,D_LI)
 						Ply.VJ_NPC_Class = friendlyClasses
@@ -59,7 +59,7 @@ function PLUGIN:CharacterLoaded(char)
 			if !ent:IsNPC() then continue end
 				if ent:GetClass() != class then continue end
 					for i, Ply in ipairs(player.GetAll()) do
-						if Ply:GetCharacter() and Ply:Team() == FACTION_ZOMBIES then
+						if Ply:GetCharacter() and Ply:Team() == friendlyFaction then
 							SetRelationship(ent,Ply,D_LI)
 							Ply.VJ_NPC_Class = friendlyClasses
 						elseif Ply:GetCharacter() then
@@ -72,22 +72,5 @@ function PLUGIN:CharacterLoaded(char)
 		end
 	end
 end
-
-end
-
-if CLIENT then
-
-
-	--[[function PLUGIN:HUDPaint() -- debug, only use for testing
-		if LocalPlayer():Team() == FACTION_ZOMBIES then
-			isZombie = "Yes."
-		else
-			isZombie = "No."
-		end
-
-		draw.SimpleText("Zombie? "..isZombie, "DermaLarge", 100,200, Color( 255, 255, 255, 255 ))
-
-	end]]
-
 
 end
