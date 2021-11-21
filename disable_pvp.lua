@@ -19,14 +19,17 @@ ix.config.Add("S2K Enabled", true, "Whether or not corpses remain on the map aft
 	THIS WILL ONLY WORK !!PROPERLY!! IF YOU DO NOT HAVE ANY OTHER PLUGINS THAT AFFECT EntityTakeDamage()!!!
 ]]
 
+function PLUGIN:EntityTakeDamage(target, dmgInfo)
+end
+
 function PLUGIN:EntityFireBullets(ent, data)
 	local tr = util.TraceLine( {
 		start = ent:EyePos(),
 		endpos = ent:EyePos() + ent:EyeAngles():Forward() * 100,
-		filter = function( ent ) if ent:IsNPC() then return true end end,
+		filter = function( entity ) if entity:IsPlayer() and !entity == ent then return true end end,
 	})
 
-	if tr.Entity:IsNPC() and !ix.config.Get("S2K Enabled", false) then
+	if tr.Entity:IsPlayer() and !ix.config.Get("S2K Enabled", false) then
 		return false
 	end
 end
