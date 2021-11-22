@@ -11,6 +11,8 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ]]
 
+if SERVER then -- if on server
+
 local zombieNPCs = {
 	"npc_zombie",
 	"npc_vj_nmrih_runfemalez",
@@ -31,44 +33,54 @@ local friendlyClasses = { -- vjbase classes to make friendly if the player is a 
 
 }
 
-if SERVER then
-
-function SetRelationship(ent, ply, relationship)
-	ent:AddEntityRelationship(ply, relationship, 99)
+function SetRelationship(ent, ply, relationship) -- function to set relationship
+	ent:AddEntityRelationship(ply, relationship, 99) -- make ent friendly to ply
 	
 end
 
 function PLUGIN:OnEntityCreated(ent)
-	if !ent:IsNPC() then return end -- if not an npc, return
-		for i, class in ipairs(zombieNPCs) do -- get all friendly classes
-			if ent:GetClass() != class then continue end --
-				for i, Ply in ipairs(player.GetAll()) do
-					if !Ply:GetCharacter() then continue end
-					if Ply:Team() != friendlyFaction then Ply.VJ_NPC_Class = {nil}; continue end
-						if !SERVER then continue end
-						SetRelationship(ent,Ply,D_LI)
-						Ply.VJ_NPC_Class = friendlyClasses
-				end
-		end
 
+	if !ent:IsNPC() then return end -- if not an npc
+
+	for i, class in ipairs(zombieNPCs) do -- get all friendly classes
+		if ent:GetClass() != class then continue end -- if the entity is not the specified class
+
+		for i, Ply in ipairs(player.GetAll()) do -- get all players
+			if !Ply:GetCharacter() then continue end -- if player is not loaded
+
+			if Ply:Team() != friendlyFaction then Ply.VJ_NPC_Class = {nil}; continue end -- if not a friendly faction
+
+			if !SERVER then continue end -- if not the server (likely unneeded, for insurance)
+
+			SetRelationship(ent,Ply,D_LI) -- make the entity friendly
+
+			Ply.VJ_NPC_Class = friendlyClasses -- support for vjbase
+
+		end
+	end
 end
 
 function PLUGIN:CharacterLoaded(char)
-	for i, ent in pairs(ents.GetAll()) do
-		for v, class in ipairs(zombieNPCs) do
-			if !ent:IsNPC() then continue end
-				if ent:GetClass() != class then continue end
-					for i, Ply in ipairs(player.GetAll()) do
-						if Ply:GetCharacter() and Ply:Team() == friendlyFaction then
-							SetRelationship(ent,Ply,D_LI)
-							Ply.VJ_NPC_Class = friendlyClasses
-						elseif Ply:GetCharacter() then
-							SetRelationship(ent,Ply,D_HT)
-							Ply.VJ_NPC_Class = {nil}
-						end
-					end
-				
-			
+
+	for i, ent in pairs(ents.GetAll()) do -- get all entities
+		for v, class in ipairs(zombieNPCs) do -- get all friendly classes 
+			if !ent:IsNPC() then continue end --if not an npc
+
+			if ent:GetClass() != class then continue end -- if the entity is not the specified class
+
+			for i, Ply in ipairs(player.GetAll()) do -- get all players
+				if Ply:GetCharacter() and Ply:Team() == friendlyFaction then -- if player is loaded and is a friendly faction
+					SetRelationship(ent,Ply,D_LI) -- make the entity friendly
+
+					Ply.VJ_NPC_Class = friendlyClasses -- support for vjbase
+
+				elseif Ply:GetCharacter() then -- if not a friendly faction
+					SetRelationship(ent,Ply,D_HT) -- make the entity hostile
+
+					Ply.VJ_NPC_Class = {nil} -- support for vjbase
+
+				end
+			end	
 		end
 	end
 end
