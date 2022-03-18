@@ -9,8 +9,8 @@ if (CLIENT) then
 	SWEP.DrawCrosshair = false
 end
 
-SWEP.Category = "i17RP"
-SWEP.Author = "Miyo H."
+SWEP.Category = "HL2 RP"
+SWEP.Author = "wowm0d"
 SWEP.Instructions = "Primary Fire: Attach/Cut Rope"
 
 SWEP.Spawnable = true
