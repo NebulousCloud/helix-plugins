@@ -1,6 +1,8 @@
 
+local PLUGIN = PLUGIN
+
 -- Yuck. No wonder Clockwork had low FPS, with plugins like these.
-function ixCTO:Tick()
+function PLUGIN:Tick()
 	local curTime = CurTime()
 	local networkedCameraData = {}
 	
@@ -81,7 +83,7 @@ function ixCTO:Tick()
 		end
 
 		net.Start("RecalculateHUDObjectives")
-			net.WriteString(ixCTO.socioStatus)
+			net.WriteString(self.socioStatus)
 			net.WriteTable(Schema.CombineObjectives)
 		net.Send(receivers)
 
@@ -89,10 +91,10 @@ function ixCTO:Tick()
 	end
 end
 
-function ixCTO:PlayerSpawn(client)
+function PLUGIN:PlayerSpawn(client)
 	if (client:IsCombine()) then
 		net.Start("RecalculateHUDObjectives")
-			net.WriteString(ixCTO.socioStatus)
+			net.WriteString(self.socioStatus)
 			net.WriteTable(Schema.CombineObjectives)
 		net.Send(client)
 
@@ -116,7 +118,7 @@ function ixCTO:PlayerSpawn(client)
 	end
 end
 
-function ixCTO:OnCharacterFallover(client, entity, bFallenOver)
+function PLUGIN:OnCharacterFallover(client, entity, bFallenOver)
 	if (client:IsCombine() and !client:GetNetVar("IsBiosignalGone")) then
 		if (bFallenOver) then
 			local location = client:GetArea() != "" and client:GetArea() or "unknown location"
@@ -133,7 +135,7 @@ function Schema:PlayerDeath(client, inflictor, attacker)
 		local location = client:GetArea() != "" and client:GetArea() or "unknown location"
 
 		if (!client:GetNetVar("IsBiosignalGone")) then
-			ixCTO:DoPostBiosignalLoss(client)
+			PLUGIN:DoPostBiosignalLoss(client)
 		end
 
 		if (IsValid(client.ixScanner) and client.ixScanner:Health() > 0) then
@@ -158,7 +160,7 @@ function Schema:GetPlayerDeathSound(client)
 	end
 end
 
-function ixCTO:OnEntityCreated(entity)
+function PLUGIN:OnEntityCreated(entity)
 	if (entity:GetClass() == "npc_combine_camera") then
 		if (self.cameraData[entity] == nil) then
 			self:SafelyPrepareCamera(entity)
@@ -166,7 +168,7 @@ function ixCTO:OnEntityCreated(entity)
 	end
 end
 
-function ixCTO:SetupPlayerVisibility(client)
+function PLUGIN:SetupPlayerVisibility(client)
 	for _, terminal in pairs(ents.FindByClass("ix_ctocameraterminal")) do
 		local camera = terminal:GetNWEntity("camera")
 

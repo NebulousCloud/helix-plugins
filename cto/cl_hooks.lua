@@ -1,6 +1,6 @@
 
 -- Running on tick to avoid some HUD conflicts.
-function ixCTO:Tick()
+function PLUGIN:Tick()
 	local client = LocalPlayer()
 
 	for ent, bDraw in pairs(self.terminalsToDraw) do
@@ -25,7 +25,7 @@ function ixCTO:Tick()
 				end
 
 				render.PushRenderTarget(ent.tex)
-					if (ixCTO:isCameraEnabled(camera)) then
+					if (self:isCameraEnabled(camera)) then
 						if (ent.lastCamOutputTime == nil or RealTime() - ent.lastCamOutputTime >= (1 / 15)) then
 							render.RenderView({
 								origin = camPos + (boneAngles:Forward() * 2.8),
@@ -65,7 +65,7 @@ function ixCTO:Tick()
 	end
 end
 
-function ixCTO:HUDPaint()
+function PLUGIN:HUDPaint()
 	local client = LocalPlayer()
 
 	if (client:IsCombine()) then

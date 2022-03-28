@@ -1,11 +1,13 @@
 
+local PLUGIN = PLUGIN
+
 include("shared.lua")
 
 function ENT:CreateTexMat()
-	ixCTO.terminalMaterialIdx = ixCTO.terminalMaterialIdx + 1
+	PLUGIN.terminalMaterialIdx = PLUGIN.terminalMaterialIdx + 1
 
-	self.tex = GetRenderTarget("ctouniquert" .. ixCTO.terminalMaterialIdx, 512, 256, false)
-	self.mat = CreateMaterial("ctouniquemat" .. ixCTO.terminalMaterialIdx, "UnlitGeneric", {
+	self.tex = GetRenderTarget("ctouniquert" .. PLUGIN.terminalMaterialIdx, 512, 256, false)
+	self.mat = CreateMaterial("ctouniquemat" .. PLUGIN.terminalMaterialIdx, "UnlitGeneric", {
 		["$basetexture"] = self.tex,
 	})
 end
@@ -15,7 +17,7 @@ function ENT:Think()
 		self:CreateTexMat()
 	end
 
-	ixCTO.terminalsToDraw[self] = LocalPlayer():IsLineOfSightClear(self)
+	PLUGIN.terminalsToDraw[self] = LocalPlayer():IsLineOfSightClear(self)
 end
 
 function ENT:Draw()

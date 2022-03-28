@@ -1,21 +1,23 @@
 
-ixCTO.cameraData = ixCTO.cameraData or {}
-ixCTO.fixedCameras = ixCTO.fixedCameras or false
-ixCTO.outputEntity = ixCTO.outputEntity or nil
-ixCTO.socioStatus = ixCTO.socioStatus or "GREEN"
+local PLUGIN = PLUGIN
+
+PLUGIN.cameraData = PLUGIN.cameraData or {}
+PLUGIN.fixedCameras = PLUGIN.fixedCameras or false
+PLUGIN.outputEntity = PLUGIN.outputEntity or nil
+PLUGIN.socioStatus = PLUGIN.socioStatus or "GREEN"
 
 util.AddNetworkString("UpdateBiosignalCameraData")
 util.AddNetworkString("RecalculateHUDObjectives")
 util.AddNetworkString("CombineRequestSignal")
 
-function ixCTO:SafelyPrepareCamera(combineCamera)
+function PLUGIN:SafelyPrepareCamera(combineCamera)
 	if (!IsValid(self.outputEntity)) then
 		self.outputEntity = ents.Create("base_entity")
 		self.outputEntity:SetName("__ixCTOhook")
 
 		function self.outputEntity:AcceptInput(inputName, activator, called, data)
 			if (data == "OnFoundPlayer") then
-				ixCTO:CombineCameraFoundPlayer(called, activator)
+				PLUGIN:CombineCameraFoundPlayer(called, activator)
 			end
 		end
 
@@ -23,11 +25,11 @@ function ixCTO:SafelyPrepareCamera(combineCamera)
 		self.outputEntity:Activate()
 	end
 
-	combineCamera:Fire("addoutput", "OnFoundPlayer __ixCTOhook:ixCTO:OnFoundPlayer:0:-1")
+	combineCamera:Fire("addoutput", "OnFoundPlayer __ixCTOhook:PLUGIN:OnFoundPlayer:0:-1")
 	self.cameraData[combineCamera] = {}
 end
 
-function ixCTO:CombineCameraFoundPlayer(combineCamera, client)
+function PLUGIN:CombineCameraFoundPlayer(combineCamera, client)
 	if (self.cameraData[combineCamera] and client:GetMoveType() != MOVETYPE_NOCLIP) then
 		if (!self.cameraData[combineCamera][client]) then
 			self.cameraData[combineCamera][client] = {}
@@ -35,7 +37,7 @@ function ixCTO:CombineCameraFoundPlayer(combineCamera, client)
 	end
 end
 
-function ixCTO:DoPostBiosignalLoss(client)
+function PLUGIN:DoPostBiosignalLoss(client)
 	client:SetNetVar("IsBiosignalGone", true)
 
 	local location = client:GetArea() != "" and client:GetArea() or "unknown location"
@@ -81,7 +83,7 @@ function ixCTO:DoPostBiosignalLoss(client)
 	end
 end
 
-function ixCTO:SetPlayerBiosignal(client, bEnable)
+function PLUGIN:SetPlayerBiosignal(client, bEnable)
 	if (client:IsCombine()) then
 		local isDisabledAlready = client:GetNetVar("IsBiosignalGone")
 
@@ -127,7 +129,7 @@ function ixCTO:SetPlayerBiosignal(client, bEnable)
 	end
 end
 
-function ixCTO:DispatchRequestSignal(client, text)
+function PLUGIN:DispatchRequestSignal(client, text)
 	local players = {}
 	local soundQueue = {
 		"npc/metropolice/vo/on" .. math.random(1, 2) .. ".wav",

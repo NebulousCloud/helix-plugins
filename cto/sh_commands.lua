@@ -1,4 +1,6 @@
 
+local PLUGIN = PLUGIN
+
 do
 	local COMMAND = {}
 	COMMAND.description = "Remotely disable a Combine camera - IDs are shown on the HUD."
@@ -78,7 +80,7 @@ do
 	function COMMAND:OnRun(client, socioStatus)
 		local tryingFor = string.upper(socioStatus)
 
-		if (!ixCTO.sociostatusColors[tryingFor]) then
+		if (!PLUGIN.sociostatusColors[tryingFor]) then
 			client:Notify("That is not a valid sociostatus!")
 		else
 			local players = {}
@@ -104,12 +106,12 @@ do
 				end
 			end
 
-			ixCTO.socioStatus = tryingFor
+			PLUGIN.socioStatus = tryingFor
 
-			Schema:AddCombineDisplayMessage("ALERT! Sociostatus updated to " .. tryingFor .. "!", ixCTO.sociostatusColors[tryingFor])
+			Schema:AddCombineDisplayMessage("ALERT! Sociostatus updated to " .. tryingFor .. "!", PLUGIN.sociostatusColors[tryingFor])
 			
 			net.Start("RecalculateHUDObjectives")
-				net.WriteString(ixCTO.socioStatus)
+				net.WriteString(PLUGIN.socioStatus)
 				net.WriteTable(Schema.CombineObjectives)
 			net.Send(players)
 		end
@@ -130,11 +132,11 @@ do
 	}
 
 	function COMMAND:OnRun(client, bEnable)
-		local result = ixCTO:SetPlayerBiosignal(client, bEnable)
+		local result = PLUGIN:SetPlayerBiosignal(client, bEnable)
 
-		if (result == ixCTO.ERROR_ALREADY_ENABLED) then
+		if (result == PLUGIN.ERROR_ALREADY_ENABLED) then
 			client:Notify("Your biosignal is already enabled!")
-		elseif (result == ixCTO.ERROR_ALREADY_DISABLED) then
+		elseif (result == PLUGIN.ERROR_ALREADY_DISABLED) then
 			client:Notify("Your biosignal is already disabled!")
 		end
 	end
@@ -155,13 +157,13 @@ do
 	}
 
 	function COMMAND:OnRun(client, target, bEnable)
-		local result = ixCTO:SetPlayerBiosignal(target, bEnable)
+		local result = PLUGIN:SetPlayerBiosignal(target, bEnable)
 	
-		if (result == ixCTO.ERROR_NOT_COMBINE) then
+		if (result == PLUGIN.ERROR_NOT_COMBINE) then
 			client:Notify(target:Name() .. " is not the Combine!")
-		elseif (result == ixCTO.ERROR_ALREADY_ENABLED) then
+		elseif (result == PLUGIN.ERROR_ALREADY_ENABLED) then
 			client:Notify(target:Name() .. "'s biosignal is already enabled!")
-		elseif (result == ixCTO.ERROR_ALREADY_DISABLED) then
+		elseif (result == PLUGIN.ERROR_ALREADY_DISABLED) then
 			client:Notify(target:Name() .. "'s biosignal is already disabled!")
 		else
 			client:Notify("You have " .. (bEnable and "enabled" or "disabled") .. " " .. target:Name() .. "'s biosignal.")
@@ -215,7 +217,7 @@ do
 			if (!client:IsRestricted()) then
 				Schema:AddCombineDisplayMessage("@cRequest")
 
-				ixCTO:DispatchRequestSignal(client, message)
+				PLUGIN:DispatchRequestSignal(client, message)
 
 				ix.chat.Send(client, "request", message)
 				ix.chat.Send(client, "request_eavesdrop", message)

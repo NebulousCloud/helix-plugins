@@ -1,15 +1,17 @@
 
-ixCTO.biosignalLocations = ixCTO.biosignalLocations or {}
-ixCTO.requestLocations = ixCTO.requestLocations or {}
+local PLUGIN = PLUGIN
 
-ixCTO.cameraData = ixCTO.cameraData or {}
-ixCTO.hudObjectives = ixCTO.hudObjectives or {}
-ixCTO.socioStatus = ixCTO.socioStatus or "GREEN"
+PLUGIN.biosignalLocations = PLUGIN.biosignalLocations or {}
+PLUGIN.requestLocations = PLUGIN.requestLocations or {}
 
-ixCTO.terminalMaterialIdx = ixCTO.terminalMaterialIdx or 0
-ixCTO.terminalsToDraw = ixCTO.terminalsToDraw or {}
+PLUGIN.cameraData = PLUGIN.cameraData or {}
+PLUGIN.hudObjectives = PLUGIN.hudObjectives or {}
+PLUGIN.socioStatus = PLUGIN.socioStatus or "GREEN"
 
-function ixCTO:UpdateBiosignalLocations()
+PLUGIN.terminalMaterialIdx = PLUGIN.terminalMaterialIdx or 0
+PLUGIN.terminalsToDraw = PLUGIN.terminalsToDraw or {}
+
+function PLUGIN:UpdateBiosignalLocations()
 	local curTime = CurTime()
 	local client = LocalPlayer()
 
@@ -76,7 +78,7 @@ net.Receive("CombineRequestSignal", function()
 			position = client:GetPos() + Vector(0, 0, 80)
 		end
 
-		table.insert(ixCTO.requestLocations, {
+		table.insert(PLUGIN.requestLocations, {
 			time = CurTime(),
 			pos = position,
 			text = text
@@ -96,7 +98,7 @@ net.Receive("UpdateBiosignalCameraData", function()
 		end
 	end
 	
-	ixCTO.cameraData = newCameraData
+	PLUGIN.cameraData = newCameraData
 end)
 
 net.Receive("RecalculateHUDObjectives", function()
@@ -110,8 +112,8 @@ net.Receive("RecalculateHUDObjectives", function()
 		end
 	end
 
-	ixCTO.socioStatus = status
-	ixCTO.hudObjectives = lines
+	PLUGIN.socioStatus = status
+	PLUGIN.hudObjectives = lines
 
-	ixCTO:UpdateBiosignalLocations()
+	PLUGIN:UpdateBiosignalLocations()
 end)
