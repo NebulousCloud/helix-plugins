@@ -19,7 +19,7 @@ PLUGIN.delay = 0.5
 if ( SERVER ) then
     function PLUGIN:PlayerSwitchFlashlight(ply, state)
         if not ( ( ply.ixAntiSpamFlashlight or 0 ) < CurTime() ) then
-            ply.ixAntiSpamFlashlight = CurTime() + 0.5
+            ply.ixAntiSpamFlashlight = CurTime() + PLUGIN.delay
             
             return false
         end
