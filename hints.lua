@@ -42,7 +42,7 @@ ix.hints.Register("Don't piss off Civil Protection, or you'll find yourself bein
 
 if ( CLIENT ) then
     surface.CreateFont("HintFont", {
-        font = "Purista",
+        font = "Arial",
         size = 24,
         weight = 500,
         blursize = 0.5,
