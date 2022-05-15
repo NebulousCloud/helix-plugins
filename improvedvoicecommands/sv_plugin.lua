@@ -48,17 +48,13 @@ local function ExperimentalFormatting(stringtabl)
 
         -- if we are not a voice command, check if we have someone before us, cuz if we do and they are a voice command than only they can have the carry symbol set
         if !v.sound then
-            if before and carry and stringtabl[before].sound then
+            if before and carry and stringtabl[before].sound and string.sub(stringtabl[before].text, #stringtabl[before].text, #stringtabl[before].text) != "," then
                 local text = stringtabl[before].text
                 stringtabl[before].text = string.SetChar(text, #text, carry)
+                carry = nil
             end
             -- we only want voice commands to be corrected
             continue
-        end
-
-        -- we are a vc so we can also set the carry to us
-        if carry then
-            v.text = string.SetChar(v.text, #v.text, carry)
         end
 
         -- if there is a string before us adjust the casing of our first letter according to the before's symbol
@@ -75,8 +71,8 @@ local function ExperimentalFormatting(stringtabl)
 
         -- if there is a string after us adjust our symbol to their casing. if they are a vc always adjust to comma, if they are not, check if the message starts with a lower casing letter, indicating a conntinuation of the sentence
         if after then
-            local endsub = string.sub(v.text, #v.text, #v.text)
             local firstletterafter = string.sub(stringtabl[after].text, 1, 1)
+            local endsub = string.sub(v.text, #v.text, #v.text)
 
             if stringtabl[after].sound or string.match(firstletterafter, "%l") then
                 if endsub == "!" or endsub == "." or endsub == "?" then
@@ -85,6 +81,15 @@ local function ExperimentalFormatting(stringtabl)
                         carry = carry == nil and endsub or carry
                     end
                 end
+            end
+        end
+
+        -- we are a vc so we can also set the carry to us
+        if carry then
+            if !after then
+                v.text = string.SetChar(v.text, #v.text, carry) 
+                carry = nil
+                continue
             end
         end
     end
