@@ -1,4 +1,6 @@
 -- I apologise for the amount of loops in all of this lol, also for the lack of comments, i tend to change my code a lot.
+local PLUGIN = PLUGIN
+PLUGIN.TempStored = PLUGIN.TempStored or {}
 
 -- if no separator then just seperate at spaces
 local function GetVoiceCommands(text, class, separator)
@@ -150,12 +152,23 @@ function Schema:PlayerMessageSend(speaker, chatType, text, anonymous, receivers,
         end
 
         ::exit::
+
+        PLUGIN.TempStored[CurTime()] = text
+
         if speaker:IsCombine() then
             if chatType != "radio" then
                 return string.format("<:: %s ::>", text)
             end
         end
         return text
+    end
+
+    -- this isnt optimal but it works
+    if chatType == "radio_eavesdrop" then
+        if PLUGIN.TempStored[CurTime()] then
+            text = PLUGIN.TempStored[CurTime()]
+            PLUGIN.TempStored[CurTime()] = nil
+        end
     end
     return text
 end
