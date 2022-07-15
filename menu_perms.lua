@@ -44,7 +44,7 @@ if (CLIENT) then
     end
 
     function PLUGIN:ContextMenuOpen()
-        if LocalPlayer():IsAdmin() then return true end
+        if CAMI.PlayerHasAccess(LocalPlayer(), "Helix - Admin Context Options", nil) then return true end
         return false
     end
 end
