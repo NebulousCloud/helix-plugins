@@ -110,7 +110,7 @@ net.Receive("RecalculateHUDObjectives", function()
 		PLUGIN.socioStatus = status
 	end
 
-	if (objectives) then
+	if (objectives and objectives.text) then
 		for k, v in pairs(string.Split(objectives.text, "\n")) do
 			if (string.StartWith(v, "^")) then
 				table.insert(lines, "<:: " .. string.sub(v, 2) .. " ::>")
