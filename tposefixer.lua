@@ -31,15 +31,15 @@ local function UpdateAnimationTable(client)
 	client.ixAnimGlide = baseTable["glide"]
 end
 
-function PLUGIN:PlayerModelChanged(ent, model)
-    if not IsValid(ent) or not ent:IsPlayer() then return end
+function PLUGIN:PlayerModelChanged(ply, model)
+    if not IsValid(ply) then return end
 
     -- timer since the model is not set yet
     timer.Simple(0, function()
-        if not IsValid(ent) then return end
+        if not IsValid(ply) then return end
 
         if not self.cached[model] then
-            local submodels = ent:GetSubModels()
+            local submodels = ply:GetSubModels()
             for k, v in pairs(submodels) do
                 local class = v.name:gsub(".*/([^/]+)%.%w+$", "%1"):lower()
                 if translations[class] then
@@ -49,9 +49,9 @@ function PLUGIN:PlayerModelChanged(ent, model)
             end
         end
 
-        ent.ixAnimModelClass = ix.anim.GetModelClass(model)
+        ply.ixAnimModelClass = ix.anim.GetModelClass(model)
 
-        UpdateAnimationTable(ent)
+        UpdateAnimationTable(ply)
     end)
 end
 
