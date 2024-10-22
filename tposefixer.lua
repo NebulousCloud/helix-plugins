@@ -32,28 +32,30 @@ local function UpdateAnimationTable(client)
 end
 
 function PLUGIN:PlayerModelChanged(ply, model)
-	if not IsValid(ply) then
-		return
-	end
+    timer.Simple(0, function()
+        if not IsValid(ply) then
+            return
+        end
 
-	model = model:lower()
-	
-	if not self.cached[model] then
-		local submodels = ply:GetSubModels()
-		for k, v in ipairs(submodels) do
-			local class = v.name:gsub(".*/([^/]+)%.%w+$", "%1"):lower()
-			if translations[class] then
-				ix.anim.SetModelClass(model, translations[class])
-				break
-			end
-		end
-	end
+        model = model:lower()
 
-	ply.ixAnimModelClass = ix.anim.GetModelClass(model)
+        if not self.cached[model] then
+            local submodels = ply:GetSubModels()
+            for k, v in ipairs(submodels) do
+                local class = v.name:gsub(".*/([^/]+)%.%w+$", "%1"):lower()
+                if translations[class] then
+                    ix.anim.SetModelClass(model, translations[class])
+                    break
+                end
+            end
+        end
+        
+        ply.ixAnimModelClass = ix.anim.GetModelClass(model)
 
-	UpdateAnimationTable(ply)
+    	UpdateAnimationTable(ply)
+    end)
 
-	return true
+    return true
 end
 
 if SERVER then
