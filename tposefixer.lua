@@ -58,6 +58,12 @@ function PLUGIN:PlayerModelChanged(ply, model)
     return true
 end
 
+function PLUGIN:OnReloaded()
+    for k, v in pairs(self.cached) do
+        ix.anim.SetModelClass(k, v)
+    end
+end
+
 if SERVER then
     util.AddNetworkString("TPoseFixerSync")
 
