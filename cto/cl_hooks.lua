@@ -36,7 +36,8 @@ function PLUGIN:Tick()
 								y = 0,
 								w = 512,
 								h = 256,
-								drawviewmodel = false
+								drawviewmodel = false,
+								drawviewer = true
 							})
 
 							ent.lastCamOutputTime = RealTime()
@@ -274,7 +275,7 @@ function PLUGIN:HUDPaint()
 				if (toScreen.visible and beholder:IsLineOfSightClear(v)) then
 					local showDetail = (Vector(toScreen.x, toScreen.y):Distance(halfScrVector) <= lowDetailBox)
 					local CID = v:GetCharacter():GetData("cid", "UNKNOWN")
-					
+
 					if (ix.config.Get("useTagSystem") and beholderEyePos:Distance(v:GetPos()) <= (maximumDistance / 6) and !v:GetCharacter():GetData("IsCIDTagGone") and CID != "") then
 						local text = "<:: c#" .. CID .. " ::>"
 						local color = team.GetColor(v:Team()) or color_white
