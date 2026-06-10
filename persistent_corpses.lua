@@ -187,7 +187,7 @@ if (SERVER) then
 		local width, height = charInventory:GetSize()
 
 		-- create new inventory
-		local inventory = ix.item.CreateInv(width, height, os.time())
+		local inventory = ix.inventory.Create(width, height, os.time())
 		inventory.noSave = true
 
 		if (ix.config.Get("dropItemsOnDeath")) then
