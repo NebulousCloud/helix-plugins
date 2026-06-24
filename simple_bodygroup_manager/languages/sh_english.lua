@@ -3,6 +3,8 @@ LANGUAGE = {
     cfgColorEnfasisBGManager = "Enphasis color",
     cfgAllowKeyUseBGManager = "Allow key-use",
     cfgSaveButtonColor = "Save button color",
+    cfgSaveHairColor = "Save haircolor",
+
 
     cmdBanKeyUseSBMDesc = "Forbid a player to open the menu with a key even if it's turned on",
     cmdEditUserBodygroups = "Modify a target's bodygroups from the menu.",

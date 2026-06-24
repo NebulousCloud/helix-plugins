@@ -120,6 +120,25 @@ function PANEL:Fill(target)
         end
     end
 
+    self.hairChangerLabel = self.contenedorBg:Add("ixLabel")
+    self.hairChangerLabel:Dock(TOP)
+    self.hairChangerLabel:DockMargin(10, 10, 0, 5)
+    self.hairChangerLabel:SetFont("ixMediumFont")
+    self.hairChangerLabel:SetText("Haircolor")
+    self.hairChangerLabel:SetTextColor(ix.config.Get("colorEnfasisBGManager"))
+    self.hairChangerLabel:SetContentAlignment(7)
+
+    self.hairChanger = self.contenedorBg:Add("DColorMixer")
+    self.hairChanger:Dock(TOP)
+    self.hairChanger:SetContentAlignment(7)
+    self.hairChanger:DockMargin(10, 10, 0, 5)
+    self.hairChanger:SetVector(colorJugador)
+    self.hairChanger.ValueChanged = function(this, color)
+        self.displayCharacter.Entity.GetPlayerColor = function() return this:GetVector() end
+
+    end
+
+
 
 
     self.buttonContainer = self:Add("DPanel")
@@ -148,6 +167,7 @@ function PANEL:Fill(target)
             net.WritePlayer(target)
             net.WriteTable(tblBodygroups)
             net.WriteUInt(self.displayCharacter.Entity:GetSkin(), 5)
+            net.WriteVector(self.hairChanger:GetVector())
         net.SendToServer()
 
         if (LocalPlayer() == client) then

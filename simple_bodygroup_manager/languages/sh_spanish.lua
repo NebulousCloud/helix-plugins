@@ -3,6 +3,7 @@ LANGUAGE = {
     cfgColorEnfasisBGManager = "Color del enfasis",
     cfgAllowKeyUseBGManager = "Permitir uso con tecla",
     cfgSaveButtonColor = "Color del botón de guardado",
+    cfgSaveHairColor = "Guardar el color del pelo",
 
     cmdBanKeyUseSBMDesc = "Impide que un jugador pueda utilizar el menú con la tecla aunque esté activado",
     cmdEditUserBodygroups = "Modifica los bodygroups de un usuario desde el menú.",
@@ -11,5 +12,4 @@ LANGUAGE = {
 
     selfBodygroupsModified = "¡Has guardado tu apariencia!",
     userBodygroupsModified = "Has modificado la apariencia de %s.",
-
 }

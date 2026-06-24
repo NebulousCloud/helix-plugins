@@ -13,3 +13,7 @@ ix.config.Add("allowKeyUseBGManager", true, "Permite que los usuarios abran el m
 ix.config.Add("saveButtonColor", Color(33,107,27), "Color del botón de guardado", nil, {
     category = "Simple Bodygroup Manager"
 })
+
+ix.config.Get("saveHairColor", true, "Permite que el plugin gestione el guardado del color del pelo", nil, {
+    category = "Simple Bodygroup Manager"
+})

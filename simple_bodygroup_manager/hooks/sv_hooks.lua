@@ -9,3 +9,14 @@ function PLUGIN:PlayerButtonDown(ply, button)
         net.Send(ply)
     end
 end
+
+
+function PLUGIN:PlayerSpawn(client)
+    if (ix.config.Get("saveHairColor", true)) then
+        local char = client:GetCharacter()
+        if (char) then
+            local color = char:GetData("SBMPlayerColor", Vector(0,0,0))
+            client:SetPlayerColor(color)
+        end
+    end
+end
